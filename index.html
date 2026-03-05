@@ -545,13 +545,16 @@ tbody td { padding:11px 14px; font-size:13px; vertical-align:middle; }
       <div class="nav-item" id="navPistachos" onclick="showPanel('pistachos',this)"><span class="icon">🌿</span> Bravo Pistachos</div>
       <div class="nav-item" id="navConstruccion" onclick="showPanel('construccion',this)"><span class="icon">🏗️</span> BC Construcciones</div>
       <div class="nav-item" id="navCamiones" onclick="showPanel('camiones',this)"><span class="icon">🚛</span> Bravo CAMC</div>
-      <div class="nav-section">Gestión</div>
-      <div class="nav-item" onclick="showPanel('rrhh',this)"><span class="icon">👷</span> RRHH</div>
-      <div class="nav-item" onclick="showPanel('compras',this)"><span class="icon">🛒</span> Compras</div>
-      <div class="nav-item" onclick="showPanel('stock',this)"><span class="icon">📦</span> Stock</div>
-      <div class="nav-item" onclick="showPanel('mantenimiento',this)"><span class="icon">🔧</span> Mantenimiento</div>
-      <div class="nav-item" onclick="showPanel('proyectos',this)"><span class="icon">📌</span> Proyectos</div>
-      <div class="nav-item" onclick="showPanel('documentos',this)"><span class="icon">📁</span> Documentos</div>
+      <div class="nav-section">Operaciones</div>
+      <div class="nav-item" onclick="showPanel('agroquimicos',this)"><span class="icon">🧪</span> Agroquímicos</div>
+      <div class="nav-item" onclick="showPanel('inventario',this)"><span class="icon">📦</span> Inventario</div>
+      <div class="nav-item" onclick="showPanel('herramientas',this)"><span class="icon">🔨</span> Herramientas</div>
+      <div class="nav-item" onclick="showPanel('activos',this)"><span class="icon">🚜</span> Activos</div>
+      <div class="nav-item" onclick="showPanel('combustible',this)"><span class="icon">⛽</span> Combustible</div>
+      <div class="nav-item" onclick="showPanel('conteos',this)"><span class="icon">🌳</span> Conteos</div>
+      <div class="nav-section">RRHH</div>
+      <div class="nav-item" onclick="showPanel('personas',this)"><span class="icon">👷</span> Personas</div>
+      <div class="nav-item" onclick="showPanel('asistencia',this)"><span class="icon">🕐</span> Asistencia</div>
       <div class="nav-section" id="navAdminSec" style="display:none">Admin</div>
       <div class="nav-item" id="navPermisos" style="display:none" onclick="showPanel('permisos',this)"><span class="icon">🔐</span> Usuarios y Permisos</div>
       <div class="nav-item" id="navAuditoria" style="display:none" onclick="showPanel('auditoria',this)"><span class="icon">📊</span> Auditoría</div>
@@ -588,431 +591,414 @@ tbody td { padding:11px 14px; font-size:13px; vertical-align:middle; }
         </div>
       </div>
 
-      <!-- RRHH -->
-      <div id="panel-rrhh" class="tab-panel">
+      <!-- AGROQUÍMICOS Y FERTILIZANTES -->
+      <div id="panel-agroquimicos" class="tab-panel">
         <div class="inner-tabs">
-          <div class="inner-tab active" onclick="showInner('rrhh-empleados',this)">👷 Empleados</div>
-          <div class="inner-tab" onclick="showInner('rrhh-legajos',this)">📋 Legajos</div>
-          <div class="inner-tab" onclick="showInner('rrhh-asistencia',this)">🕐 Asistencia</div>
-          <div class="inner-tab" onclick="showInner('rrhh-liquidacion',this)">💰 Liquidación</div>
+          <div class="inner-tab active" onclick="showInner('aq-stock',this)">🧪 Stock</div>
+          <div class="inner-tab" onclick="showInner('aq-entradas',this)">📥 Entradas</div>
+          <div class="inner-tab" onclick="showInner('aq-salidas',this)">📤 Aplicaciones</div>
+          <div class="inner-tab" onclick="showInner('aq-alertas',this)">⚠️ Alertas</div>
         </div>
-        <div id="rrhh-empleados" class="inner-panel active">
-          <div class="table-wrap">
-            <div class="table-top">
-              <div class="table-top-title">👷 Empleados</div>
-              <div class="table-filters">
-                <input class="search-input" type="text" placeholder="🔍 Buscar..." id="sRrhh" oninput="renderRrhh()">
-                <select class="filter-select" id="fRrhhEmpresa" onchange="renderRrhh()">
-                  <option value="">Todas las empresas</option>
-                  <option>Bravo Pistachos</option><option>BC Construcciones</option><option>Bravo CAMC</option>
+        <div id="aq-stock" class="inner-panel active">
+          <div class="bp-table-wrap">
+            <div class="bp-table-header">
+              <div><div class="bp-table-title">Stock de Agroquímicos y Fertilizantes</div><div class="bp-table-sub" id="aq-stock-count">— productos</div></div>
+              <div class="bp-table-actions">
+                <input class="bp-search" placeholder="Buscar..." id="sAq" oninput="renderAqStock()">
+                <select class="bp-filter" id="fAqTipo" onchange="renderAqStock()">
+                  <option value="">Todos</option><option>Herbicida</option><option>Insecticida</option><option>Fungicida</option><option>Fertilizante</option><option>Otro</option>
                 </select>
-                <button class="btn btn-primary" onclick="openModal('modalEmpleado')">+ Nuevo Empleado</button>
+                <button class="bp-btn-primary" onclick="openModal('modalAqProducto')">+ Nuevo Producto</button>
               </div>
             </div>
-            <div style="overflow-x:auto"><table>
-              <thead><tr><th>Nombre</th><th>DNI</th><th>Empresa</th><th>Área</th><th>Puesto</th><th>Ingreso</th><th>Estado</th><th>Contacto</th><th>Acc.</th></tr></thead>
-              <tbody id="tRrhh"></tbody>
+            <div style="overflow-x:auto"><table class="bp-table">
+              <thead><tr><th>Producto</th><th>Tipo</th><th>P. Activo</th><th>Unidad</th><th>Stock Actual</th><th>Stock Mín.</th><th>Vencimiento</th><th>Depósito</th><th>SENASA</th><th></th></tr></thead>
+              <tbody id="tAqStock"></tbody>
             </table></div>
           </div>
         </div>
-        <div id="rrhh-legajos" class="inner-panel">
-          <div class="empty-state"><div class="empty-icon">📋</div><div>Módulo de Legajos — próximamente</div><small style="color:var(--muted)">Documentación, contratos, certificados por empleado</small></div>
+        <div id="aq-entradas" class="inner-panel">
+          <div class="bp-table-wrap">
+            <div class="bp-table-header">
+              <div><div class="bp-table-title">Entradas — Compras y Recepciones</div></div>
+              <div class="bp-table-actions">
+                <input class="bp-search" placeholder="Buscar..." id="sAqEnt" oninput="renderAqEntradas()">
+                <button class="bp-btn-primary" onclick="openModal('modalAqEntrada')">+ Registrar Entrada</button>
+              </div>
+            </div>
+            <div style="overflow-x:auto"><table class="bp-table">
+              <thead><tr><th>Fecha</th><th>Producto</th><th>Cantidad</th><th>Unidad</th><th>Proveedor</th><th>Remito/Factura</th><th>Vencimiento</th><th>Responsable</th></tr></thead>
+              <tbody id="tAqEntradas"></tbody>
+            </table></div>
+          </div>
         </div>
-        <div id="rrhh-asistencia" class="inner-panel">
-          <div class="empty-state"><div class="empty-icon">🕐</div><div>Módulo de Asistencia — próximamente</div><small style="color:var(--muted)">Control de presentismo, horas extra, ausencias</small></div>
+        <div id="aq-salidas" class="inner-panel">
+          <div class="bp-table-wrap">
+            <div class="bp-table-header">
+              <div><div class="bp-table-title">Aplicaciones — Salidas por Lote</div></div>
+              <div class="bp-table-actions">
+                <input class="bp-search" placeholder="Buscar..." id="sAqSal" oninput="renderAqSalidas()">
+                <button class="bp-btn-primary" onclick="openModal('modalAqSalida')">+ Registrar Aplicación</button>
+              </div>
+            </div>
+            <div style="overflow-x:auto"><table class="bp-table">
+              <thead><tr><th>Fecha</th><th>Producto</th><th>Cantidad</th><th>Sector/Lote</th><th>Desde</th><th>Hasta</th><th>Dosis</th><th>Operador</th><th>Obs.</th></tr></thead>
+              <tbody id="tAqSalidas"></tbody>
+            </table></div>
+          </div>
         </div>
-        <div id="rrhh-liquidacion" class="inner-panel">
-          <div class="empty-state"><div class="empty-icon">💰</div><div>Módulo de Liquidación — próximamente</div><small style="color:var(--muted)">Sueldos, recibos, deducciones</small></div>
+        <div id="aq-alertas" class="inner-panel">
+          <div id="aqAlertasContainer" style="display:flex;flex-direction:column;gap:12px;padding:4px">
+            <div class="empty-state"><div class="empty-icon">✅</div><div>Sin alertas activas</div></div>
+          </div>
         </div>
       </div>
 
-      <!-- COMPRAS -->
-      <div id="panel-compras" class="tab-panel">
+      <!-- INVENTARIO GENERAL -->
+      <div id="panel-inventario" class="tab-panel">
         <div class="inner-tabs">
-          <div class="inner-tab active" onclick="showInner('compras-ordenes',this)">🛒 Órdenes de Compra</div>
-          <div class="inner-tab" onclick="showInner('compras-proveedores',this)">🏭 Proveedores</div>
-          <div class="inner-tab" onclick="showInner('compras-presupuestos',this)">📄 Presupuestos</div>
+          <div class="inner-tab active" onclick="showInner('inv-items',this)">📦 Ítems</div>
+          <div class="inner-tab" onclick="showInner('inv-movimientos',this)">↔️ Movimientos</div>
         </div>
-        <div id="compras-ordenes" class="inner-panel active">
-          <div class="table-wrap">
-            <div class="table-top">
-              <div class="table-top-title">🛒 Órdenes de Compra</div>
-              <div class="table-filters">
-                <input class="search-input" type="text" placeholder="🔍 Buscar..." id="sCompras" oninput="renderCompras()">
-                <select class="filter-select" id="fComprasEstado" onchange="renderCompras()">
-                  <option value="">Todos los estados</option>
-                  <option>Pendiente</option><option>Aprobada</option><option>Recibida</option><option>Cancelada</option>
-                </select>
-                <button class="btn btn-primary" onclick="openModal('modalCompra')">+ Nueva Orden</button>
-              </div>
-            </div>
-            <div style="overflow-x:auto"><table>
-              <thead><tr><th>Fecha</th><th>Nº Orden</th><th>Proveedor</th><th>Empresa</th><th>Descripción</th><th>Monto</th><th>Estado</th><th>Responsable</th><th>Acc.</th></tr></thead>
-              <tbody id="tCompras"></tbody>
-            </table></div>
-          </div>
-        </div>
-        <div id="compras-proveedores" class="inner-panel">
-          <div class="table-wrap">
-            <div class="table-top">
-              <div class="table-top-title">🏭 Proveedores</div>
-              <div class="table-filters">
-                <input class="search-input" type="text" placeholder="🔍 Buscar..." id="sProveedores" oninput="renderProveedores()">
-                <button class="btn btn-primary" onclick="openModal('modalProveedor')">+ Nuevo Proveedor</button>
-              </div>
-            </div>
-            <div style="overflow-x:auto"><table>
-              <thead><tr><th>Razón Social</th><th>CUIT</th><th>Rubro</th><th>Contacto</th><th>Teléfono</th><th>Email</th><th>Acc.</th></tr></thead>
-              <tbody id="tProveedores"></tbody>
-            </table></div>
-          </div>
-        </div>
-        <div id="compras-presupuestos" class="inner-panel">
-          <div class="empty-state"><div class="empty-icon">📄</div><div>Módulo de Presupuestos — próximamente</div><small style="color:var(--muted)">Comparación de presupuestos por proveedor</small></div>
-        </div>
-      </div>
-
-      <!-- STOCK -->
-      <div id="panel-stock" class="tab-panel">
-        <div class="inner-tabs">
-          <div class="inner-tab active" onclick="showInner('stock-inventario',this)">📦 Inventario</div>
-          <div class="inner-tab" onclick="showInner('stock-movimientos',this)">↔️ Movimientos</div>
-          <div class="inner-tab" onclick="showInner('stock-alertas',this)">⚠️ Alertas</div>
-        </div>
-        <div id="stock-inventario" class="inner-panel active">
-          <div class="table-wrap">
-            <div class="table-top">
-              <div class="table-top-title">📦 Inventario</div>
-              <div class="table-filters">
-                <input class="search-input" type="text" placeholder="🔍 Buscar..." id="sStock" oninput="renderStock()">
-                <select class="filter-select" id="fStockCategoria" onchange="renderStock()">
+        <div id="inv-items" class="inner-panel active">
+          <div class="bp-table-wrap">
+            <div class="bp-table-header">
+              <div><div class="bp-table-title">Inventario General</div><div class="bp-table-sub" id="inv-count">— ítems</div></div>
+              <div class="bp-table-actions">
+                <input class="bp-search" placeholder="Buscar..." id="sInv" oninput="renderInv()">
+                <select class="bp-filter" id="fInvCat" onchange="renderInv()">
                   <option value="">Todas las categorías</option>
-                  <option>Insumos</option><option>Herramientas</option><option>Repuestos</option><option>Materiales</option>
+                  <option>Insumos</option><option>Materiales</option><option>Repuestos</option><option>Embalajes</option><option>Otros</option>
                 </select>
-                <button class="btn btn-primary" onclick="openModal('modalStockItem')">+ Nuevo Ítem</button>
+                <button class="bp-btn-primary" onclick="openModal('modalInvItem')">+ Nuevo Ítem</button>
               </div>
             </div>
-            <div style="overflow-x:auto"><table>
-              <thead><tr><th>Código</th><th>Descripción</th><th>Categoría</th><th>Empresa</th><th>Stock Actual</th><th>Stock Mínimo</th><th>Unidad</th><th>Ubicación</th><th>Acc.</th></tr></thead>
-              <tbody id="tStock"></tbody>
+            <div style="overflow-x:auto"><table class="bp-table">
+              <thead><tr><th>Código</th><th>Descripción</th><th>Categoría</th><th>Depósito</th><th>Stock</th><th>Mínimo</th><th>Unidad</th><th>Ult. Movimiento</th><th></th></tr></thead>
+              <tbody id="tInv"></tbody>
             </table></div>
           </div>
         </div>
-        <div id="stock-movimientos" class="inner-panel">
-          <div class="empty-state"><div class="empty-icon">↔️</div><div>Movimientos de Stock — próximamente</div><small style="color:var(--muted)">Entradas, salidas, transferencias entre empresas</small></div>
-        </div>
-        <div id="stock-alertas" class="inner-panel">
-          <div class="empty-state"><div class="empty-icon">⚠️</div><div>Alertas de Stock — próximamente</div><small style="color:var(--muted)">Ítems bajo stock mínimo, vencimientos</small></div>
+        <div id="inv-movimientos" class="inner-panel">
+          <div class="bp-table-wrap">
+            <div class="bp-table-header">
+              <div><div class="bp-table-title">Movimientos de Inventario</div></div>
+              <div class="bp-table-actions">
+                <input class="bp-search" placeholder="Buscar..." id="sInvMov" oninput="renderInvMov()">
+                <button class="bp-btn-primary" onclick="openModal('modalInvMov')">+ Registrar Movimiento</button>
+              </div>
+            </div>
+            <div style="overflow-x:auto"><table class="bp-table">
+              <thead><tr><th>Fecha</th><th>Tipo</th><th>Ítem</th><th>Cantidad</th><th>Depósito</th><th>Responsable</th><th>Motivo</th></tr></thead>
+              <tbody id="tInvMov"></tbody>
+            </table></div>
+          </div>
         </div>
       </div>
 
-      <!-- MANTENIMIENTO -->
-      <div id="panel-mantenimiento" class="tab-panel">
+      <!-- HERRAMIENTAS Y EQUIPOS MENORES -->
+      <div id="panel-herramientas" class="tab-panel">
         <div class="inner-tabs">
-          <div class="inner-tab active" onclick="showInner('mant-equipos',this)">🚜 Equipos</div>
-          <div class="inner-tab" onclick="showInner('mant-ordenes',this)">🔧 Órdenes de Trabajo</div>
-          <div class="inner-tab" onclick="showInner('mant-preventivo',this)">📅 Preventivo</div>
+          <div class="inner-tab active" onclick="showInner('her-catalogo',this)">🔨 Catálogo</div>
+          <div class="inner-tab" onclick="showInner('her-asignadas',this)">👤 Asignadas</div>
+          <div class="inner-tab" onclick="showInner('her-historial',this)">📋 Historial</div>
         </div>
-        <div id="mant-equipos" class="inner-panel active">
-          <div class="table-wrap">
-            <div class="table-top">
-              <div class="table-top-title">🚜 Equipos y Vehículos</div>
-              <div class="table-filters">
-                <input class="search-input" type="text" placeholder="🔍 Buscar..." id="sEquipos" oninput="renderEquipos()">
-                <select class="filter-select" id="fEquiposEmpresa" onchange="renderEquipos()">
+        <div id="her-catalogo" class="inner-panel active">
+          <div class="bp-table-wrap">
+            <div class="bp-table-header">
+              <div><div class="bp-table-title">Catálogo de Herramientas</div></div>
+              <div class="bp-table-actions">
+                <input class="bp-search" placeholder="Buscar..." id="sHer" oninput="renderHer()">
+                <select class="bp-filter" id="fHerEstado" onchange="renderHer()">
+                  <option value="">Todos los estados</option><option>Disponible</option><option>Asignada</option><option>En reparación</option><option>Baja</option>
+                </select>
+                <button class="bp-btn-primary" onclick="openModal('modalHerramienta')">+ Nueva Herramienta</button>
+              </div>
+            </div>
+            <div style="overflow-x:auto"><table class="bp-table">
+              <thead><tr><th>Código</th><th>Descripción</th><th>Tipo</th><th>Estado</th><th>Asignada a</th><th>Desde</th><th></th></tr></thead>
+              <tbody id="tHer"></tbody>
+            </table></div>
+          </div>
+        </div>
+        <div id="her-asignadas" class="inner-panel">
+          <div class="bp-table-wrap">
+            <div class="bp-table-header">
+              <div><div class="bp-table-title">Herramientas Actualmente Asignadas</div></div>
+              <div class="bp-table-actions">
+                <button class="bp-btn-primary" onclick="openModal('modalHerAsignacion')">+ Nueva Asignación</button>
+              </div>
+            </div>
+            <div style="overflow-x:auto"><table class="bp-table">
+              <thead><tr><th>Herramienta</th><th>Asignada a</th><th>Cuadrilla</th><th>Fecha entrega</th><th>Devolución esp.</th><th>Estado entrega</th><th>Acc.</th></tr></thead>
+              <tbody id="tHerAsig"></tbody>
+            </table></div>
+          </div>
+        </div>
+        <div id="her-historial" class="inner-panel">
+          <div class="bp-table-wrap">
+            <div class="bp-table-header"><div><div class="bp-table-title">Historial de Movimientos</div></div></div>
+            <div style="overflow-x:auto"><table class="bp-table">
+              <thead><tr><th>Fecha</th><th>Herramienta</th><th>Acción</th><th>Persona</th><th>Estado devuelto</th><th>Obs.</th></tr></thead>
+              <tbody id="tHerHist"></tbody>
+            </table></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ACTIVOS Y MANTENIMIENTO -->
+      <div id="panel-activos" class="tab-panel">
+        <div class="inner-tabs">
+          <div class="inner-tab active" onclick="showInner('act-flota',this)">🚜 Flota / Activos</div>
+          <div class="inner-tab" onclick="showInner('act-ordenes',this)">🔧 Órdenes de Trabajo</div>
+          <div class="inner-tab" onclick="showInner('act-preventivo',this)">📅 Preventivo</div>
+          <div class="inner-tab" onclick="showInner('act-historial',this)">📋 Historial</div>
+        </div>
+        <div id="act-flota" class="inner-panel active">
+          <div class="bp-table-wrap">
+            <div class="bp-table-header">
+              <div><div class="bp-table-title">Flota y Activos</div><div class="bp-table-sub" id="act-count">— activos</div></div>
+              <div class="bp-table-actions">
+                <input class="bp-search" placeholder="Buscar..." id="sAct" oninput="renderActivos()">
+                <select class="bp-filter" id="fActTipo" onchange="renderActivos()">
+                  <option value="">Todos los tipos</option><option>Tractor</option><option>Camión</option><option>Vehículo</option><option>Maquinaria</option><option>Herramienta mayor</option><option>Otro</option>
+                </select>
+                <button class="bp-btn-primary" onclick="openModal('modalActivo')">+ Nuevo Activo</button>
+              </div>
+            </div>
+            <div style="overflow-x:auto"><table class="bp-table">
+              <thead><tr><th>Código</th><th>Descripción</th><th>Tipo</th><th>Marca/Modelo</th><th>Año</th><th>Patente/Serie</th><th>Horas/Km</th><th>Estado</th><th>Próx. Service</th><th></th></tr></thead>
+              <tbody id="tActivos"></tbody>
+            </table></div>
+          </div>
+        </div>
+        <div id="act-ordenes" class="inner-panel">
+          <div class="bp-table-wrap">
+            <div class="bp-table-header">
+              <div><div class="bp-table-title">Órdenes de Trabajo</div></div>
+              <div class="bp-table-actions">
+                <input class="bp-search" placeholder="Buscar..." id="sOT" oninput="renderOTs()">
+                <select class="bp-filter" id="fOTEstado" onchange="renderOTs()">
+                  <option value="">Todos</option><option>Abierta</option><option>En proceso</option><option>Cerrada</option>
+                </select>
+                <button class="bp-btn-primary" onclick="openModal('modalOT')">+ Nueva OT</button>
+              </div>
+            </div>
+            <div style="overflow-x:auto"><table class="bp-table">
+              <thead><tr><th>N° OT</th><th>Activo</th><th>Tipo</th><th>Descripción</th><th>Fecha apertura</th><th>Fecha cierre</th><th>Técnico</th><th>Costo</th><th>Estado</th><th></th></tr></thead>
+              <tbody id="tOTs"></tbody>
+            </table></div>
+          </div>
+        </div>
+        <div id="act-preventivo" class="inner-panel">
+          <div class="bp-table-wrap">
+            <div class="bp-table-header">
+              <div><div class="bp-table-title">Plan de Mantenimiento Preventivo</div></div>
+              <div class="bp-table-actions">
+                <button class="bp-btn-primary" onclick="openModal('modalPreventivo')">+ Agregar Plan</button>
+              </div>
+            </div>
+            <div style="overflow-x:auto"><table class="bp-table">
+              <thead><tr><th>Activo</th><th>Tarea preventiva</th><th>Frecuencia</th><th>Último realizado</th><th>Próximo</th><th>Estado</th><th></th></tr></thead>
+              <tbody id="tPreventivo"></tbody>
+            </table></div>
+          </div>
+        </div>
+        <div id="act-historial" class="inner-panel">
+          <div class="bp-table-wrap">
+            <div class="bp-table-header">
+              <div><div class="bp-table-title">Historial de Mantenimiento</div></div>
+              <div class="bp-table-actions">
+                <select class="bp-filter" id="fHistActivo" onchange="renderHistMant()"><option value="">Todos los activos</option></select>
+              </div>
+            </div>
+            <div style="overflow-x:auto"><table class="bp-table">
+              <thead><tr><th>Fecha</th><th>Activo</th><th>Tipo</th><th>Descripción</th><th>Técnico</th><th>Costo</th><th>Horas/Km</th></tr></thead>
+              <tbody id="tHistMant"></tbody>
+            </table></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- COMBUSTIBLE -->
+      <div id="panel-combustible" class="tab-panel">
+        <div class="inner-tabs">
+          <div class="inner-tab active" onclick="showInner('comb-registros',this)">⛽ Cargas</div>
+          <div class="inner-tab" onclick="showInner('comb-resumen',this)">📊 Resumen por Activo</div>
+        </div>
+        <div id="comb-registros" class="inner-panel active">
+          <div class="bp-table-wrap">
+            <div class="bp-table-header">
+              <div><div class="bp-table-title">Registro de Cargas de Combustible</div></div>
+              <div class="bp-table-actions">
+                <input class="bp-search" placeholder="Buscar..." id="sComb" oninput="renderComb()">
+                <select class="bp-filter" id="fCombActivo" onchange="renderComb()"><option value="">Todos los activos</option></select>
+                <button class="bp-btn-primary" onclick="openModal('modalCombustible')">+ Registrar Carga</button>
+              </div>
+            </div>
+            <div style="overflow-x:auto"><table class="bp-table">
+              <thead><tr><th>Fecha</th><th>Activo</th><th>Operador</th><th>Litros</th><th>Tipo</th><th>Horómetro/Km</th><th>Tarea</th><th>Obs.</th></tr></thead>
+              <tbody id="tComb"></tbody>
+            </table></div>
+          </div>
+        </div>
+        <div id="comb-resumen" class="inner-panel">
+          <div id="combResumenContainer" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;padding:4px"></div>
+        </div>
+      </div>
+
+      <!-- CONTEOS AGRONÓMICOS -->
+      <div id="panel-conteos" class="tab-panel">
+        <div class="inner-tabs">
+          <div class="inner-tab active" onclick="showInner('cnt-nuevo',this)">📋 Nuevo Conteo</div>
+          <div class="inner-tab" onclick="showInner('cnt-historial',this)">📊 Historial</div>
+          <div class="inner-tab" onclick="showInner('cnt-resumen',this)">🌳 Resumen por Cuadro</div>
+        </div>
+        <div id="cnt-nuevo" class="inner-panel active">
+          <div class="bp-table-wrap" style="padding:24px">
+            <div class="bp-table-title" style="margin-bottom:20px">Registrar Conteo Agronómico</div>
+            <div class="form-grid">
+              <div class="form-group"><label>Fecha</label><input type="date" id="cnt-fecha"></div>
+              <div class="form-group"><label>Responsable</label><input id="cnt-resp" placeholder="Nombre del responsable"></div>
+              <div class="form-group"><label>Finca</label>
+                <select id="cnt-finca" onchange="renderCuadrosConteo()">
+                  <option value="oeste">Finca Oeste</option><option value="este">Finca Este</option>
+                </select>
+              </div>
+              <div class="form-group"><label>Sector</label>
+                <select id="cnt-sector" onchange="renderCuadrosConteo()">
+                  <option>SUR</option><option>NORTE</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option><option>H</option><option>I</option><option>J</option><option>K</option><option>L</option><option>M</option><option>N</option>
+                </select>
+              </div>
+              <div class="form-group"><label>Observaciones generales</label><input id="cnt-obs" placeholder="Notas del recorrido..."></div>
+            </div>
+            <div style="margin-top:24px">
+              <div class="bp-table-title" style="font-size:13px;margin-bottom:12px;color:var(--muted2)">DATOS POR CUADRO</div>
+              <div style="overflow-x:auto"><table class="bp-table" id="tConteoInput">
+                <thead><tr><th>Cuadro</th><th>Plantas totales</th><th>Muertas</th><th>Injerto no prendido</th><th>% Muerte</th><th>% Inj. no prendido</th><th>Obs.</th></tr></thead>
+                <tbody id="tbConteoInput"></tbody>
+              </table></div>
+            </div>
+            <div style="margin-top:20px;display:flex;gap:12px">
+              <button class="bp-btn-primary" onclick="saveConteo()">💾 Guardar Conteo</button>
+              <button class="btn btn-secondary" onclick="renderCuadrosConteo()">↺ Recargar cuadros</button>
+            </div>
+          </div>
+        </div>
+        <div id="cnt-historial" class="inner-panel">
+          <div class="bp-table-wrap">
+            <div class="bp-table-header">
+              <div><div class="bp-table-title">Historial de Conteos</div></div>
+              <div class="bp-table-actions">
+                <select class="bp-filter" id="fCntSector" onchange="renderConteoHistorial()"><option value="">Todos los sectores</option></select>
+              </div>
+            </div>
+            <div style="overflow-x:auto"><table class="bp-table">
+              <thead><tr><th>Fecha</th><th>Sector</th><th>Cuadros relevados</th><th>Responsable</th><th>% Muerte prom.</th><th>% Inj. no prendido prom.</th><th>Obs.</th></tr></thead>
+              <tbody id="tConteoHist"></tbody>
+            </table></div>
+          </div>
+        </div>
+        <div id="cnt-resumen" class="inner-panel">
+          <div class="bp-table-wrap">
+            <div class="bp-table-header">
+              <div><div class="bp-table-title">Resumen por Cuadro — Último Conteo</div></div>
+              <div class="bp-table-actions">
+                <select class="bp-filter" id="fCntResumenSector" onchange="renderConteoResumen()">
+                  <option value="">Todos los sectores</option>
+                  <option>SUR</option><option>NORTE</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option><option>H</option><option>I</option><option>J</option><option>K</option><option>L</option><option>M</option><option>N</option>
+                </select>
+              </div>
+            </div>
+            <div style="overflow-x:auto"><table class="bp-table">
+              <thead><tr><th>Sector</th><th>Cuadro</th><th>Plantas totales</th><th>Muertas</th><th>% Muerte</th><th>Inj. no prendido</th><th>% Inj.</th><th>Último conteo</th></tr></thead>
+              <tbody id="tConteoResumen"></tbody>
+            </table></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PERSONAS -->
+      <div id="panel-personas" class="tab-panel">
+        <div class="inner-tabs">
+          <div class="inner-tab active" onclick="showInner('per-lista',this)">👷 Empleados</div>
+          <div class="inner-tab" onclick="showInner('per-ingresos',this)">✅ Ingresos</div>
+          <div class="inner-tab" onclick="showInner('per-egresos',this)">🚪 Egresos</div>
+          <div class="inner-tab" onclick="showInner('per-docs',this)">📋 Documentación</div>
+        </div>
+        <div id="per-lista" class="inner-panel active">
+          <div class="bp-table-wrap">
+            <div class="bp-table-header">
+              <div><div class="bp-table-title">Personas</div><div class="bp-table-sub" id="per-count">— empleados activos</div></div>
+              <div class="bp-table-actions">
+                <input class="bp-search" placeholder="Buscar..." id="sPer" oninput="renderPersonas()">
+                <select class="bp-filter" id="fPerEmpresa" onchange="renderPersonas()">
                   <option value="">Todas las empresas</option>
                   <option>Bravo Pistachos</option><option>BC Construcciones</option><option>Bravo CAMC</option>
                 </select>
-                <button class="btn btn-primary" onclick="openModal('modalEquipo')">+ Nuevo Equipo</button>
-              </div>
-            </div>
-            <div style="overflow-x:auto"><table>
-              <thead><tr><th>Código</th><th>Descripción</th><th>Tipo</th><th>Empresa</th><th>Marca/Modelo</th><th>Año</th><th>Patente/Serie</th><th>Estado</th><th>Próx. Service</th><th>Acc.</th></tr></thead>
-              <tbody id="tEquipos"></tbody>
-            </table></div>
-          </div>
-        </div>
-        <div id="mant-ordenes" class="inner-panel">
-          <div class="empty-state"><div class="empty-icon">🔧</div><div>Órdenes de Trabajo — próximamente</div><small style="color:var(--muted)">Correctivo, reparaciones, historial por equipo</small></div>
-        </div>
-        <div id="mant-preventivo" class="inner-panel">
-          <div class="empty-state"><div class="empty-icon">📅</div><div>Mantenimiento Preventivo — próximamente</div><small style="color:var(--muted)">Plan de services, recordatorios automáticos</small></div>
-        </div>
-      </div>
-
-      <!-- PROYECTOS -->
-      <div id="panel-proyectos" class="tab-panel">
-        <div class="inner-tabs">
-          <div class="inner-tab active" onclick="showInner('proy-lista',this)">📌 Proyectos</div>
-          <div class="inner-tab" onclick="showInner('proy-tareas',this)">✅ Tareas</div>
-          <div class="inner-tab" onclick="showInner('proy-gantt',this)">📊 Cronograma</div>
-        </div>
-        <div id="proy-lista" class="inner-panel active">
-          <div class="table-wrap">
-            <div class="table-top">
-              <div class="table-top-title">📌 Proyectos</div>
-              <div class="table-filters">
-                <input class="search-input" type="text" placeholder="🔍 Buscar..." id="sProyectos" oninput="renderProyectos()">
-                <select class="filter-select" id="fProyEstado" onchange="renderProyectos()">
-                  <option value="">Todos los estados</option>
-                  <option>En curso</option><option>Pausado</option><option>Completado</option><option>Cancelado</option>
+                <select class="bp-filter" id="fPerEstado" onchange="renderPersonas()">
+                  <option value="">Todos</option><option>Activo</option><option>Inactivo</option>
                 </select>
-                <button class="btn btn-primary" onclick="openModal('modalProyecto')">+ Nuevo Proyecto</button>
+                <button class="bp-btn-primary" onclick="openModal('modalPersona')">+ Nueva Persona</button>
               </div>
             </div>
-            <div style="overflow-x:auto"><table>
-              <thead><tr><th>Nombre</th><th>Empresa</th><th>Responsable</th><th>Inicio</th><th>Fin estimado</th><th>Avance</th><th>Estado</th><th>Acc.</th></tr></thead>
-              <tbody id="tProyectos"></tbody>
+            <div style="overflow-x:auto"><table class="bp-table">
+              <thead><tr><th>Nombre</th><th>DNI</th><th>Empresa</th><th>Área</th><th>Puesto</th><th>Ingreso</th><th>Estado</th><th>Contacto</th><th></th></tr></thead>
+              <tbody id="tPersonas"></tbody>
             </table></div>
           </div>
         </div>
-        <div id="proy-tareas" class="inner-panel">
-          <div class="empty-state"><div class="empty-icon">✅</div><div>Gestión de Tareas — próximamente</div><small style="color:var(--muted)">Asignación, prioridades, seguimiento por proyecto</small></div>
+        <div id="per-ingresos" class="inner-panel">
+          <div class="bp-table-wrap">
+            <div class="bp-table-header">
+              <div><div class="bp-table-title">Historial de Ingresos</div></div>
+              <div class="bp-table-actions">
+                <button class="bp-btn-primary" onclick="openModal('modalPersona')">+ Registrar Ingreso</button>
+              </div>
+            </div>
+            <div style="overflow-x:auto"><table class="bp-table">
+              <thead><tr><th>Fecha ingreso</th><th>Nombre</th><th>DNI</th><th>Empresa</th><th>Puesto</th><th>Tipo contrato</th><th>Registrado por</th></tr></thead>
+              <tbody id="tIngresos"></tbody>
+            </table></div>
+          </div>
         </div>
-        <div id="proy-gantt" class="inner-panel">
-          <div class="empty-state"><div class="empty-icon">📊</div><div>Cronograma Gantt — próximamente</div><small style="color:var(--muted)">Visualización de tiempos y dependencias</small></div>
+        <div id="per-egresos" class="inner-panel">
+          <div class="bp-table-wrap">
+            <div class="bp-table-header">
+              <div><div class="bp-table-title">Historial de Egresos</div></div>
+              <div class="bp-table-actions">
+                <button class="bp-btn-primary" onclick="openModal('modalEgreso')">+ Registrar Egreso</button>
+              </div>
+            </div>
+            <div style="overflow-x:auto"><table class="bp-table">
+              <thead><tr><th>Fecha egreso</th><th>Nombre</th><th>DNI</th><th>Empresa</th><th>Motivo</th><th>Observaciones</th><th>Registrado por</th></tr></thead>
+              <tbody id="tEgresos"></tbody>
+            </table></div>
+          </div>
+        </div>
+        <div id="per-docs" class="inner-panel">
+          <div class="bp-table-wrap">
+            <div class="bp-table-header">
+              <div><div class="bp-table-title">Documentación y Vencimientos</div></div>
+              <div class="bp-table-actions">
+                <button class="bp-btn-primary" onclick="openModal('modalPerDoc')">+ Agregar Documento</button>
+              </div>
+            </div>
+            <div style="overflow-x:auto"><table class="bp-table">
+              <thead><tr><th>Empleado</th><th>Tipo documento</th><th>Número</th><th>Vencimiento</th><th>Estado</th><th>Obs.</th><th></th></tr></thead>
+              <tbody id="tPerDocs"></tbody>
+            </table></div>
+          </div>
         </div>
       </div>
 
-      <!-- DOCUMENTOS -->
-      <div id="panel-documentos" class="tab-panel">
-        <div class="table-wrap">
-          <div class="table-top">
-            <div class="table-top-title">📁 Documentos</div>
-            <div class="table-filters">
-              <input class="search-input" type="text" placeholder="🔍 Buscar..." id="sDocs" oninput="renderDocs()">
-              <select class="filter-select" id="fDocsCategoria" onchange="renderDocs()">
-                <option value="">Todas las categorías</option>
-                <option>Contratos</option><option>Manuales</option><option>Procedimientos</option><option>Certificados</option><option>Otros</option>
-              </select>
-              <button class="btn btn-primary" onclick="openModal('modalDoc')">+ Subir Documento</button>
-            </div>
-          </div>
-          <div style="overflow-x:auto"><table>
-            <thead><tr><th>Nombre</th><th>Categoría</th><th>Empresa</th><th>Subido por</th><th>Fecha</th><th>Descripción</th><th>Acc.</th></tr></thead>
-            <tbody id="tDocs"></tbody>
-          </table></div>
+      <!-- ASISTENCIA (solo estructura) -->
+      <div id="panel-asistencia" class="tab-panel">
+        <div class="empty-state" style="padding:80px 24px">
+          <div class="empty-icon">🕐</div>
+          <div style="font-size:20px;font-weight:600;color:var(--text);margin-bottom:8px">Asistencia</div>
+          <div style="color:var(--muted);max-width:360px;text-align:center">Módulo en construcción. Próximamente: fichaje diario, control de presentismo y vinculación con partes.</div>
         </div>
-      </div>
-
-      <!-- AUDITORÍA -->
-      <div id="panel-auditoria" class="tab-panel">
-        <div class="table-wrap">
-          <div class="table-top">
-            <div class="table-top-title">📊 Log de Auditoría</div>
-            <div class="table-filters">
-              <input class="search-input" type="text" placeholder="🔍 Buscar usuario o acción..." id="sAudit" oninput="renderAuditoria()">
-              <select class="filter-select" id="fAuditModulo" onchange="renderAuditoria()">
-                <option value="">Todos los módulos</option>
-                <option>Campo</option><option>Riego</option><option>Tractores</option><option>RRHH</option><option>Compras</option><option>Stock</option><option>Mantenimiento</option><option>Proyectos</option><option>Documentos</option>
-              </select>
-            </div>
-          </div>
-          <div style="overflow-x:auto"><table>
-            <thead><tr><th>Fecha/Hora</th><th>Usuario</th><th>Módulo</th><th>Acción</th><th>Detalle</th></tr></thead>
-            <tbody id="tAuditoria"></tbody>
-          </table></div>
-        </div>
-      </div>
-
-      <!-- PISTACHOS -->
-      <div id="panel-pistachos" class="tab-panel">
-
-        <!-- DASHBOARD HEADER -->
-        <div class="bp-header">
-          <div class="bp-header-left">
-            <div class="bp-breadcrumb">GRUPO BRAVO · AGRICULTURA</div>
-            <h1 class="bp-title">Bravo Pistachos</h1>
-            <div class="bp-subtitle">1.000 ha · San Juan, Argentina · Temporada 2025/2026</div>
-          </div>
-          <div class="bp-header-stats">
-            <div class="bp-stat-card">
-              <div class="bp-stat-value" id="stat-partes-hoy">—</div>
-              <div class="bp-stat-label">Partes hoy</div>
-            </div>
-            <div class="bp-stat-card">
-              <div class="bp-stat-value" id="stat-jornales">—</div>
-              <div class="bp-stat-label">Jornales semana</div>
-            </div>
-            <div class="bp-stat-card">
-              <div class="bp-stat-value" id="stat-hectareas">—</div>
-              <div class="bp-stat-label">Ha trabajadas</div>
-            </div>
-            <div class="bp-stat-card bp-stat-accent">
-              <div class="bp-stat-value" id="stat-tarea-top">—</div>
-              <div class="bp-stat-label">Tarea principal</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- INNER TABS -->
-        <div class="bp-tabs">
-          <button class="bp-tab active" onclick="showBPTab('bp-partes',this)">
-            <span class="bp-tab-icon">📋</span> Partes Diarios
-          </button>
-          <button class="bp-tab" onclick="showBPTab('bp-mapa',this);renderMapa()">
-            <span class="bp-tab-icon">🗺</span> Mapa de Finca
-          </button>
-          <button class="bp-tab" onclick="showBPTab('bp-analytics',this);renderAnalytics()">
-            <span class="bp-tab-icon">📊</span> Analítica
-          </button>
-          <button class="bp-tab" onclick="showBPTab('bp-org',this);renderOrg()">
-            <span class="bp-tab-icon">👥</span> Equipo
-          </button>
-        </div>
-
-        <!-- PARTES -->
-        <div id="bp-partes" class="bp-panel active">
-          <div class="bp-parte-selector">
-            <button class="bp-parte-btn active campo" onclick="showParte('campo',this)">
-              <span>🌾</span> Campo
-            </button>
-            <button class="bp-parte-btn" onclick="showParte('riego',this)">
-              <span>💧</span> Riego
-            </button>
-            <button class="bp-parte-btn" onclick="showParte('tractor',this)">
-              <span>🚜</span> Tractores
-            </button>
-          </div>
-
-          <div id="parte-campo" class="parte-panel active">
-            <div class="bp-table-wrap">
-              <div class="bp-table-header">
-                <div>
-                  <div class="bp-table-title">Partes de Campo</div>
-                  <div class="bp-table-sub" id="bp-campo-count">— registros</div>
-                </div>
-                <div class="bp-table-actions">
-                  <input class="bp-search" type="text" placeholder="Buscar..." id="sCampo" oninput="renderCampo()">
-                  <select class="bp-filter" id="fCampoTarea" onchange="renderCampo()"><option value="">Todas las tareas</option></select>
-                  <button class="bp-btn-primary" id="btnNuevoCampo" onclick="abrirModalCampo()">+ Nuevo Parte</button>
-                </div>
-              </div>
-              <div style="overflow-x:auto">
-              <table class="bp-table">
-                <thead><tr><th>Fecha</th><th>Responsable</th><th>Horario</th><th>Tarea</th><th>Empresa</th><th>Sector</th><th>Desde</th><th>Hasta</th><th>Melgas</th><th>P/Melga</th><th>Rend.</th><th>Jornales</th><th></th></tr></thead>
-                <tbody id="tCampo"></tbody>
-              </table>
-              </div>
-            </div>
-          </div>
-
-          <div id="parte-riego" class="parte-panel">
-            <div class="bp-table-wrap">
-              <div class="bp-table-header">
-                <div>
-                  <div class="bp-table-title">Partes de Riego</div>
-                  <div class="bp-table-sub" id="bp-riego-count">— registros</div>
-                </div>
-                <div class="bp-table-actions">
-                  <input class="bp-search" type="text" placeholder="Buscar..." id="sRiego" oninput="renderRiego()">
-                  <select class="bp-filter" id="fRiegoTarea" onchange="renderRiego()"><option value="">Todas las tareas</option></select>
-                  <button class="bp-btn-primary" id="btnNuevoRiego" onclick="abrirModalRiego()">+ Nuevo Parte</button>
-                </div>
-              </div>
-              <div style="overflow-x:auto">
-              <table class="bp-table">
-                <thead><tr><th>Fecha</th><th>Responsable</th><th>Horario</th><th>Tarea</th><th>Empresa</th><th>Sector</th><th>Desde</th><th>Hasta</th><th>Jornales</th><th>Notas</th><th></th></tr></thead>
-                <tbody id="tRiego"></tbody>
-              </table>
-              </div>
-            </div>
-          </div>
-
-          <div id="parte-tractor" class="parte-panel">
-            <div class="bp-table-wrap">
-              <div class="bp-table-header">
-                <div>
-                  <div class="bp-table-title">Partes de Tractores</div>
-                  <div class="bp-table-sub" id="bp-tractor-count">— registros</div>
-                </div>
-                <div class="bp-table-actions">
-                  <input class="bp-search" type="text" placeholder="Buscar..." id="sTractor" oninput="renderTractor()">
-                  <select class="bp-filter" id="fTractorTarea" onchange="renderTractor()"><option value="">Todas las tareas</option></select>
-                  <button class="bp-btn-primary" id="btnNuevoTractor" onclick="abrirModalTractor()">+ Nuevo Parte</button>
-                </div>
-              </div>
-              <div style="overflow-x:auto">
-              <table class="bp-table">
-                <thead><tr><th>Fecha</th><th>Responsable</th><th>Horario</th><th>Tractor</th><th>Implemento</th><th>Tarea</th><th>Empresa</th><th>Sector</th><th>Melgas</th><th>Jornales</th><th></th></tr></thead>
-                <tbody id="tTractor"></tbody>
-              </table>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- MAPA -->
-        <div id="bp-mapa" class="bp-panel">
-          <div class="bp-map-controls">
-            <div class="bp-map-fincas">
-              <button class="bp-finca-btn active" onclick="switchFinca('oeste',this)">Finca Oeste</button>
-              <button class="bp-finca-btn" onclick="switchFinca('este',this)">Finca Este</button>
-            </div>
-            <div class="bp-map-filters">
-              <select class="bp-filter" id="mapTemporada" onchange="renderMapaActivo()">
-                <option value="2025-2026">Temporada 2025/2026</option>
-                <option value="2024-2025">Temporada 2024/2025</option>
-                <option value="2026-2027">Temporada 2026/2027</option>
-              </select>
-              <select class="bp-filter" id="mapFTipo" onchange="renderMapaActivo()">
-                <option value="">Todos los tipos</option>
-                <option value="campo">🌾 Campo</option>
-                <option value="riego">💧 Riego</option>
-                <option value="tractor">🚜 Tractor</option>
-              </select>
-              <select class="bp-filter" id="mapFT" onchange="renderMapaActivo()">
-                <option value="">Todas las tareas</option>
-              </select>
-            </div>
-          </div>
-          <div class="bp-map-legend">
-            <span class="bp-legend-item"><span class="bp-legend-dot" style="background:rgba(46,204,113,0.6)"></span>Desbrote/Atada</span>
-            <span class="bp-legend-item"><span class="bp-legend-dot" style="background:rgba(240,180,41,0.6)"></span>Poda</span>
-            <span class="bp-legend-item"><span class="bp-legend-dot" style="background:rgba(52,152,219,0.6)"></span>Riego</span>
-            <span class="bp-legend-item"><span class="bp-legend-dot" style="background:rgba(231,76,60,0.6)"></span>Herbicida</span>
-            <span class="bp-legend-item"><span class="bp-legend-dot" style="background:rgba(155,89,182,0.6)"></span>Foliar</span>
-            <span class="bp-legend-item"><span class="bp-legend-dot" style="background:rgba(230,126,34,0.6)"></span>Cosecha</span>
-          </div>
-          <div id="pasadasContainer"></div>
-        </div>
-
-        <!-- ANALÍTICA -->
-        <div id="bp-analytics" class="bp-panel">
-          <div class="bp-analytics-grid">
-            <div class="bp-analytics-card bp-analytics-wide">
-              <div class="bp-analytics-title">Jornales por semana</div>
-              <canvas id="chartJornales" height="120"></canvas>
-            </div>
-            <div class="bp-analytics-card">
-              <div class="bp-analytics-title">Distribución de tareas</div>
-              <canvas id="chartTareas" height="160"></canvas>
-            </div>
-            <div class="bp-analytics-card">
-              <div class="bp-analytics-title">Actividad por sector</div>
-              <canvas id="chartSectores" height="160"></canvas>
-            </div>
-          </div>
-        </div>
-
-        <!-- EQUIPO -->
-        <div id="bp-org" class="bp-panel">
-          <div class="bp-org-actions">
-            <button class="bp-btn-primary" onclick="openModal('modalOrg')">+ Agregar Posición</button>
-          </div>
-          <div class="org-container" id="orgTree"></div>
-        </div>
-
-      </div><!-- fin pistachos -->
-
-      <!-- CONSTRUCCION -->
-      <div id="panel-construccion" class="tab-panel">
-        <div class="empty-state"><div class="empty-icon">🏗️</div><div style="font-size:18px;font-weight:600;color:var(--text);margin-bottom:8px">BC Construcciones</div><div>Próximamente</div></div>
-      </div>
-
-      <!-- CAMIONES -->
-      <div id="panel-camiones" class="tab-panel">
-        <div class="empty-state"><div class="empty-icon">🚛</div><div style="font-size:18px;font-weight:600;color:var(--text);margin-bottom:8px">Bravo CAMC</div><div>Próximamente</div></div>
       </div>
 
       <!-- PERMISOS -->
@@ -1040,6 +1026,171 @@ tbody td { padding:11px 14px; font-size:13px; vertical-align:middle; }
     </div>
   </div>
 </div>
+
+
+<!-- MODAL AQ PRODUCTO -->
+<div class="modal-overlay" id="modalAqProducto"><div class="modal">
+  <div class="modal-head"><span class="modal-title">🧪 Nuevo Producto</span><button class="modal-close" onclick="closeModal('modalAqProducto')">✕</button></div>
+  <div class="modal-body"><div class="form-grid">
+    <div class="form-group span2"><label>Nombre del producto</label><input id="aqp-nombre" placeholder="Glifosato 48%, Urea, etc."></div>
+    <div class="form-group"><label>Tipo</label><select id="aqp-tipo"><option>Herbicida</option><option>Insecticida</option><option>Fungicida</option><option>Fertilizante</option><option>Otro</option></select></div>
+    <div class="form-group"><label>Principio activo</label><input id="aqp-pa" placeholder="Glifosato, Clorpirifos..."></div>
+    <div class="form-group"><label>Unidad</label><select id="aqp-unidad"><option>kg</option><option>lt</option><option>u</option></select></div>
+    <div class="form-group"><label>Stock actual</label><input type="number" id="aqp-stock" placeholder="0" min="0"></div>
+    <div class="form-group"><label>Stock mínimo (alerta)</label><input type="number" id="aqp-min" placeholder="0" min="0"></div>
+    <div class="form-group"><label>Vencimiento</label><input type="date" id="aqp-venc"></div>
+    <div class="form-group"><label>Depósito</label><input id="aqp-deposito" placeholder="Depósito principal..."></div>
+    <div class="form-group"><label>N° Registro SENASA</label><input id="aqp-senasa" placeholder="Opcional"></div>
+  </div></div>
+  <div class="modal-foot"><button class="btn btn-secondary" onclick="closeModal('modalAqProducto')">Cancelar</button><button class="btn btn-primary" onclick="saveAqProducto()">Guardar</button></div>
+</div></div>
+
+<!-- MODAL AQ ENTRADA -->
+<div class="modal-overlay" id="modalAqEntrada"><div class="modal">
+  <div class="modal-head"><span class="modal-title">📥 Registrar Entrada</span><button class="modal-close" onclick="closeModal('modalAqEntrada')">✕</button></div>
+  <div class="modal-body"><div class="form-grid">
+    <div class="form-group"><label>Fecha</label><input type="date" id="aqe-fecha"></div>
+    <div class="form-group"><label>Producto</label><select id="aqe-producto"><option value="">— Seleccioná —</option></select></div>
+    <div class="form-group"><label>Cantidad</label><input type="number" id="aqe-cantidad" placeholder="0" min="0"></div>
+    <div class="form-group"><label>Unidad</label><select id="aqe-unidad"><option>kg</option><option>lt</option><option>u</option></select></div>
+    <div class="form-group"><label>Proveedor</label><input id="aqe-proveedor" placeholder="Nombre del proveedor"></div>
+    <div class="form-group"><label>Remito / Factura</label><input id="aqe-remito" placeholder="R-0001-00000123"></div>
+    <div class="form-group"><label>Vencimiento lote</label><input type="date" id="aqe-venc"></div>
+  </div></div>
+  <div class="modal-foot"><button class="btn btn-secondary" onclick="closeModal('modalAqEntrada')">Cancelar</button><button class="btn btn-primary" onclick="saveAqEntrada()">Guardar</button></div>
+</div></div>
+
+<!-- MODAL AQ SALIDA -->
+<div class="modal-overlay" id="modalAqSalida"><div class="modal">
+  <div class="modal-head"><span class="modal-title">📤 Registrar Aplicación</span><button class="modal-close" onclick="closeModal('modalAqSalida')">✕</button></div>
+  <div class="modal-body"><div class="form-grid">
+    <div class="form-group"><label>Fecha</label><input type="date" id="aqs-fecha"></div>
+    <div class="form-group"><label>Producto</label><select id="aqs-producto"><option value="">— Seleccioná —</option></select></div>
+    <div class="form-group"><label>Cantidad usada</label><input type="number" id="aqs-cantidad" placeholder="0" min="0"></div>
+    <div class="form-group"><label>Sector</label><select id="aqs-sector"><option>SUR</option><option>NORTE</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option><option>H</option><option>I</option><option>J</option><option>K</option><option>L</option><option>M</option><option>N</option></select></div>
+    <div class="form-group"><label>Cuadro desde</label><input type="number" id="aqs-desde" placeholder="1" min="1"></div>
+    <div class="form-group"><label>Cuadro hasta</label><input type="number" id="aqs-hasta" placeholder="20" min="1"></div>
+    <div class="form-group"><label>Dosis aplicada</label><input id="aqs-dosis" placeholder="2 lt/ha, 200 cc/100lt..."></div>
+    <div class="form-group"><label>Operador</label><input id="aqs-operador" placeholder="Nombre del aplicador"></div>
+    <div class="form-group span2"><label>Observaciones</label><input id="aqs-obs" placeholder="Condiciones, notas..."></div>
+  </div></div>
+  <div class="modal-foot"><button class="btn btn-secondary" onclick="closeModal('modalAqSalida')">Cancelar</button><button class="btn btn-primary" onclick="saveAqSalida()">Guardar</button></div>
+</div></div>
+
+<!-- MODAL INVENTARIO ITEM -->
+<div class="modal-overlay" id="modalInvItem"><div class="modal">
+  <div class="modal-head"><span class="modal-title">📦 Nuevo Ítem de Inventario</span><button class="modal-close" onclick="closeModal('modalInvItem')">✕</button></div>
+  <div class="modal-body"><div class="form-grid">
+    <div class="form-group"><label>Código</label><input id="invi-cod" placeholder="MAT-001"></div>
+    <div class="form-group"><label>Descripción</label><input id="invi-desc" placeholder="Nombre del ítem"></div>
+    <div class="form-group"><label>Categoría</label><select id="invi-cat"><option>Insumos</option><option>Materiales</option><option>Repuestos</option><option>Embalajes</option><option>Otros</option></select></div>
+    <div class="form-group"><label>Depósito</label><input id="invi-dep" placeholder="Depósito A, Galpón..."></div>
+    <div class="form-group"><label>Stock actual</label><input type="number" id="invi-stock" placeholder="0"></div>
+    <div class="form-group"><label>Stock mínimo</label><input type="number" id="invi-min" placeholder="0"></div>
+    <div class="form-group"><label>Unidad</label><input id="invi-unidad" placeholder="u, kg, m, lt..."></div>
+  </div></div>
+  <div class="modal-foot"><button class="btn btn-secondary" onclick="closeModal('modalInvItem')">Cancelar</button><button class="btn btn-primary" onclick="saveInvItem()">Guardar</button></div>
+</div></div>
+
+<!-- MODAL INVENTARIO MOVIMIENTO -->
+<div class="modal-overlay" id="modalInvMov"><div class="modal">
+  <div class="modal-head"><span class="modal-title">↔️ Registrar Movimiento</span><button class="modal-close" onclick="closeModal('modalInvMov')">✕</button></div>
+  <div class="modal-body"><div class="form-grid">
+    <div class="form-group"><label>Tipo</label><select id="invm-tipo"><option>Entrada</option><option>Salida</option><option>Ajuste</option></select></div>
+    <div class="form-group"><label>Ítem</label><select id="invm-item"><option value="">— Seleccioná —</option></select></div>
+    <div class="form-group"><label>Cantidad</label><input type="number" id="invm-cant" placeholder="0" min="0"></div>
+    <div class="form-group"><label>Depósito</label><input id="invm-dep" placeholder="Depósito de origen/destino"></div>
+    <div class="form-group span2"><label>Motivo</label><input id="invm-motivo" placeholder="Compra, uso en campo, ajuste de inventario..."></div>
+  </div></div>
+  <div class="modal-foot"><button class="btn btn-secondary" onclick="closeModal('modalInvMov')">Cancelar</button><button class="btn btn-primary" onclick="saveInvMov()">Guardar</button></div>
+</div></div>
+
+<!-- MODAL HERRAMIENTA -->
+<div class="modal-overlay" id="modalHerramienta"><div class="modal">
+  <div class="modal-head"><span class="modal-title">🔨 Nueva Herramienta</span><button class="modal-close" onclick="closeModal('modalHerramienta')">✕</button></div>
+  <div class="modal-body"><div class="form-grid">
+    <div class="form-group"><label>Código</label><input id="her-cod" placeholder="HER-001"></div>
+    <div class="form-group"><label>Descripción</label><input id="her-desc" placeholder="Tijera de poda, Motosierra..."></div>
+    <div class="form-group span2"><label>Tipo</label><select id="her-tipo"><option>Poda</option><option>Cosecha</option><option>Riego</option><option>Seguridad</option><option>Medición</option><option>Otro</option></select></div>
+  </div></div>
+  <div class="modal-foot"><button class="btn btn-secondary" onclick="closeModal('modalHerramienta')">Cancelar</button><button class="btn btn-primary" onclick="saveHerramienta()">Guardar</button></div>
+</div></div>
+
+<!-- MODAL ACTIVO -->
+<div class="modal-overlay" id="modalActivo"><div class="modal">
+  <div class="modal-head"><span class="modal-title">🚜 Nuevo Activo</span><button class="modal-close" onclick="closeModal('modalActivo')">✕</button></div>
+  <div class="modal-body"><div class="form-grid">
+    <div class="form-group"><label>Código</label><input id="act-cod" placeholder="TRA-001"></div>
+    <div class="form-group"><label>Descripción</label><input id="act-desc" placeholder="Tractor Valtra T155"></div>
+    <div class="form-group"><label>Tipo</label><select id="act-tipo"><option>Tractor</option><option>Camión</option><option>Vehículo</option><option>Maquinaria</option><option>Herramienta mayor</option><option>Otro</option></select></div>
+    <div class="form-group"><label>Marca / Modelo</label><input id="act-marca" placeholder="Valtra T155"></div>
+    <div class="form-group"><label>Año</label><input type="number" id="act-anio" placeholder="2020"></div>
+    <div class="form-group"><label>Patente / Serie</label><input id="act-patente" placeholder="AB123CD"></div>
+    <div class="form-group"><label>Horas / Km actuales</label><input type="number" id="act-horas" placeholder="0"></div>
+    <div class="form-group"><label>Estado</label><select id="act-estado"><option>Operativo</option><option>Mantenimiento</option><option>Baja</option></select></div>
+    <div class="form-group span2"><label>Próximo service</label><input type="date" id="act-service"></div>
+  </div></div>
+  <div class="modal-foot"><button class="btn btn-secondary" onclick="closeModal('modalActivo')">Cancelar</button><button class="btn btn-primary" onclick="saveActivo()">Guardar</button></div>
+</div></div>
+
+<!-- MODAL ORDEN DE TRABAJO -->
+<div class="modal-overlay" id="modalOT"><div class="modal">
+  <div class="modal-head"><span class="modal-title">🔧 Nueva Orden de Trabajo</span><button class="modal-close" onclick="closeModal('modalOT')">✕</button></div>
+  <div class="modal-body"><div class="form-grid">
+    <div class="form-group"><label>Activo</label><select id="ot-activo"><option value="">— Seleccioná —</option></select></div>
+    <div class="form-group"><label>Tipo</label><select id="ot-tipo"><option>Correctivo</option><option>Preventivo</option><option>Mejora</option></select></div>
+    <div class="form-group span2"><label>Descripción del trabajo</label><textarea id="ot-desc" rows="2" placeholder="Qué se debe hacer o qué falló..."></textarea></div>
+    <div class="form-group"><label>Fecha apertura</label><input type="date" id="ot-fecha"></div>
+    <div class="form-group"><label>Técnico / Taller</label><input id="ot-tecnico" placeholder="Nombre o taller"></div>
+    <div class="form-group"><label>Costo estimado ($)</label><input type="number" id="ot-costo" placeholder="0"></div>
+  </div></div>
+  <div class="modal-foot"><button class="btn btn-secondary" onclick="closeModal('modalOT')">Cancelar</button><button class="btn btn-primary" onclick="saveOT()">Crear OT</button></div>
+</div></div>
+
+<!-- MODAL PREVENTIVO -->
+<div class="modal-overlay" id="modalPreventivo"><div class="modal">
+  <div class="modal-head"><span class="modal-title">📅 Plan Preventivo</span><button class="modal-close" onclick="closeModal('modalPreventivo')">✕</button></div>
+  <div class="modal-body"><div class="form-grid">
+    <div class="form-group"><label>Activo</label><select id="prev-activo"><option value="">— Seleccioná —</option></select></div>
+    <div class="form-group"><label>Tarea preventiva</label><input id="prev-tarea" placeholder="Cambio de aceite, revisión filtros..."></div>
+    <div class="form-group"><label>Frecuencia</label><select id="prev-freq"><option>Mensual</option><option>Trimestral</option><option>Semestral</option><option>Anual</option><option>Cada 250hs</option><option>Cada 500hs</option><option>Cada 1000hs</option></select></div>
+    <div class="form-group"><label>Último realizado</label><input type="date" id="prev-ultimo"></div>
+    <div class="form-group"><label>Próximo</label><input type="date" id="prev-proximo"></div>
+  </div></div>
+  <div class="modal-foot"><button class="btn btn-secondary" onclick="closeModal('modalPreventivo')">Cancelar</button><button class="btn btn-primary" onclick="savePreventivo()">Guardar</button></div>
+</div></div>
+
+<!-- MODAL COMBUSTIBLE -->
+<div class="modal-overlay" id="modalCombustible"><div class="modal">
+  <div class="modal-head"><span class="modal-title">⛽ Registrar Carga</span><button class="modal-close" onclick="closeModal('modalCombustible')">✕</button></div>
+  <div class="modal-body"><div class="form-grid">
+    <div class="form-group"><label>Fecha</label><input type="date" id="comb-fecha"></div>
+    <div class="form-group"><label>Activo</label><select id="comb-activo"><option value="">— Seleccioná —</option></select></div>
+    <div class="form-group"><label>Operador</label><input id="comb-operador" placeholder="Nombre del operador"></div>
+    <div class="form-group"><label>Litros cargados</label><input type="number" id="comb-litros" placeholder="0" min="0"></div>
+    <div class="form-group"><label>Tipo combustible</label><select id="comb-tipo"><option>Gasoil</option><option>Nafta</option><option>GNC</option></select></div>
+    <div class="form-group"><label>Horómetro / Km</label><input type="number" id="comb-horometro" placeholder="0"></div>
+    <div class="form-group"><label>Tarea asociada</label><input id="comb-tarea" placeholder="Descripción de la tarea..."></div>
+    <div class="form-group"><label>Observaciones</label><input id="comb-obs" placeholder="Opcional..."></div>
+  </div></div>
+  <div class="modal-foot"><button class="btn btn-secondary" onclick="closeModal('modalCombustible')">Cancelar</button><button class="btn btn-primary" onclick="saveCombustible()">Guardar</button></div>
+</div></div>
+
+<!-- MODAL PERSONA -->
+<div class="modal-overlay" id="modalPersona"><div class="modal">
+  <div class="modal-head"><span class="modal-title">👷 Nueva Persona</span><button class="modal-close" onclick="closeModal('modalPersona')">✕</button></div>
+  <div class="modal-body"><div class="form-grid">
+    <div class="form-group span2"><label>Nombre completo</label><input id="per-nombre" placeholder="Juan Pérez"></div>
+    <div class="form-group"><label>DNI</label><input id="per-dni" placeholder="12.345.678"></div>
+    <div class="form-group"><label>Empresa</label><select id="per-empresa"><option>Bravo Pistachos</option><option>BC Construcciones</option><option>Bravo CAMC</option></select></div>
+    <div class="form-group"><label>Área</label><input id="per-area" placeholder="Campo, Administración, Taller..."></div>
+    <div class="form-group"><label>Puesto</label><input id="per-puesto" placeholder="Operario, Capataz, Técnico..."></div>
+    <div class="form-group"><label>Tipo contrato</label><select id="per-contrato"><option>Relación de dependencia</option><option>Temporada</option><option>Jornal</option><option>Contratista</option></select></div>
+    <div class="form-group"><label>Fecha de ingreso</label><input type="date" id="per-ingreso"></div>
+    <div class="form-group"><label>Contacto / Tel.</label><input id="per-contacto" placeholder="Teléfono o email"></div>
+  </div></div>
+  <div class="modal-foot"><button class="btn btn-secondary" onclick="closeModal('modalPersona')">Cancelar</button><button class="btn btn-primary" onclick="savePersona()">Guardar</button></div>
+</div></div>
 
 <!-- MODAL EMPLEADO -->
 <div class="modal-overlay" id="modalEmpleado"><div class="modal">
@@ -1435,7 +1586,17 @@ function showParte(tipo,el){
 }
 
 // ========== MODAL ==========
-function openModal(id){document.getElementById(id).classList.add('open');}
+function openModal(id){
+  // Poblar selects dinámicos antes de abrir
+  if(id==='modalAqEntrada'||id==='modalAqSalida'){
+    ['aqe-producto','aqs-producto'].forEach(sid=>{const sel=document.getElementById(sid);if(sel)sel.innerHTML='<option value="">— Seleccioná —</option>'+aqProductos.map(p=>`<option>${p.nombre}</option>`).join('');});
+  }
+  if(id==='modalInvMov'){const sel=document.getElementById('invm-item');if(sel)sel.innerHTML='<option value="">— Seleccioná —</option>'+invItems.map(i=>`<option>${i.descripcion}</option>`).join('');}
+  if(id==='modalOT'||id==='modalPreventivo'||id==='modalCombustible'){
+    ['ot-activo','prev-activo','comb-activo'].forEach(sid=>{const sel=document.getElementById(sid);if(sel)sel.innerHTML='<option value="">— Seleccioná —</option>'+activos.map(a=>`<option>${a.descripcion}</option>`).join('');});
+  }
+  document.getElementById(id).classList.add('open');
+}
 function closeModal(id){document.getElementById(id).classList.remove('open');}
 document.querySelectorAll('.modal-overlay').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open');}));
 
@@ -1661,6 +1822,620 @@ function renderTractor(){
 }
 
 // ========== MAPA ==========
+
+// ========== MÓDULOS OPERACIONALES ==========
+
+// ── Datos ──────────────────────────────────
+let aqProductos=[], aqEntradas=[], aqSalidas=[];
+let invItems=[], invMovimientos=[];
+let herramientas=[], herAsignaciones=[], herHistorial=[];
+let activos=[], ordenesTrabajo=[], preventivos=[];
+let combustibles=[];
+let conteos=[];
+let personas=[], egresos=[], perDocs=[];
+let otCounter=1;
+
+// ── AGROQUÍMICOS ────────────────────────────
+function renderAqStock(){
+  const q=(document.getElementById('sAq')?.value||'').toLowerCase();
+  const ft=document.getElementById('fAqTipo')?.value||'';
+  const rows=aqProductos.filter(r=>JSON.stringify(r).toLowerCase().includes(q)&&(!ft||r.tipo===ft));
+  const tb=document.getElementById('tAqStock'); if(!tb)return;
+  const el=document.getElementById('aq-stock-count'); if(el) el.textContent=aqProductos.length+' productos';
+  if(!rows.length){tb.innerHTML=`<tr><td colspan="10"><div class="empty-state"><div class="empty-icon">🧪</div><div>Sin productos</div></div></td></tr>`;return;}
+  const hoy=new Date();
+  tb.innerHTML=rows.map(r=>{
+    const venc=r.vencimiento?new Date(r.vencimiento):null;
+    const diasVenc=venc?Math.ceil((venc-hoy)/(1000*60*60*24)):null;
+    const stockBajo=+r.stockActual<=+r.stockMin;
+    const vencProx=diasVenc!==null&&diasVenc<=30;
+    return`<tr>
+      <td><strong>${r.nombre}</strong></td>
+      <td><span class="bp-badge bp-badge-muted">${r.tipo}</span></td>
+      <td style="color:var(--muted2);font-size:12px">${r.principioActivo||'—'}</td>
+      <td style="font-family:'DM Mono',monospace;font-size:12px">${r.unidad}</td>
+      <td><span style="font-family:'Fraunces',serif;font-size:20px;font-weight:600;color:${stockBajo?'var(--red)':'var(--accent)'}">${r.stockActual}</span>${stockBajo?' ⚠️':''}</td>
+      <td style="color:var(--muted2);font-family:'DM Mono',monospace">${r.stockMin||0}</td>
+      <td style="color:${vencProx?'var(--red)':'var(--muted2)'};font-size:12px">${r.vencimiento||'—'}${vencProx?` (${diasVenc}d)`:''}</td>
+      <td style="color:var(--muted2)">${r.deposito||'—'}</td>
+      <td style="color:var(--muted2);font-size:11px">${r.senasa||'—'}</td>
+      <td><button class="action-btn" onclick="delAqProducto(${aqProductos.indexOf(r)})">🗑️</button></td>
+    </tr>`;
+  }).join('');
+  renderAqAlertas();
+}
+function saveAqProducto(){
+  const obj={nombre:document.getElementById('aqp-nombre').value.trim(),tipo:document.getElementById('aqp-tipo').value,principioActivo:document.getElementById('aqp-pa').value.trim(),unidad:document.getElementById('aqp-unidad').value,stockActual:+document.getElementById('aqp-stock').value||0,stockMin:+document.getElementById('aqp-min').value||0,vencimiento:document.getElementById('aqp-venc').value,deposito:document.getElementById('aqp-deposito').value.trim(),senasa:document.getElementById('aqp-senasa').value.trim()};
+  if(!obj.nombre){showToast('Ingresá el nombre','err');return;}
+  aqProductos.push(obj);
+  guardarEnSheets('AqProductos',[obj.nombre,obj.tipo,obj.principioActivo,obj.unidad,obj.stockActual,obj.stockMin,obj.vencimiento,obj.deposito,obj.senasa]);
+  closeModal('modalAqProducto');renderAqStock();showToast('✅ Producto guardado');
+}
+function delAqProducto(i){if(!confirm('¿Eliminar?'))return;aqProductos.splice(i,1);renderAqStock();}
+
+function renderAqEntradas(){
+  const q=(document.getElementById('sAqEnt')?.value||'').toLowerCase();
+  const rows=aqEntradas.filter(r=>JSON.stringify(r).toLowerCase().includes(q));
+  const tb=document.getElementById('tAqEntradas');if(!tb)return;
+  if(!rows.length){tb.innerHTML=`<tr><td colspan="8"><div class="empty-state"><div class="empty-icon">📥</div><div>Sin entradas registradas</div></div></td></tr>`;return;}
+  tb.innerHTML=rows.map(r=>`<tr>
+    <td style="font-size:12px;color:var(--muted2);font-family:'DM Mono',monospace">${r.fecha}</td>
+    <td><strong>${r.producto}</strong></td>
+    <td style="font-family:'Fraunces',serif;font-size:18px;color:var(--accent)">${r.cantidad}</td>
+    <td style="font-size:12px">${r.unidad}</td>
+    <td>${r.proveedor||'—'}</td>
+    <td style="font-size:12px;color:var(--muted2)">${r.remito||'—'}</td>
+    <td style="font-size:12px;color:var(--muted2)">${r.vencimiento||'—'}</td>
+    <td>${r.responsable||'—'}</td>
+  </tr>`).join('');
+}
+function saveAqEntrada(){
+  const prod=document.getElementById('aqe-producto').value;
+  const cant=+document.getElementById('aqe-cantidad').value||0;
+  const obj={fecha:document.getElementById('aqe-fecha').value||new Date().toLocaleDateString('es-AR'),producto:prod,cantidad:cant,unidad:document.getElementById('aqe-unidad').value,proveedor:document.getElementById('aqe-proveedor').value.trim(),remito:document.getElementById('aqe-remito').value.trim(),vencimiento:document.getElementById('aqe-venc').value,responsable:currentUser?.nombre||currentUser?.user||'—'};
+  if(!obj.producto||!cant){showToast('Completá producto y cantidad','err');return;}
+  // Actualizar stock
+  const p=aqProductos.find(p=>p.nombre===prod);
+  if(p) p.stockActual=+p.stockActual+cant;
+  aqEntradas.push(obj);
+  guardarEnSheets('AqEntradas',[obj.fecha,obj.producto,obj.cantidad,obj.unidad,obj.proveedor,obj.remito,obj.vencimiento,obj.responsable]);
+  closeModal('modalAqEntrada');renderAqEntradas();renderAqStock();showToast('✅ Entrada registrada');
+}
+
+function renderAqSalidas(){
+  const q=(document.getElementById('sAqSal')?.value||'').toLowerCase();
+  const rows=aqSalidas.filter(r=>JSON.stringify(r).toLowerCase().includes(q));
+  const tb=document.getElementById('tAqSalidas');if(!tb)return;
+  if(!rows.length){tb.innerHTML=`<tr><td colspan="9"><div class="empty-state"><div class="empty-icon">📤</div><div>Sin aplicaciones registradas</div></div></td></tr>`;return;}
+  tb.innerHTML=rows.map(r=>`<tr>
+    <td style="font-size:12px;color:var(--muted2);font-family:'DM Mono',monospace">${r.fecha}</td>
+    <td><strong>${r.producto}</strong></td>
+    <td style="font-family:'Fraunces',serif;font-size:18px;color:var(--red)">${r.cantidad}</td>
+    <td><span class="bp-badge bp-badge-muted">${r.sector}</span></td>
+    <td style="font-size:12px;font-family:'DM Mono',monospace">${r.desde||'—'}</td>
+    <td style="font-size:12px;font-family:'DM Mono',monospace">${r.hasta||'—'}</td>
+    <td style="font-size:12px">${r.dosis||'—'}</td>
+    <td>${r.operador||'—'}</td>
+    <td style="font-size:12px;color:var(--muted2)">${r.obs||'—'}</td>
+  </tr>`).join('');
+}
+function saveAqSalida(){
+  const prod=document.getElementById('aqs-producto').value;
+  const cant=+document.getElementById('aqs-cantidad').value||0;
+  const p=aqProductos.find(p=>p.nombre===prod);
+  if(p&&+p.stockActual<cant){if(!confirm(`Stock insuficiente (${p.stockActual} disponibles). ¿Continuar igual?`))return;}
+  const obj={fecha:document.getElementById('aqs-fecha').value||new Date().toLocaleDateString('es-AR'),producto:prod,cantidad:cant,sector:document.getElementById('aqs-sector').value,desde:document.getElementById('aqs-desde').value,hasta:document.getElementById('aqs-hasta').value,dosis:document.getElementById('aqs-dosis').value.trim(),operador:document.getElementById('aqs-operador').value.trim()||currentUser?.nombre||'—',obs:document.getElementById('aqs-obs').value.trim()};
+  if(p) p.stockActual=Math.max(0,+p.stockActual-cant);
+  aqSalidas.push(obj);
+  guardarEnSheets('AqSalidas',[obj.fecha,obj.producto,obj.cantidad,obj.sector,obj.desde,obj.hasta,obj.dosis,obj.operador,obj.obs]);
+  closeModal('modalAqSalida');renderAqSalidas();renderAqStock();showToast('✅ Aplicación registrada');
+}
+
+function renderAqAlertas(){
+  const container=document.getElementById('aqAlertasContainer');if(!container)return;
+  const hoy=new Date(); const alertas=[];
+  aqProductos.forEach(p=>{
+    if(+p.stockActual<=+p.stockMin) alertas.push({tipo:'stock',msg:`<strong>${p.nombre}</strong> — Stock bajo mínimo (${p.stockActual} ${p.unidad}, mín: ${p.stockMin})`,color:'var(--red)'});
+    if(p.vencimiento){const d=new Date(p.vencimiento);const dias=Math.ceil((d-hoy)/(1000*60*60*24));if(dias<=30&&dias>0) alertas.push({tipo:'venc',msg:`<strong>${p.nombre}</strong> — Vence en ${dias} días (${p.vencimiento})`,color:'var(--gold)'});}
+  });
+  container.innerHTML=alertas.length?alertas.map(a=>`<div style="background:var(--surface);border:1px solid ${a.color};border-left:4px solid ${a.color};border-radius:10px;padding:14px 18px;color:var(--text);font-size:13px">⚠️ ${a.msg}</div>`).join(''):`<div class="empty-state"><div class="empty-icon">✅</div><div>Sin alertas activas</div></div>`;
+}
+
+// ── INVENTARIO ──────────────────────────────
+function renderInv(){
+  const q=(document.getElementById('sInv')?.value||'').toLowerCase();
+  const fc=document.getElementById('fInvCat')?.value||'';
+  const rows=invItems.filter(r=>JSON.stringify(r).toLowerCase().includes(q)&&(!fc||r.categoria===fc));
+  const tb=document.getElementById('tInv');if(!tb)return;
+  const el=document.getElementById('inv-count');if(el)el.textContent=invItems.length+' ítems';
+  if(!rows.length){tb.innerHTML=`<tr><td colspan="9"><div class="empty-state"><div class="empty-icon">📦</div><div>Sin ítems</div></div></td></tr>`;return;}
+  tb.innerHTML=rows.map(r=>{
+    const bajo=+r.stock<=+r.minimo;
+    return`<tr>
+      <td style="font-family:'DM Mono',monospace;color:var(--accent)">${r.codigo||'—'}</td>
+      <td><strong>${r.descripcion}</strong></td>
+      <td><span class="bp-badge bp-badge-muted">${r.categoria}</span></td>
+      <td style="color:var(--muted2)">${r.deposito||'—'}</td>
+      <td style="font-family:'Fraunces',serif;font-size:20px;color:${bajo?'var(--red)':'var(--accent)'}">${r.stock}${bajo?' ⚠️':''}</td>
+      <td style="color:var(--muted2);font-family:'DM Mono',monospace">${r.minimo||0}</td>
+      <td style="font-size:12px">${r.unidad||'u'}</td>
+      <td style="font-size:11px;color:var(--muted2)">${r.ultMov||'—'}</td>
+      <td><button class="action-btn" onclick="delInvItem(${invItems.indexOf(r)})">🗑️</button></td>
+    </tr>`;
+  }).join('');
+}
+function saveInvItem(){
+  const obj={codigo:document.getElementById('invi-cod').value.trim(),descripcion:document.getElementById('invi-desc').value.trim(),categoria:document.getElementById('invi-cat').value,deposito:document.getElementById('invi-dep').value.trim(),stock:+document.getElementById('invi-stock').value||0,minimo:+document.getElementById('invi-min').value||0,unidad:document.getElementById('invi-unidad').value.trim()||'u',ultMov:'—'};
+  if(!obj.descripcion){showToast('Ingresá descripción','err');return;}
+  invItems.push(obj);guardarEnSheets('Inventario',[obj.codigo,obj.descripcion,obj.categoria,obj.deposito,obj.stock,obj.minimo,obj.unidad]);
+  closeModal('modalInvItem');renderInv();showToast('✅ Ítem guardado');
+}
+function delInvItem(i){if(!confirm('¿Eliminar?'))return;invItems.splice(i,1);renderInv();}
+
+function renderInvMov(){
+  const q=(document.getElementById('sInvMov')?.value||'').toLowerCase();
+  const rows=invMovimientos.filter(r=>JSON.stringify(r).toLowerCase().includes(q));
+  const tb=document.getElementById('tInvMov');if(!tb)return;
+  if(!rows.length){tb.innerHTML=`<tr><td colspan="7"><div class="empty-state"><div class="empty-icon">↔️</div><div>Sin movimientos</div></div></td></tr>`;return;}
+  const tipoColor={Entrada:'bp-badge-green',Salida:'bp-badge-red',Ajuste:'bp-badge-gold'};
+  tb.innerHTML=rows.map(r=>`<tr>
+    <td style="font-size:12px;color:var(--muted2);font-family:'DM Mono',monospace">${r.fecha}</td>
+    <td><span class="bp-badge ${tipoColor[r.tipo]||'bp-badge-muted'}">${r.tipo}</span></td>
+    <td><strong>${r.item}</strong></td>
+    <td style="font-family:'Fraunces',serif;font-size:18px;color:var(--accent)">${r.cantidad}</td>
+    <td style="color:var(--muted2)">${r.deposito||'—'}</td>
+    <td>${r.responsable||'—'}</td>
+    <td style="font-size:12px;color:var(--muted2)">${r.motivo||'—'}</td>
+  </tr>`).join('');
+}
+function saveInvMov(){
+  const item=document.getElementById('invm-item').value;
+  const tipo=document.getElementById('invm-tipo').value;
+  const cant=+document.getElementById('invm-cant').value||0;
+  const obj={fecha:new Date().toLocaleDateString('es-AR'),tipo,item,cantidad:cant,deposito:document.getElementById('invm-dep').value.trim(),responsable:currentUser?.nombre||currentUser?.user||'—',motivo:document.getElementById('invm-motivo').value.trim()};
+  const p=invItems.find(i=>i.descripcion===item);
+  if(p){p.ultMov=obj.fecha;if(tipo==='Entrada')p.stock=+p.stock+cant;else if(tipo==='Salida')p.stock=Math.max(0,+p.stock-cant);}
+  invMovimientos.unshift(obj);guardarEnSheets('InvMovimientos',[obj.fecha,obj.tipo,obj.item,obj.cantidad,obj.deposito,obj.responsable,obj.motivo]);
+  closeModal('modalInvMov');renderInvMov();renderInv();showToast('✅ Movimiento registrado');
+}
+
+// ── HERRAMIENTAS ────────────────────────────
+function renderHer(){
+  const q=(document.getElementById('sHer')?.value||'').toLowerCase();
+  const fe=document.getElementById('fHerEstado')?.value||'';
+  const rows=herramientas.filter(r=>JSON.stringify(r).toLowerCase().includes(q)&&(!fe||r.estado===fe));
+  const tb=document.getElementById('tHer');if(!tb)return;
+  if(!rows.length){tb.innerHTML=`<tr><td colspan="7"><div class="empty-state"><div class="empty-icon">🔨</div><div>Sin herramientas</div></div></td></tr>`;return;}
+  const estColor={Disponible:'bp-badge-green',Asignada:'bp-badge-blue','En reparación':'bp-badge-gold',Baja:'bp-badge-red'};
+  tb.innerHTML=rows.map(r=>`<tr>
+    <td style="font-family:'DM Mono',monospace;color:var(--accent)">${r.codigo||'—'}</td>
+    <td><strong>${r.descripcion}</strong></td>
+    <td style="color:var(--muted2)">${r.tipo||'—'}</td>
+    <td><span class="bp-badge ${estColor[r.estado]||'bp-badge-muted'}">${r.estado}</span></td>
+    <td>${r.asignadaA||'—'}</td>
+    <td style="font-size:12px;color:var(--muted2)">${r.desdeAsig||'—'}</td>
+    <td>
+      ${r.estado==='Disponible'?`<button class="action-btn" onclick="asignarHer(${herramientas.indexOf(r)})">📤 Asignar</button>`:''}
+      ${r.estado==='Asignada'?`<button class="action-btn" onclick="devolverHer(${herramientas.indexOf(r)})">📥 Devolver</button>`:''}
+      <button class="action-btn" onclick="delHer(${herramientas.indexOf(r)})">🗑️</button>
+    </td>
+  </tr>`).join('');
+}
+function saveHerramienta(){
+  const obj={codigo:document.getElementById('her-cod').value.trim(),descripcion:document.getElementById('her-desc').value.trim(),tipo:document.getElementById('her-tipo').value,estado:'Disponible',asignadaA:'—',desdeAsig:'—'};
+  if(!obj.descripcion){showToast('Ingresá descripción','err');return;}
+  herramientas.push(obj);guardarEnSheets('Herramientas',[obj.codigo,obj.descripcion,obj.tipo,obj.estado]);
+  closeModal('modalHerramienta');renderHer();showToast('✅ Herramienta guardada');
+}
+function delHer(i){if(!confirm('¿Eliminar?'))return;herramientas.splice(i,1);renderHer();}
+function asignarHer(i){
+  const h=herramientas[i];
+  const persona=prompt(`Asignar "${h.descripcion}" a (nombre):`);
+  if(!persona)return;
+  h.estado='Asignada';h.asignadaA=persona;h.desdeAsig=new Date().toLocaleDateString('es-AR');
+  herHistorial.unshift({fecha:h.desdeAsig,herramienta:h.descripcion,accion:'Entrega',persona,estadoDev:'—',obs:''});
+  guardarEnSheets('HerHistorial',[h.desdeAsig,h.descripcion,'Entrega',persona,'—','']);
+  renderHer();renderHerHist();showToast(`✅ Asignada a ${persona}`);
+}
+function devolverHer(i){
+  const h=herramientas[i];
+  const estado=prompt(`Devolver "${h.descripcion}". Estado al devolver (Bueno/Regular/Dañado):`)||'Bueno';
+  h.estado='Disponible';h.asignadaA='—';
+  const fecha=new Date().toLocaleDateString('es-AR');
+  herHistorial.unshift({fecha,herramienta:h.descripcion,accion:'Devolución',persona:h.asignadaA,estadoDev:estado,obs:''});
+  guardarEnSheets('HerHistorial',[fecha,h.descripcion,'Devolución',h.asignadaA,estado,'']);
+  h.asignadaA='—';h.desdeAsig='—';
+  renderHer();renderHerHist();showToast('✅ Devolución registrada');
+}
+function renderHerHist(){
+  const tb=document.getElementById('tHerHist');if(!tb)return;
+  if(!herHistorial.length){tb.innerHTML=`<tr><td colspan="6"><div class="empty-state"><div class="empty-icon">📋</div><div>Sin movimientos</div></div></td></tr>`;return;}
+  tb.innerHTML=herHistorial.map(r=>`<tr>
+    <td style="font-size:12px;color:var(--muted2);font-family:'DM Mono',monospace">${r.fecha}</td>
+    <td><strong>${r.herramienta}</strong></td>
+    <td><span class="bp-badge ${r.accion==='Entrega'?'bp-badge-blue':'bp-badge-green'}">${r.accion}</span></td>
+    <td>${r.persona}</td>
+    <td style="color:var(--muted2)">${r.estadoDev||'—'}</td>
+    <td style="font-size:12px;color:var(--muted2)">${r.obs||'—'}</td>
+  </tr>`).join('');
+}
+
+// ── ACTIVOS Y MANTENIMIENTO ─────────────────
+function renderActivos(){
+  const q=(document.getElementById('sAct')?.value||'').toLowerCase();
+  const ft=document.getElementById('fActTipo')?.value||'';
+  const rows=activos.filter(r=>JSON.stringify(r).toLowerCase().includes(q)&&(!ft||r.tipo===ft));
+  const tb=document.getElementById('tActivos');if(!tb)return;
+  const el=document.getElementById('act-count');if(el)el.textContent=activos.length+' activos';
+  if(!rows.length){tb.innerHTML=`<tr><td colspan="10"><div class="empty-state"><div class="empty-icon">🚜</div><div>Sin activos</div></div></td></tr>`;return;}
+  const estColor={Operativo:'bp-badge-green',Mantenimiento:'bp-badge-gold',Baja:'bp-badge-red'};
+  const hoy=new Date();
+  tb.innerHTML=rows.map(r=>{
+    const serv=r.proximoService?new Date(r.proximoService):null;
+    const servVenc=serv&&serv<hoy;
+    return`<tr>
+      <td style="font-family:'DM Mono',monospace;color:var(--accent)">${r.codigo||'—'}</td>
+      <td><strong>${r.descripcion}</strong></td>
+      <td><span class="bp-badge bp-badge-muted">${r.tipo}</span></td>
+      <td style="color:var(--muted2)">${r.marca||'—'}</td>
+      <td style="color:var(--muted2)">${r.anio||'—'}</td>
+      <td style="font-family:'DM Mono',monospace;font-size:12px">${r.patente||'—'}</td>
+      <td style="font-family:'Fraunces',serif;font-size:18px;color:var(--accent)">${r.horasKm||0}</td>
+      <td><span class="bp-badge ${estColor[r.estado]||'bp-badge-muted'}">${r.estado||'—'}</span></td>
+      <td style="color:${servVenc?'var(--red)':'var(--muted2)'};font-size:12px">${r.proximoService||'—'}${servVenc?' ⚠️':''}</td>
+      <td>
+        <button class="action-btn" onclick="abrirOT(${activos.indexOf(r)})">🔧 OT</button>
+        <button class="action-btn" onclick="delActivo(${activos.indexOf(r)})">🗑️</button>
+      </td>
+    </tr>`;
+  }).join('');
+  // Actualizar select del historial
+  const sel=document.getElementById('fHistActivo');
+  if(sel){sel.innerHTML='<option value="">Todos los activos</option>'+activos.map(a=>`<option>${a.descripcion}</option>`).join('');}
+  // Actualizar select de combustible
+  const selC=document.getElementById('fCombActivo');
+  if(selC){selC.innerHTML='<option value="">Todos los activos</option>'+activos.map(a=>`<option>${a.descripcion}</option>`).join('');}
+}
+function saveActivo(){
+  const obj={codigo:document.getElementById('act-cod').value.trim(),descripcion:document.getElementById('act-desc').value.trim(),tipo:document.getElementById('act-tipo').value,marca:document.getElementById('act-marca').value.trim(),anio:document.getElementById('act-anio').value,patente:document.getElementById('act-patente').value.trim(),horasKm:+document.getElementById('act-horas').value||0,estado:document.getElementById('act-estado').value,proximoService:document.getElementById('act-service').value};
+  if(!obj.descripcion){showToast('Ingresá descripción','err');return;}
+  activos.push(obj);guardarEnSheets('Activos',[obj.codigo,obj.descripcion,obj.tipo,obj.marca,obj.anio,obj.patente,obj.horasKm,obj.estado,obj.proximoService]);
+  closeModal('modalActivo');renderActivos();showToast('✅ Activo guardado');
+}
+function delActivo(i){if(!confirm('¿Eliminar?'))return;activos.splice(i,1);renderActivos();}
+function abrirOT(i){
+  document.getElementById('ot-activo').value=activos[i].descripcion;
+  openModal('modalOT');
+}
+
+function renderOTs(){
+  const q=(document.getElementById('sOT')?.value||'').toLowerCase();
+  const fe=document.getElementById('fOTEstado')?.value||'';
+  const rows=ordenesTrabajo.filter(r=>JSON.stringify(r).toLowerCase().includes(q)&&(!fe||r.estado===fe));
+  const tb=document.getElementById('tOTs');if(!tb)return;
+  if(!rows.length){tb.innerHTML=`<tr><td colspan="10"><div class="empty-state"><div class="empty-icon">🔧</div><div>Sin órdenes de trabajo</div></div></td></tr>`;return;}
+  const estColor={Abierta:'bp-badge-gold','En proceso':'bp-badge-blue',Cerrada:'bp-badge-green'};
+  tb.innerHTML=rows.map(r=>`<tr>
+    <td style="font-family:'DM Mono',monospace;color:var(--accent);font-weight:700">#${r.numero}</td>
+    <td><strong>${r.activo}</strong></td>
+    <td><span class="bp-badge bp-badge-muted">${r.tipo}</span></td>
+    <td style="max-width:200px;font-size:13px">${r.descripcion}</td>
+    <td style="font-size:12px;color:var(--muted2)">${r.fechaApertura}</td>
+    <td style="font-size:12px;color:var(--muted2)">${r.fechaCierre||'—'}</td>
+    <td>${r.tecnico||'—'}</td>
+    <td style="font-family:'Fraunces',serif;font-size:18px;color:var(--accent)">${r.costo?'$'+Number(r.costo).toLocaleString('es-AR'):'—'}</td>
+    <td><span class="bp-badge ${estColor[r.estado]||''}">${r.estado}</span></td>
+    <td><button class="action-btn" onclick="cerrarOT(${ordenesTrabajo.indexOf(r)})">✅ Cerrar</button></td>
+  </tr>`).join('');
+}
+function saveOT(){
+  const obj={numero:otCounter++,activo:document.getElementById('ot-activo').value,tipo:document.getElementById('ot-tipo').value,descripcion:document.getElementById('ot-desc').value.trim(),fechaApertura:document.getElementById('ot-fecha').value||new Date().toLocaleDateString('es-AR'),fechaCierre:'',tecnico:document.getElementById('ot-tecnico').value.trim(),costo:document.getElementById('ot-costo').value,estado:'Abierta'};
+  if(!obj.activo||!obj.descripcion){showToast('Completá activo y descripción','err');return;}
+  ordenesTrabajo.unshift(obj);guardarEnSheets('OrdenesTrabajo',[obj.numero,obj.activo,obj.tipo,obj.descripcion,obj.fechaApertura,'',obj.tecnico,obj.costo,'Abierta']);
+  closeModal('modalOT');renderOTs();showToast('✅ OT creada #'+obj.numero);
+}
+function cerrarOT(i){
+  if(!confirm('¿Cerrar esta OT?'))return;
+  ordenesTrabajo[i].estado='Cerrada';
+  ordenesTrabajo[i].fechaCierre=new Date().toLocaleDateString('es-AR');
+  renderOTs();renderHistMant();showToast('✅ OT cerrada');
+}
+
+function renderHistMant(){
+  const fa=document.getElementById('fHistActivo')?.value||'';
+  const rows=ordenesTrabajo.filter(r=>r.estado==='Cerrada'&&(!fa||r.activo===fa));
+  const tb=document.getElementById('tHistMant');if(!tb)return;
+  if(!rows.length){tb.innerHTML=`<tr><td colspan="7"><div class="empty-state"><div class="empty-icon">📋</div><div>Sin historial</div></div></td></tr>`;return;}
+  tb.innerHTML=rows.map(r=>`<tr>
+    <td style="font-size:12px;color:var(--muted2)">${r.fechaCierre}</td>
+    <td><strong>${r.activo}</strong></td>
+    <td><span class="bp-badge bp-badge-muted">${r.tipo}</span></td>
+    <td style="font-size:13px">${r.descripcion}</td>
+    <td>${r.tecnico||'—'}</td>
+    <td style="font-family:'Fraunces',serif;font-size:18px;color:var(--accent)">${r.costo?'$'+Number(r.costo).toLocaleString('es-AR'):'—'}</td>
+    <td style="color:var(--muted2)">—</td>
+  </tr>`).join('');
+}
+
+function renderPreventivo(){
+  const tb=document.getElementById('tPreventivo');if(!tb)return;
+  if(!preventivos.length){tb.innerHTML=`<tr><td colspan="7"><div class="empty-state"><div class="empty-icon">📅</div><div>Sin planes preventivos</div></div></td></tr>`;return;}
+  const hoy=new Date();
+  tb.innerHTML=preventivos.map(r=>{
+    const prox=r.proximo?new Date(r.proximo):null;
+    const venc=prox&&prox<hoy;
+    return`<tr>
+      <td><strong>${r.activo}</strong></td>
+      <td>${r.tarea}</td>
+      <td style="color:var(--muted2)">${r.frecuencia}</td>
+      <td style="font-size:12px;color:var(--muted2)">${r.ultimoRealizado||'—'}</td>
+      <td style="color:${venc?'var(--red)':'var(--muted2)'};font-size:12px">${r.proximo||'—'}${venc?' ⚠️':''}</td>
+      <td><span class="bp-badge ${venc?'bp-badge-red':'bp-badge-green'}">${venc?'Vencido':'Al día'}</span></td>
+      <td><button class="action-btn" onclick="preventivos.splice(${preventivos.indexOf(r)},1);renderPreventivo()">🗑️</button></td>
+    </tr>`;
+  }).join('');
+}
+function savePreventivo(){
+  const obj={activo:document.getElementById('prev-activo').value,tarea:document.getElementById('prev-tarea').value.trim(),frecuencia:document.getElementById('prev-freq').value,ultimoRealizado:document.getElementById('prev-ultimo').value,proximo:document.getElementById('prev-proximo').value};
+  preventivos.push(obj);guardarEnSheets('Preventivos',[obj.activo,obj.tarea,obj.frecuencia,obj.ultimoRealizado,obj.proximo]);
+  closeModal('modalPreventivo');renderPreventivo();showToast('✅ Plan guardado');
+}
+
+// ── COMBUSTIBLE ─────────────────────────────
+function renderComb(){
+  const q=(document.getElementById('sComb')?.value||'').toLowerCase();
+  const fa=document.getElementById('fCombActivo')?.value||'';
+  const rows=combustibles.filter(r=>JSON.stringify(r).toLowerCase().includes(q)&&(!fa||r.activo===fa));
+  const tb=document.getElementById('tComb');if(!tb)return;
+  if(!rows.length){tb.innerHTML=`<tr><td colspan="8"><div class="empty-state"><div class="empty-icon">⛽</div><div>Sin cargas registradas</div></div></td></tr>`;return;}
+  tb.innerHTML=rows.map(r=>`<tr>
+    <td style="font-size:12px;color:var(--muted2);font-family:'DM Mono',monospace">${r.fecha}</td>
+    <td><strong>${r.activo}</strong></td>
+    <td>${r.operador||'—'}</td>
+    <td style="font-family:'Fraunces',serif;font-size:20px;color:var(--accent)">${r.litros}</td>
+    <td><span class="bp-badge bp-badge-muted">${r.tipo||'Gasoil'}</span></td>
+    <td style="font-family:'DM Mono',monospace;font-size:12px">${r.horometro||'—'}</td>
+    <td style="color:var(--muted2)">${r.tarea||'—'}</td>
+    <td style="font-size:12px;color:var(--muted2)">${r.obs||'—'}</td>
+  </tr>`).join('');
+  renderCombResumen();
+}
+function saveCombustible(){
+  const obj={fecha:document.getElementById('comb-fecha').value||new Date().toLocaleDateString('es-AR'),activo:document.getElementById('comb-activo').value,operador:document.getElementById('comb-operador').value.trim()||currentUser?.nombre||'—',litros:+document.getElementById('comb-litros').value||0,tipo:document.getElementById('comb-tipo').value,horometro:document.getElementById('comb-horometro').value,tarea:document.getElementById('comb-tarea').value.trim(),obs:document.getElementById('comb-obs').value.trim()};
+  if(!obj.activo||!obj.litros){showToast('Completá activo y litros','err');return;}
+  combustibles.unshift(obj);guardarEnSheets('Combustible',[obj.fecha,obj.activo,obj.operador,obj.litros,obj.tipo,obj.horometro,obj.tarea,obj.obs]);
+  closeModal('modalCombustible');renderComb();showToast('✅ Carga registrada');
+}
+function renderCombResumen(){
+  const container=document.getElementById('combResumenContainer');if(!container)return;
+  const resumen={};
+  combustibles.forEach(r=>{if(!resumen[r.activo])resumen[r.activo]={total:0,cargas:0};resumen[r.activo].total+=+r.litros;resumen[r.activo].cargas++;});
+  if(!Object.keys(resumen).length){container.innerHTML=`<div class="empty-state"><div class="empty-icon">⛽</div><div>Sin datos</div></div>`;return;}
+  container.innerHTML=Object.entries(resumen).sort((a,b)=>b[1].total-a[1].total).map(([act,d])=>`
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px 24px">
+      <div style="font-size:12px;color:var(--muted2);font-family:'DM Mono',monospace;margin-bottom:4px">ACTIVO</div>
+      <div style="font-size:16px;font-weight:600;color:var(--text);margin-bottom:16px">${act}</div>
+      <div style="display:flex;gap:24px">
+        <div><div style="font-family:'Fraunces',serif;font-size:32px;font-weight:600;color:var(--accent)">${d.total.toLocaleString('es-AR')}</div><div style="font-size:10px;letter-spacing:1.5px;color:var(--muted);font-family:'DM Mono',monospace">LITROS TOTALES</div></div>
+        <div><div style="font-family:'Fraunces',serif;font-size:32px;font-weight:600;color:var(--text)">${d.cargas}</div><div style="font-size:10px;letter-spacing:1.5px;color:var(--muted);font-family:'DM Mono',monospace">CARGAS</div></div>
+      </div>
+    </div>`).join('');
+}
+
+// ── CONTEOS AGRONÓMICOS ─────────────────────
+const SECTORES_CONTEO = {
+  SUR:{cuadros:22},NORTE:{cuadros:32},A:{cuadros:20},B:{cuadros:20},C:{cuadros:20},D:{cuadros:21},E:{cuadros:20},F:{cuadros:20},
+  G:{cuadros:30},H:{cuadros:30},I:{cuadros:30},J:{cuadros:20},K:{cuadros:20},L:{cuadros:20},M:{cuadros:20},N:{cuadros:20}
+};
+// Plantas por cuadro — se puede sobreescribir cuando el usuario pase los datos
+let plantasPorCuadro = {}; // key: "SECTOR_N" → cantidad de plantas
+
+function renderCuadrosConteo(){
+  const sector=document.getElementById('cnt-sector')?.value;
+  if(!sector)return;
+  const n=SECTORES_CONTEO[sector]?.cuadros||20;
+  const tb=document.getElementById('tbConteoInput');if(!tb)return;
+  tb.innerHTML=Array.from({length:n},(_,i)=>{
+    const c=i+1;
+    const key=`${sector}_${c}`;
+    const plantas=plantasPorCuadro[key]||'';
+    return`<tr>
+      <td style="font-family:'DM Mono',monospace;font-weight:700;color:var(--accent)">${c}</td>
+      <td><input type="number" id="cnt-plantas-${c}" value="${plantas}" placeholder="—" min="0"
+        style="width:80px;background:var(--bg);border:1px solid var(--border2);border-radius:6px;padding:6px 10px;color:var(--text);font-family:'DM Mono',monospace;font-size:13px;text-align:center"
+        oninput="calcPctConteo(${c})"></td>
+      <td><input type="number" id="cnt-muertas-${c}" placeholder="0" min="0"
+        style="width:70px;background:var(--bg);border:1px solid var(--border2);border-radius:6px;padding:6px 10px;color:var(--text);font-family:'DM Mono',monospace;font-size:13px;text-align:center"
+        oninput="calcPctConteo(${c})"></td>
+      <td><input type="number" id="cnt-injerto-${c}" placeholder="0" min="0"
+        style="width:70px;background:var(--bg);border:1px solid var(--border2);border-radius:6px;padding:6px 10px;color:var(--text);font-family:'DM Mono',monospace;font-size:13px;text-align:center"
+        oninput="calcPctConteo(${c})"></td>
+      <td id="cnt-pct-muerte-${c}" style="font-family:'DM Mono',monospace;font-size:13px;text-align:center;color:var(--muted2)">—</td>
+      <td id="cnt-pct-inj-${c}" style="font-family:'DM Mono',monospace;font-size:13px;text-align:center;color:var(--muted2)">—</td>
+      <td><input type="text" id="cnt-obs-${c}" placeholder="—"
+        style="width:120px;background:var(--bg);border:1px solid var(--border2);border-radius:6px;padding:6px 10px;color:var(--text);font-size:12px"></td>
+    </tr>`;
+  }).join('');
+}
+function calcPctConteo(c){
+  const plantas=+document.getElementById(`cnt-plantas-${c}`)?.value||0;
+  const muertas=+document.getElementById(`cnt-muertas-${c}`)?.value||0;
+  const injerto=+document.getElementById(`cnt-injerto-${c}`)?.value||0;
+  const pctM=plantas>0?(muertas/plantas*100).toFixed(1):'—';
+  const pctI=plantas>0?(injerto/plantas*100).toFixed(1):'—';
+  const elM=document.getElementById(`cnt-pct-muerte-${c}`);
+  const elI=document.getElementById(`cnt-pct-inj-${c}`);
+  if(elM){elM.textContent=pctM==='—'?'—':pctM+'%';elM.style.color=+pctM>10?'var(--red)':+pctM>5?'var(--gold)':'var(--accent)';}
+  if(elI){elI.textContent=pctI==='—'?'—':pctI+'%';elI.style.color=+pctI>10?'var(--red)':+pctI>5?'var(--gold)':'var(--accent)';}
+}
+function saveConteo(){
+  const fecha=document.getElementById('cnt-fecha').value||new Date().toLocaleDateString('es-AR');
+  const resp=document.getElementById('cnt-resp').value.trim()||currentUser?.nombre||'—';
+  const sector=document.getElementById('cnt-sector').value;
+  const obs=document.getElementById('cnt-obs').value.trim();
+  const n=SECTORES_CONTEO[sector]?.cuadros||20;
+  const filas=[];
+  let totalMuertas=0,totalPlantas=0,totalInjerto=0,cuadrosConDatos=0;
+  for(let c=1;c<=n;c++){
+    const plantas=+document.getElementById(`cnt-plantas-${c}`)?.value||0;
+    const muertas=+document.getElementById(`cnt-muertas-${c}`)?.value||0;
+    const injerto=+document.getElementById(`cnt-injerto-${c}`)?.value||0;
+    const obsCuadro=document.getElementById(`cnt-obs-${c}`)?.value||'';
+    if(plantas>0){totalPlantas+=plantas;totalMuertas+=muertas;totalInjerto+=injerto;cuadrosConDatos++;}
+    filas.push({sector,cuadro:c,plantas,muertas,injerto,obsCuadro});
+    guardarEnSheets('ConteosCuadros',[fecha,sector,c,plantas,muertas,injerto,obsCuadro,resp]);
+  }
+  const pctMuerte=totalPlantas>0?(totalMuertas/totalPlantas*100).toFixed(1):0;
+  const pctInjerto=totalPlantas>0?(totalInjerto/totalPlantas*100).toFixed(1):0;
+  const conteo={fecha,sector,resp,obs,cuadrosConDatos,pctMuerte,pctInjerto,filas};
+  conteos.unshift(conteo);
+  guardarEnSheets('ConteosResumen',[fecha,sector,cuadrosConDatos,resp,pctMuerte,pctInjerto,obs]);
+  showToast(`✅ Conteo guardado — ${sector}: ${pctMuerte}% muerte, ${pctInjerto}% inj.`);
+  renderConteoHistorial();renderConteoResumen();
+}
+function renderConteoHistorial(){
+  const fs=document.getElementById('fCntSector')?.value||'';
+  const rows=conteos.filter(r=>!fs||r.sector===fs);
+  const tb=document.getElementById('tConteoHist');if(!tb)return;
+  if(!rows.length){tb.innerHTML=`<tr><td colspan="7"><div class="empty-state"><div class="empty-icon">📊</div><div>Sin conteos registrados</div></div></td></tr>`;return;}
+  tb.innerHTML=rows.map(r=>`<tr>
+    <td style="font-size:12px;color:var(--muted2);font-family:'DM Mono',monospace">${r.fecha}</td>
+    <td><span class="bp-badge bp-badge-muted">${r.sector}</span></td>
+    <td style="text-align:center;font-family:'DM Mono',monospace">${r.cuadrosConDatos}</td>
+    <td>${r.resp}</td>
+    <td style="font-family:'Fraunces',serif;font-size:18px;color:${+r.pctMuerte>10?'var(--red)':+r.pctMuerte>5?'var(--gold)':'var(--accent)'}">${r.pctMuerte}%</td>
+    <td style="font-family:'Fraunces',serif;font-size:18px;color:${+r.pctInjerto>10?'var(--red)':+r.pctInjerto>5?'var(--gold)':'var(--accent)'}">${r.pctInjerto}%</td>
+    <td style="font-size:12px;color:var(--muted2)">${r.obs||'—'}</td>
+  </tr>`).join('');
+}
+function renderConteoResumen(){
+  const fs=document.getElementById('fCntResumenSector')?.value||'';
+  // Agrupar último conteo por sector+cuadro
+  const ultimos={};
+  conteos.forEach(c=>{
+    if(fs&&c.sector!==fs)return;
+    c.filas.forEach(f=>{
+      const key=`${f.sector}_${f.cuadro}`;
+      if(!ultimos[key])ultimos[key]={...f,fecha:c.fecha};
+    });
+  });
+  const tb=document.getElementById('tConteoResumen');if(!tb)return;
+  const rows=Object.values(ultimos).sort((a,b)=>a.sector.localeCompare(b.sector)||a.cuadro-b.cuadro);
+  if(!rows.length){tb.innerHTML=`<tr><td colspan="8"><div class="empty-state"><div class="empty-icon">🌳</div><div>Sin datos. Registrá un conteo primero.</div></div></td></tr>`;return;}
+  tb.innerHTML=rows.map(r=>{
+    const pctM=r.plantas>0?(r.muertas/r.plantas*100).toFixed(1):null;
+    const pctI=r.plantas>0?(r.injerto/r.plantas*100).toFixed(1):null;
+    const colorM=+pctM>10?'var(--red)':+pctM>5?'var(--gold)':'var(--accent)';
+    const colorI=+pctI>10?'var(--red)':+pctI>5?'var(--gold)':'var(--accent)';
+    return`<tr>
+      <td><span class="bp-badge bp-badge-muted">${r.sector}</span></td>
+      <td style="font-family:'DM Mono',monospace;font-weight:700;color:var(--accent)">${r.cuadro}</td>
+      <td style="font-family:'DM Mono',monospace">${r.plantas||'—'}</td>
+      <td style="font-family:'DM Mono',monospace">${r.muertas||0}</td>
+      <td style="font-family:'Fraunces',serif;font-size:18px;color:${colorM}">${pctM!==null?pctM+'%':'—'}</td>
+      <td style="font-family:'DM Mono',monospace">${r.injerto||0}</td>
+      <td style="font-family:'Fraunces',serif;font-size:18px;color:${colorI}">${pctI!==null?pctI+'%':'—'}</td>
+      <td style="font-size:11px;color:var(--muted2)">${r.fecha}</td>
+    </tr>`;
+  }).join('');
+}
+
+// ── PERSONAS ────────────────────────────────
+function renderPersonas(){
+  const q=(document.getElementById('sPer')?.value||'').toLowerCase();
+  const fe=document.getElementById('fPerEmpresa')?.value||'';
+  const fest=document.getElementById('fPerEstado')?.value||'';
+  const rows=personas.filter(r=>JSON.stringify(r).toLowerCase().includes(q)&&(!fe||r.empresa===fe)&&(!fest||r.estado===fest));
+  const tb=document.getElementById('tPersonas');if(!tb)return;
+  const activos=personas.filter(p=>p.estado==='Activo').length;
+  const el=document.getElementById('per-count');if(el)el.textContent=activos+' empleados activos';
+  if(!rows.length){tb.innerHTML=`<tr><td colspan="9"><div class="empty-state"><div class="empty-icon">👷</div><div>Sin personas</div></div></td></tr>`;return;}
+  tb.innerHTML=rows.map(r=>`<tr>
+    <td><strong>${r.nombre}</strong></td>
+    <td style="font-family:'DM Mono',monospace;font-size:12px">${r.dni||'—'}</td>
+    <td><span class="bp-badge bp-badge-blue">${r.empresa}</span></td>
+    <td style="color:var(--muted2)">${r.area||'—'}</td>
+    <td>${r.puesto||'—'}</td>
+    <td style="font-size:12px;color:var(--muted2)">${r.ingreso||'—'}</td>
+    <td><span class="bp-badge ${r.estado==='Activo'?'bp-badge-green':'bp-badge-red'}">${r.estado||'Activo'}</span></td>
+    <td style="font-size:12px">${r.contacto||'—'}</td>
+    <td>
+      <button class="action-btn" onclick="darEgreso(${personas.indexOf(r)})">🚪</button>
+      <button class="action-btn" onclick="delPersona(${personas.indexOf(r)})">🗑️</button>
+    </td>
+  </tr>`).join('');
+  renderIngresos();
+}
+function savePersona(){
+  const obj={nombre:document.getElementById('per-nombre').value.trim(),dni:document.getElementById('per-dni').value.trim(),empresa:document.getElementById('per-empresa').value,area:document.getElementById('per-area').value.trim(),puesto:document.getElementById('per-puesto').value.trim(),contrato:document.getElementById('per-contrato').value,ingreso:document.getElementById('per-ingreso').value,estado:'Activo',contacto:document.getElementById('per-contacto').value.trim(),regPor:currentUser?.nombre||currentUser?.user||'—'};
+  if(!obj.nombre){showToast('Ingresá el nombre','err');return;}
+  personas.push(obj);
+  guardarEnSheets('Personas',[obj.nombre,obj.dni,obj.empresa,obj.area,obj.puesto,obj.contrato,obj.ingreso,'Activo',obj.contacto,obj.regPor]);
+  closeModal('modalPersona');renderPersonas();showToast('✅ Persona registrada');
+}
+function delPersona(i){if(!confirm('¿Eliminar?'))return;personas.splice(i,1);renderPersonas();}
+function darEgreso(i){
+  const p=personas[i];
+  const motivo=prompt(`Egreso de ${p.nombre}. Motivo:`);
+  if(motivo===null)return;
+  const fecha=new Date().toLocaleDateString('es-AR');
+  p.estado='Inactivo';
+  egresos.unshift({fecha,nombre:p.nombre,dni:p.dni,empresa:p.empresa,motivo,obs:'',regPor:currentUser?.nombre||'—'});
+  guardarEnSheets('Egresos',[fecha,p.nombre,p.dni,p.empresa,motivo,'',currentUser?.nombre||'—']);
+  renderPersonas();renderEgresos();showToast(`🚪 Egreso registrado — ${p.nombre}`);
+}
+function renderIngresos(){
+  const tb=document.getElementById('tIngresos');if(!tb)return;
+  const rows=[...personas].sort((a,b)=>b.ingreso?.localeCompare(a.ingreso||'')||0);
+  tb.innerHTML=rows.map(r=>`<tr>
+    <td style="font-size:12px;color:var(--muted2)">${r.ingreso||'—'}</td>
+    <td><strong>${r.nombre}</strong></td>
+    <td style="font-family:'DM Mono',monospace;font-size:12px">${r.dni||'—'}</td>
+    <td><span class="bp-badge bp-badge-blue">${r.empresa}</span></td>
+    <td>${r.puesto||'—'}</td>
+    <td><span class="bp-badge bp-badge-muted">${r.contrato||'—'}</span></td>
+    <td style="color:var(--muted2)">${r.regPor||'—'}</td>
+  </tr>`).join('');
+}
+function renderEgresos(){
+  const tb=document.getElementById('tEgresos');if(!tb)return;
+  if(!egresos.length){tb.innerHTML=`<tr><td colspan="7"><div class="empty-state"><div class="empty-icon">🚪</div><div>Sin egresos registrados</div></div></td></tr>`;return;}
+  tb.innerHTML=egresos.map(r=>`<tr>
+    <td style="font-size:12px;color:var(--muted2)">${r.fecha}</td>
+    <td><strong>${r.nombre}</strong></td>
+    <td style="font-family:'DM Mono',monospace;font-size:12px">${r.dni||'—'}</td>
+    <td><span class="bp-badge bp-badge-blue">${r.empresa}</span></td>
+    <td>${r.motivo||'—'}</td>
+    <td style="font-size:12px;color:var(--muted2)">${r.obs||'—'}</td>
+    <td style="color:var(--muted2)">${r.regPor||'—'}</td>
+  </tr>`).join('');
+}
+
+// Extender carga de Sheets para nuevos módulos
+const _origCargarModulos = cargarDesdeSheets;
+async function cargarDesdeSheets() {
+  await _origCargarModulos();
+  try {
+    const res = await fetch(SHEETS_URL);
+    const data = await res.json();
+    aqProductos  = (data['AqProductos'] ||[]).slice(1).filter(r=>r[0]).map(r=>({nombre:r[0],tipo:r[1],principioActivo:r[2],unidad:r[3],stockActual:r[4],stockMin:r[5],vencimiento:r[6],deposito:r[7],senasa:r[8]}));
+    aqEntradas   = (data['AqEntradas']  ||[]).slice(1).filter(r=>r[0]).map(r=>({fecha:r[0],producto:r[1],cantidad:r[2],unidad:r[3],proveedor:r[4],remito:r[5],vencimiento:r[6],responsable:r[7]}));
+    aqSalidas    = (data['AqSalidas']   ||[]).slice(1).filter(r=>r[0]).map(r=>({fecha:r[0],producto:r[1],cantidad:r[2],sector:r[3],desde:r[4],hasta:r[5],dosis:r[6],operador:r[7],obs:r[8]}));
+    invItems     = (data['Inventario']  ||[]).slice(1).filter(r=>r[0]).map(r=>({codigo:r[0],descripcion:r[1],categoria:r[2],deposito:r[3],stock:r[4],minimo:r[5],unidad:r[6],ultMov:'—'}));
+    invMovimientos=(data['InvMovimientos']||[]).slice(1).filter(r=>r[0]).map(r=>({fecha:r[0],tipo:r[1],item:r[2],cantidad:r[3],deposito:r[4],responsable:r[5],motivo:r[6]}));
+    herramientas = (data['Herramientas']||[]).slice(1).filter(r=>r[0]).map(r=>({codigo:r[0],descripcion:r[1],tipo:r[2],estado:r[3]||'Disponible',asignadaA:'—',desdeAsig:'—'}));
+    herHistorial = (data['HerHistorial']||[]).slice(1).filter(r=>r[0]).map(r=>({fecha:r[0],herramienta:r[1],accion:r[2],persona:r[3],estadoDev:r[4],obs:r[5]}));
+    activos      = (data['Activos']     ||[]).slice(1).filter(r=>r[0]).map(r=>({codigo:r[0],descripcion:r[1],tipo:r[2],marca:r[3],anio:r[4],patente:r[5],horasKm:r[6],estado:r[7],proximoService:r[8]}));
+    ordenesTrabajo=(data['OrdenesTrabajo']||[]).slice(1).filter(r=>r[0]).map(r=>({numero:r[0],activo:r[1],tipo:r[2],descripcion:r[3],fechaApertura:r[4],fechaCierre:r[5],tecnico:r[6],costo:r[7],estado:r[8]}));
+    preventivos  = (data['Preventivos'] ||[]).slice(1).filter(r=>r[0]).map(r=>({activo:r[0],tarea:r[1],frecuencia:r[2],ultimoRealizado:r[3],proximo:r[4]}));
+    combustibles = (data['Combustible'] ||[]).slice(1).filter(r=>r[0]).map(r=>({fecha:r[0],activo:r[1],operador:r[2],litros:r[3],tipo:r[4],horometro:r[5],tarea:r[6],obs:r[7]}));
+    conteos      = (data['ConteosResumen']||[]).slice(1).filter(r=>r[0]).map(r=>({fecha:r[0],sector:r[1],cuadrosConDatos:r[2],resp:r[3],pctMuerte:r[4],pctInjerto:r[5],obs:r[6],filas:[]}));
+    personas     = (data['Personas']    ||[]).slice(1).filter(r=>r[0]).map(r=>({nombre:r[0],dni:r[1],empresa:r[2],area:r[3],puesto:r[4],contrato:r[5],ingreso:r[6],estado:r[7],contacto:r[8],regPor:r[9]}));
+    egresos      = (data['Egresos']     ||[]).slice(1).filter(r=>r[0]).map(r=>({fecha:r[0],nombre:r[1],dni:r[2],empresa:r[3],motivo:r[4],obs:r[5],regPor:r[6]}));
+    if(otCounter<=1&&ordenesTrabajo.length) otCounter=Math.max(...ordenesTrabajo.map(o=>+o.numero||0))+1;
+  } catch(e){ console.log('Módulos operacionales: sin datos aún'); }
+}
+
 // ========== MÓDULOS GENÉRICOS ==========
 
 // --- Datos en memoria ---
