@@ -350,8 +350,16 @@ tbody td { padding:11px 14px; font-size:13px; vertical-align:middle; }
       <div class="nav-item" id="navPistachos" onclick="showPanel('pistachos',this)"><span class="icon">🌿</span> Bravo Pistachos</div>
       <div class="nav-item" id="navConstruccion" onclick="showPanel('construccion',this)"><span class="icon">🏗️</span> BC Construcciones</div>
       <div class="nav-item" id="navCamiones" onclick="showPanel('camiones',this)"><span class="icon">🚛</span> Bravo CAMC</div>
+      <div class="nav-section">Gestión</div>
+      <div class="nav-item" onclick="showPanel('rrhh',this)"><span class="icon">👷</span> RRHH</div>
+      <div class="nav-item" onclick="showPanel('compras',this)"><span class="icon">🛒</span> Compras</div>
+      <div class="nav-item" onclick="showPanel('stock',this)"><span class="icon">📦</span> Stock</div>
+      <div class="nav-item" onclick="showPanel('mantenimiento',this)"><span class="icon">🔧</span> Mantenimiento</div>
+      <div class="nav-item" onclick="showPanel('proyectos',this)"><span class="icon">📌</span> Proyectos</div>
+      <div class="nav-item" onclick="showPanel('documentos',this)"><span class="icon">📁</span> Documentos</div>
       <div class="nav-section" id="navAdminSec" style="display:none">Admin</div>
       <div class="nav-item" id="navPermisos" style="display:none" onclick="showPanel('permisos',this)"><span class="icon">🔐</span> Usuarios y Permisos</div>
+      <div class="nav-item" id="navAuditoria" style="display:none" onclick="showPanel('auditoria',this)"><span class="icon">📊</span> Auditoría</div>
     </nav>
     <div class="sidebar-footer"><button class="btn-logout" onclick="doLogout()">← Cerrar Sesión</button></div>
   </div>
@@ -382,6 +390,233 @@ tbody td { padding:11px 14px; font-size:13px; vertical-align:middle; }
             <div class="empresa-name">Bravo CAMC</div>
             <div class="empresa-desc">Concesionaria · Stock · Ventas · Taller</div>
           </div>
+        </div>
+      </div>
+
+      <!-- RRHH -->
+      <div id="panel-rrhh" class="tab-panel">
+        <div class="inner-tabs">
+          <div class="inner-tab active" onclick="showInner('rrhh-empleados',this)">👷 Empleados</div>
+          <div class="inner-tab" onclick="showInner('rrhh-legajos',this)">📋 Legajos</div>
+          <div class="inner-tab" onclick="showInner('rrhh-asistencia',this)">🕐 Asistencia</div>
+          <div class="inner-tab" onclick="showInner('rrhh-liquidacion',this)">💰 Liquidación</div>
+        </div>
+        <div id="rrhh-empleados" class="inner-panel active">
+          <div class="table-wrap">
+            <div class="table-top">
+              <div class="table-top-title">👷 Empleados</div>
+              <div class="table-filters">
+                <input class="search-input" type="text" placeholder="🔍 Buscar..." id="sRrhh" oninput="renderRrhh()">
+                <select class="filter-select" id="fRrhhEmpresa" onchange="renderRrhh()">
+                  <option value="">Todas las empresas</option>
+                  <option>Bravo Pistachos</option><option>BC Construcciones</option><option>Bravo CAMC</option>
+                </select>
+                <button class="btn btn-primary" onclick="openModal('modalEmpleado')">+ Nuevo Empleado</button>
+              </div>
+            </div>
+            <div style="overflow-x:auto"><table>
+              <thead><tr><th>Nombre</th><th>DNI</th><th>Empresa</th><th>Área</th><th>Puesto</th><th>Ingreso</th><th>Estado</th><th>Contacto</th><th>Acc.</th></tr></thead>
+              <tbody id="tRrhh"></tbody>
+            </table></div>
+          </div>
+        </div>
+        <div id="rrhh-legajos" class="inner-panel">
+          <div class="empty-state"><div class="empty-icon">📋</div><div>Módulo de Legajos — próximamente</div><small style="color:var(--muted)">Documentación, contratos, certificados por empleado</small></div>
+        </div>
+        <div id="rrhh-asistencia" class="inner-panel">
+          <div class="empty-state"><div class="empty-icon">🕐</div><div>Módulo de Asistencia — próximamente</div><small style="color:var(--muted)">Control de presentismo, horas extra, ausencias</small></div>
+        </div>
+        <div id="rrhh-liquidacion" class="inner-panel">
+          <div class="empty-state"><div class="empty-icon">💰</div><div>Módulo de Liquidación — próximamente</div><small style="color:var(--muted)">Sueldos, recibos, deducciones</small></div>
+        </div>
+      </div>
+
+      <!-- COMPRAS -->
+      <div id="panel-compras" class="tab-panel">
+        <div class="inner-tabs">
+          <div class="inner-tab active" onclick="showInner('compras-ordenes',this)">🛒 Órdenes de Compra</div>
+          <div class="inner-tab" onclick="showInner('compras-proveedores',this)">🏭 Proveedores</div>
+          <div class="inner-tab" onclick="showInner('compras-presupuestos',this)">📄 Presupuestos</div>
+        </div>
+        <div id="compras-ordenes" class="inner-panel active">
+          <div class="table-wrap">
+            <div class="table-top">
+              <div class="table-top-title">🛒 Órdenes de Compra</div>
+              <div class="table-filters">
+                <input class="search-input" type="text" placeholder="🔍 Buscar..." id="sCompras" oninput="renderCompras()">
+                <select class="filter-select" id="fComprasEstado" onchange="renderCompras()">
+                  <option value="">Todos los estados</option>
+                  <option>Pendiente</option><option>Aprobada</option><option>Recibida</option><option>Cancelada</option>
+                </select>
+                <button class="btn btn-primary" onclick="openModal('modalCompra')">+ Nueva Orden</button>
+              </div>
+            </div>
+            <div style="overflow-x:auto"><table>
+              <thead><tr><th>Fecha</th><th>Nº Orden</th><th>Proveedor</th><th>Empresa</th><th>Descripción</th><th>Monto</th><th>Estado</th><th>Responsable</th><th>Acc.</th></tr></thead>
+              <tbody id="tCompras"></tbody>
+            </table></div>
+          </div>
+        </div>
+        <div id="compras-proveedores" class="inner-panel">
+          <div class="table-wrap">
+            <div class="table-top">
+              <div class="table-top-title">🏭 Proveedores</div>
+              <div class="table-filters">
+                <input class="search-input" type="text" placeholder="🔍 Buscar..." id="sProveedores" oninput="renderProveedores()">
+                <button class="btn btn-primary" onclick="openModal('modalProveedor')">+ Nuevo Proveedor</button>
+              </div>
+            </div>
+            <div style="overflow-x:auto"><table>
+              <thead><tr><th>Razón Social</th><th>CUIT</th><th>Rubro</th><th>Contacto</th><th>Teléfono</th><th>Email</th><th>Acc.</th></tr></thead>
+              <tbody id="tProveedores"></tbody>
+            </table></div>
+          </div>
+        </div>
+        <div id="compras-presupuestos" class="inner-panel">
+          <div class="empty-state"><div class="empty-icon">📄</div><div>Módulo de Presupuestos — próximamente</div><small style="color:var(--muted)">Comparación de presupuestos por proveedor</small></div>
+        </div>
+      </div>
+
+      <!-- STOCK -->
+      <div id="panel-stock" class="tab-panel">
+        <div class="inner-tabs">
+          <div class="inner-tab active" onclick="showInner('stock-inventario',this)">📦 Inventario</div>
+          <div class="inner-tab" onclick="showInner('stock-movimientos',this)">↔️ Movimientos</div>
+          <div class="inner-tab" onclick="showInner('stock-alertas',this)">⚠️ Alertas</div>
+        </div>
+        <div id="stock-inventario" class="inner-panel active">
+          <div class="table-wrap">
+            <div class="table-top">
+              <div class="table-top-title">📦 Inventario</div>
+              <div class="table-filters">
+                <input class="search-input" type="text" placeholder="🔍 Buscar..." id="sStock" oninput="renderStock()">
+                <select class="filter-select" id="fStockCategoria" onchange="renderStock()">
+                  <option value="">Todas las categorías</option>
+                  <option>Insumos</option><option>Herramientas</option><option>Repuestos</option><option>Materiales</option>
+                </select>
+                <button class="btn btn-primary" onclick="openModal('modalStockItem')">+ Nuevo Ítem</button>
+              </div>
+            </div>
+            <div style="overflow-x:auto"><table>
+              <thead><tr><th>Código</th><th>Descripción</th><th>Categoría</th><th>Empresa</th><th>Stock Actual</th><th>Stock Mínimo</th><th>Unidad</th><th>Ubicación</th><th>Acc.</th></tr></thead>
+              <tbody id="tStock"></tbody>
+            </table></div>
+          </div>
+        </div>
+        <div id="stock-movimientos" class="inner-panel">
+          <div class="empty-state"><div class="empty-icon">↔️</div><div>Movimientos de Stock — próximamente</div><small style="color:var(--muted)">Entradas, salidas, transferencias entre empresas</small></div>
+        </div>
+        <div id="stock-alertas" class="inner-panel">
+          <div class="empty-state"><div class="empty-icon">⚠️</div><div>Alertas de Stock — próximamente</div><small style="color:var(--muted)">Ítems bajo stock mínimo, vencimientos</small></div>
+        </div>
+      </div>
+
+      <!-- MANTENIMIENTO -->
+      <div id="panel-mantenimiento" class="tab-panel">
+        <div class="inner-tabs">
+          <div class="inner-tab active" onclick="showInner('mant-equipos',this)">🚜 Equipos</div>
+          <div class="inner-tab" onclick="showInner('mant-ordenes',this)">🔧 Órdenes de Trabajo</div>
+          <div class="inner-tab" onclick="showInner('mant-preventivo',this)">📅 Preventivo</div>
+        </div>
+        <div id="mant-equipos" class="inner-panel active">
+          <div class="table-wrap">
+            <div class="table-top">
+              <div class="table-top-title">🚜 Equipos y Vehículos</div>
+              <div class="table-filters">
+                <input class="search-input" type="text" placeholder="🔍 Buscar..." id="sEquipos" oninput="renderEquipos()">
+                <select class="filter-select" id="fEquiposEmpresa" onchange="renderEquipos()">
+                  <option value="">Todas las empresas</option>
+                  <option>Bravo Pistachos</option><option>BC Construcciones</option><option>Bravo CAMC</option>
+                </select>
+                <button class="btn btn-primary" onclick="openModal('modalEquipo')">+ Nuevo Equipo</button>
+              </div>
+            </div>
+            <div style="overflow-x:auto"><table>
+              <thead><tr><th>Código</th><th>Descripción</th><th>Tipo</th><th>Empresa</th><th>Marca/Modelo</th><th>Año</th><th>Patente/Serie</th><th>Estado</th><th>Próx. Service</th><th>Acc.</th></tr></thead>
+              <tbody id="tEquipos"></tbody>
+            </table></div>
+          </div>
+        </div>
+        <div id="mant-ordenes" class="inner-panel">
+          <div class="empty-state"><div class="empty-icon">🔧</div><div>Órdenes de Trabajo — próximamente</div><small style="color:var(--muted)">Correctivo, reparaciones, historial por equipo</small></div>
+        </div>
+        <div id="mant-preventivo" class="inner-panel">
+          <div class="empty-state"><div class="empty-icon">📅</div><div>Mantenimiento Preventivo — próximamente</div><small style="color:var(--muted)">Plan de services, recordatorios automáticos</small></div>
+        </div>
+      </div>
+
+      <!-- PROYECTOS -->
+      <div id="panel-proyectos" class="tab-panel">
+        <div class="inner-tabs">
+          <div class="inner-tab active" onclick="showInner('proy-lista',this)">📌 Proyectos</div>
+          <div class="inner-tab" onclick="showInner('proy-tareas',this)">✅ Tareas</div>
+          <div class="inner-tab" onclick="showInner('proy-gantt',this)">📊 Cronograma</div>
+        </div>
+        <div id="proy-lista" class="inner-panel active">
+          <div class="table-wrap">
+            <div class="table-top">
+              <div class="table-top-title">📌 Proyectos</div>
+              <div class="table-filters">
+                <input class="search-input" type="text" placeholder="🔍 Buscar..." id="sProyectos" oninput="renderProyectos()">
+                <select class="filter-select" id="fProyEstado" onchange="renderProyectos()">
+                  <option value="">Todos los estados</option>
+                  <option>En curso</option><option>Pausado</option><option>Completado</option><option>Cancelado</option>
+                </select>
+                <button class="btn btn-primary" onclick="openModal('modalProyecto')">+ Nuevo Proyecto</button>
+              </div>
+            </div>
+            <div style="overflow-x:auto"><table>
+              <thead><tr><th>Nombre</th><th>Empresa</th><th>Responsable</th><th>Inicio</th><th>Fin estimado</th><th>Avance</th><th>Estado</th><th>Acc.</th></tr></thead>
+              <tbody id="tProyectos"></tbody>
+            </table></div>
+          </div>
+        </div>
+        <div id="proy-tareas" class="inner-panel">
+          <div class="empty-state"><div class="empty-icon">✅</div><div>Gestión de Tareas — próximamente</div><small style="color:var(--muted)">Asignación, prioridades, seguimiento por proyecto</small></div>
+        </div>
+        <div id="proy-gantt" class="inner-panel">
+          <div class="empty-state"><div class="empty-icon">📊</div><div>Cronograma Gantt — próximamente</div><small style="color:var(--muted)">Visualización de tiempos y dependencias</small></div>
+        </div>
+      </div>
+
+      <!-- DOCUMENTOS -->
+      <div id="panel-documentos" class="tab-panel">
+        <div class="table-wrap">
+          <div class="table-top">
+            <div class="table-top-title">📁 Documentos</div>
+            <div class="table-filters">
+              <input class="search-input" type="text" placeholder="🔍 Buscar..." id="sDocs" oninput="renderDocs()">
+              <select class="filter-select" id="fDocsCategoria" onchange="renderDocs()">
+                <option value="">Todas las categorías</option>
+                <option>Contratos</option><option>Manuales</option><option>Procedimientos</option><option>Certificados</option><option>Otros</option>
+              </select>
+              <button class="btn btn-primary" onclick="openModal('modalDoc')">+ Subir Documento</button>
+            </div>
+          </div>
+          <div style="overflow-x:auto"><table>
+            <thead><tr><th>Nombre</th><th>Categoría</th><th>Empresa</th><th>Subido por</th><th>Fecha</th><th>Descripción</th><th>Acc.</th></tr></thead>
+            <tbody id="tDocs"></tbody>
+          </table></div>
+        </div>
+      </div>
+
+      <!-- AUDITORÍA -->
+      <div id="panel-auditoria" class="tab-panel">
+        <div class="table-wrap">
+          <div class="table-top">
+            <div class="table-top-title">📊 Log de Auditoría</div>
+            <div class="table-filters">
+              <input class="search-input" type="text" placeholder="🔍 Buscar usuario o acción..." id="sAudit" oninput="renderAuditoria()">
+              <select class="filter-select" id="fAuditModulo" onchange="renderAuditoria()">
+                <option value="">Todos los módulos</option>
+                <option>Campo</option><option>Riego</option><option>Tractores</option><option>RRHH</option><option>Compras</option><option>Stock</option><option>Mantenimiento</option><option>Proyectos</option><option>Documentos</option>
+              </select>
+            </div>
+          </div>
+          <div style="overflow-x:auto"><table>
+            <thead><tr><th>Fecha/Hora</th><th>Usuario</th><th>Módulo</th><th>Acción</th><th>Detalle</th></tr></thead>
+            <tbody id="tAuditoria"></tbody>
+          </table></div>
         </div>
       </div>
 
@@ -549,6 +784,117 @@ tbody td { padding:11px 14px; font-size:13px; vertical-align:middle; }
     </div>
   </div>
 </div>
+
+<!-- MODAL EMPLEADO -->
+<div class="modal-overlay" id="modalEmpleado"><div class="modal">
+  <div class="modal-head"><span class="modal-title">👷 Nuevo Empleado</span><button class="modal-close" onclick="closeModal('modalEmpleado')">✕</button></div>
+  <div class="modal-body"><div class="form-grid">
+    <div class="form-group"><label>Nombre completo</label><input id="emp-nombre" placeholder="Juan Pérez"></div>
+    <div class="form-group"><label>DNI</label><input id="emp-dni" placeholder="12.345.678"></div>
+    <div class="form-group"><label>Empresa</label><select id="emp-empresa"><option>Bravo Pistachos</option><option>BC Construcciones</option><option>Bravo CAMC</option></select></div>
+    <div class="form-group"><label>Área</label><input id="emp-area" placeholder="Campo, Administración..."></div>
+    <div class="form-group"><label>Puesto</label><input id="emp-puesto" placeholder="Capataz, Operario..."></div>
+    <div class="form-group"><label>Fecha de ingreso</label><input type="date" id="emp-ingreso"></div>
+    <div class="form-group"><label>Estado</label><select id="emp-estado"><option>Activo</option><option>Inactivo</option><option>Suspendido</option></select></div>
+    <div class="form-group"><label>Contacto / Tel.</label><input id="emp-contacto" placeholder="Teléfono o email"></div>
+  </div></div>
+  <div class="modal-foot"><button class="btn btn-secondary" onclick="closeModal('modalEmpleado')">Cancelar</button><button class="btn btn-primary" onclick="saveEmpleado()">Guardar</button></div>
+</div></div>
+
+<!-- MODAL COMPRA -->
+<div class="modal-overlay" id="modalCompra"><div class="modal">
+  <div class="modal-head"><span class="modal-title">🛒 Nueva Orden de Compra</span><button class="modal-close" onclick="closeModal('modalCompra')">✕</button></div>
+  <div class="modal-body"><div class="form-grid">
+    <div class="form-group"><label>Fecha</label><input type="date" id="comp-fecha"></div>
+    <div class="form-group"><label>Proveedor</label><input id="comp-proveedor" placeholder="Nombre del proveedor"></div>
+    <div class="form-group"><label>Empresa</label><select id="comp-empresa"><option>Bravo Pistachos</option><option>BC Construcciones</option><option>Bravo CAMC</option></select></div>
+    <div class="form-group"><label>Monto ($)</label><input type="number" id="comp-monto" placeholder="0"></div>
+    <div class="form-group span2"><label>Descripción</label><input id="comp-desc" placeholder="Qué se compra..."></div>
+    <div class="form-group"><label>Estado</label><select id="comp-estado"><option>Pendiente</option><option>Aprobada</option><option>Recibida</option><option>Cancelada</option></select></div>
+  </div></div>
+  <div class="modal-foot"><button class="btn btn-secondary" onclick="closeModal('modalCompra')">Cancelar</button><button class="btn btn-primary" onclick="saveCompra()">Guardar</button></div>
+</div></div>
+
+<!-- MODAL PROVEEDOR -->
+<div class="modal-overlay" id="modalProveedor"><div class="modal">
+  <div class="modal-head"><span class="modal-title">🏭 Nuevo Proveedor</span><button class="modal-close" onclick="closeModal('modalProveedor')">✕</button></div>
+  <div class="modal-body"><div class="form-grid">
+    <div class="form-group span2"><label>Razón Social</label><input id="prov-razon" placeholder="Empresa S.A."></div>
+    <div class="form-group"><label>CUIT</label><input id="prov-cuit" placeholder="20-12345678-1"></div>
+    <div class="form-group"><label>Rubro</label><input id="prov-rubro" placeholder="Agroquímicos, Construcción..."></div>
+    <div class="form-group"><label>Contacto</label><input id="prov-contacto" placeholder="Nombre del contacto"></div>
+    <div class="form-group"><label>Teléfono</label><input id="prov-tel" placeholder="261-1234567"></div>
+    <div class="form-group span2"><label>Email</label><input id="prov-email" placeholder="contacto@proveedor.com"></div>
+  </div></div>
+  <div class="modal-foot"><button class="btn btn-secondary" onclick="closeModal('modalProveedor')">Cancelar</button><button class="btn btn-primary" onclick="saveProveedor()">Guardar</button></div>
+</div></div>
+
+<!-- MODAL STOCK -->
+<div class="modal-overlay" id="modalStockItem"><div class="modal">
+  <div class="modal-head"><span class="modal-title">📦 Nuevo Ítem de Stock</span><button class="modal-close" onclick="closeModal('modalStockItem')">✕</button></div>
+  <div class="modal-body"><div class="form-grid">
+    <div class="form-group"><label>Código</label><input id="stk-codigo" placeholder="INS-001"></div>
+    <div class="form-group"><label>Descripción</label><input id="stk-desc" placeholder="Nombre del ítem"></div>
+    <div class="form-group"><label>Categoría</label><select id="stk-cat"><option>Insumos</option><option>Herramientas</option><option>Repuestos</option><option>Materiales</option><option>Otros</option></select></div>
+    <div class="form-group"><label>Empresa</label><select id="stk-empresa"><option>Bravo Pistachos</option><option>BC Construcciones</option><option>Bravo CAMC</option></select></div>
+    <div class="form-group"><label>Stock actual</label><input type="number" id="stk-actual" placeholder="0"></div>
+    <div class="form-group"><label>Stock mínimo</label><input type="number" id="stk-minimo" placeholder="0"></div>
+    <div class="form-group"><label>Unidad</label><input id="stk-unidad" placeholder="u, kg, lt, m..."></div>
+    <div class="form-group"><label>Ubicación</label><input id="stk-ubicacion" placeholder="Depósito A, Galpón..."></div>
+  </div></div>
+  <div class="modal-foot"><button class="btn btn-secondary" onclick="closeModal('modalStockItem')">Cancelar</button><button class="btn btn-primary" onclick="saveStock()">Guardar</button></div>
+</div></div>
+
+<!-- MODAL EQUIPO -->
+<div class="modal-overlay" id="modalEquipo"><div class="modal">
+  <div class="modal-head"><span class="modal-title">🚜 Nuevo Equipo / Vehículo</span><button class="modal-close" onclick="closeModal('modalEquipo')">✕</button></div>
+  <div class="modal-body"><div class="form-grid">
+    <div class="form-group"><label>Código</label><input id="eq-codigo" placeholder="EQ-001"></div>
+    <div class="form-group"><label>Descripción</label><input id="eq-desc" placeholder="Nombre del equipo"></div>
+    <div class="form-group"><label>Tipo</label><select id="eq-tipo"><option>Tractor</option><option>Camión</option><option>Vehículo</option><option>Maquinaria</option><option>Herramienta</option><option>Otro</option></select></div>
+    <div class="form-group"><label>Empresa</label><select id="eq-empresa"><option>Bravo Pistachos</option><option>BC Construcciones</option><option>Bravo CAMC</option></select></div>
+    <div class="form-group"><label>Marca / Modelo</label><input id="eq-marca" placeholder="VALTRA T155"></div>
+    <div class="form-group"><label>Año</label><input type="number" id="eq-anio" placeholder="2020"></div>
+    <div class="form-group"><label>Patente / Serie</label><input id="eq-patente" placeholder="AB123CD"></div>
+    <div class="form-group"><label>Estado</label><select id="eq-estado"><option>Operativo</option><option>Mantenimiento</option><option>Baja</option></select></div>
+    <div class="form-group span2"><label>Próximo service</label><input type="date" id="eq-service"></div>
+  </div></div>
+  <div class="modal-foot"><button class="btn btn-secondary" onclick="closeModal('modalEquipo')">Cancelar</button><button class="btn btn-primary" onclick="saveEquipo()">Guardar</button></div>
+</div></div>
+
+<!-- MODAL PROYECTO -->
+<div class="modal-overlay" id="modalProyecto"><div class="modal">
+  <div class="modal-head"><span class="modal-title">📌 Nuevo Proyecto</span><button class="modal-close" onclick="closeModal('modalProyecto')">✕</button></div>
+  <div class="modal-body"><div class="form-grid">
+    <div class="form-group span2"><label>Nombre del proyecto</label><input id="proy-nombre" placeholder="Nombre del proyecto"></div>
+    <div class="form-group"><label>Empresa</label><select id="proy-empresa"><option>Bravo Pistachos</option><option>BC Construcciones</option><option>Bravo CAMC</option></select></div>
+    <div class="form-group"><label>Responsable</label><input id="proy-resp" placeholder="Nombre del responsable"></div>
+    <div class="form-group"><label>Inicio</label><input type="date" id="proy-inicio"></div>
+    <div class="form-group"><label>Fin estimado</label><input type="date" id="proy-fin"></div>
+    <div class="form-group"><label>Avance (%)</label><input type="number" id="proy-avance" min="0" max="100" placeholder="0"></div>
+    <div class="form-group"><label>Estado</label><select id="proy-estado"><option>En curso</option><option>Pausado</option><option>Completado</option><option>Cancelado</option></select></div>
+    <div class="form-group span2"><label>Descripción</label><textarea id="proy-desc" rows="2" placeholder="Descripción del proyecto..."></textarea></div>
+  </div></div>
+  <div class="modal-foot"><button class="btn btn-secondary" onclick="closeModal('modalProyecto')">Cancelar</button><button class="btn btn-primary" onclick="saveProyecto()">Guardar</button></div>
+</div></div>
+
+<!-- MODAL DOCUMENTO -->
+<div class="modal-overlay" id="modalDoc"><div class="modal">
+  <div class="modal-head"><span class="modal-title">📁 Subir Documento</span><button class="modal-close" onclick="closeModal('modalDoc')">✕</button></div>
+  <div class="modal-body"><div class="form-grid">
+    <div class="form-group span2"><label>Nombre del documento</label><input id="doc-nombre" placeholder="Contrato de trabajo, Manual de operaciones..."></div>
+    <div class="form-group"><label>Categoría</label><select id="doc-cat"><option>Contratos</option><option>Manuales</option><option>Procedimientos</option><option>Certificados</option><option>Otros</option></select></div>
+    <div class="form-group"><label>Empresa</label><select id="doc-empresa"><option>Bravo Pistachos</option><option>BC Construcciones</option><option>Bravo CAMC</option><option>General</option></select></div>
+    <div class="form-group span2"><label>Descripción</label><textarea id="doc-desc" rows="2" placeholder="Descripción breve..."></textarea></div>
+  </div>
+  <div style="background:var(--surface2);border:2px dashed var(--border2);border-radius:10px;padding:24px;text-align:center;color:var(--muted);margin-top:12px">
+    <div style="font-size:28px;margin-bottom:8px">📎</div>
+    <div style="font-size:13px">Adjuntar archivo — próximamente</div>
+    <div style="font-size:11px;margin-top:4px">Por ahora registrá el documento manualmente</div>
+  </div>
+  </div>
+  <div class="modal-foot"><button class="btn btn-secondary" onclick="closeModal('modalDoc')">Cancelar</button><button class="btn btn-primary" onclick="saveDoc()">Guardar</button></div>
+</div></div>
 
 <!-- MODAL CAMPO -->
 <div class="modal-overlay" id="modalCampo">
@@ -1051,6 +1397,264 @@ function renderTractor(){
 }
 
 // ========== MAPA ==========
+// ========== MÓDULOS GENÉRICOS ==========
+
+// --- Datos en memoria ---
+let empleados = [], compras = [], proveedores = [], stockItems = [], equipos = [], proyectos = [], documentos = [], auditLog = [];
+
+// --- Auditoría ---
+function logAudit(modulo, accion, detalle) {
+  const entry = {
+    fecha: new Date().toLocaleString('es-AR'),
+    usuario: currentUser ? currentUser.nombre || currentUser.user : '—',
+    modulo, accion, detalle
+  };
+  auditLog.unshift(entry);
+  guardarEnSheets('Auditoria', [entry.fecha, entry.usuario, entry.modulo, entry.accion, entry.detalle]);
+  renderAuditoria();
+}
+
+// --- RRHH ---
+function renderRrhh() {
+  const q = (document.getElementById('sRrhh')?.value||'').toLowerCase();
+  const fe = document.getElementById('fRrhhEmpresa')?.value||'';
+  const rows = empleados.filter(r => JSON.stringify(r).toLowerCase().includes(q) && (!fe||r.empresa===fe));
+  const tb = document.getElementById('tRrhh');
+  if (!tb) return;
+  if (!rows.length) { tb.innerHTML=`<tr><td colspan="9"><div class="empty-state"><div class="empty-icon">👷</div><div>Sin empleados cargados</div></div></td></tr>`; return; }
+  const ce = currentUser && currentUser.rol !== 'visor';
+  tb.innerHTML = rows.map((r,i) => `<tr>
+    <td><strong>${r.nombre}</strong></td><td style="color:var(--muted2)">${r.dni||'—'}</td>
+    <td><span class="chip blue">${r.empresa}</span></td><td>${r.area||'—'}</td><td>${r.puesto||'—'}</td>
+    <td style="color:var(--muted2);font-size:12px">${r.ingreso||'—'}</td>
+    <td><span class="chip ${r.estado==='Activo'?'':'red'}">${r.estado||'Activo'}</span></td>
+    <td style="font-size:12px">${r.contacto||'—'}</td>
+    <td>${ce?`<button class="action-btn" onclick="delEmpleado(${empleados.indexOf(r)})">🗑️</button>`:''}</td>
+  </tr>`).join('');
+}
+function saveEmpleado() {
+  const obj = {
+    nombre: document.getElementById('emp-nombre').value.trim(),
+    dni: document.getElementById('emp-dni').value.trim(),
+    empresa: document.getElementById('emp-empresa').value,
+    area: document.getElementById('emp-area').value.trim(),
+    puesto: document.getElementById('emp-puesto').value.trim(),
+    ingreso: document.getElementById('emp-ingreso').value,
+    estado: document.getElementById('emp-estado').value,
+    contacto: document.getElementById('emp-contacto').value.trim()
+  };
+  if (!obj.nombre) { showToast('Ingresá el nombre','err'); return; }
+  empleados.push(obj);
+  guardarEnSheets('Empleados', [obj.nombre,obj.dni,obj.empresa,obj.area,obj.puesto,obj.ingreso,obj.estado,obj.contacto]);
+  logAudit('RRHH', 'ALTA EMPLEADO', obj.nombre);
+  closeModal('modalEmpleado'); renderRrhh(); showToast('✅ Empleado guardado');
+}
+function delEmpleado(i) { if(!confirm('¿Eliminar?'))return; logAudit('RRHH','BAJA EMPLEADO',empleados[i].nombre); empleados.splice(i,1); renderRrhh(); }
+
+// --- COMPRAS ---
+let ordenCounter = 1;
+function renderCompras() {
+  const q = (document.getElementById('sCompras')?.value||'').toLowerCase();
+  const fe = document.getElementById('fComprasEstado')?.value||'';
+  const rows = compras.filter(r => JSON.stringify(r).toLowerCase().includes(q) && (!fe||r.estado===fe));
+  const tb = document.getElementById('tCompras');
+  if (!tb) return;
+  if (!rows.length) { tb.innerHTML=`<tr><td colspan="9"><div class="empty-state"><div class="empty-icon">🛒</div><div>Sin órdenes de compra</div></div></td></tr>`; return; }
+  const estadoColor = {Pendiente:'',Aprobada:'green',Recibida:'blue',Cancelada:'red'};
+  tb.innerHTML = rows.map(r => `<tr>
+    <td style="color:var(--muted2);font-size:12px">${r.fecha}</td>
+    <td><strong style="color:var(--accent)">#${r.numero}</strong></td>
+    <td>${r.proveedor||'—'}</td><td><span class="chip blue">${r.empresa}</span></td>
+    <td>${r.descripcion||'—'}</td>
+    <td style="font-weight:700">$${Number(r.monto||0).toLocaleString('es-AR')}</td>
+    <td><span class="chip ${estadoColor[r.estado]||''}">${r.estado}</span></td>
+    <td>${r.responsable||'—'}</td>
+    <td><button class="action-btn" onclick="delCompra(${compras.indexOf(r)})">🗑️</button></td>
+  </tr>`).join('');
+}
+function saveCompra() {
+  const obj = {
+    fecha: document.getElementById('comp-fecha').value||new Date().toLocaleDateString('es-AR'),
+    numero: ordenCounter++,
+    proveedor: document.getElementById('comp-proveedor').value.trim(),
+    empresa: document.getElementById('comp-empresa').value,
+    descripcion: document.getElementById('comp-desc').value.trim(),
+    monto: document.getElementById('comp-monto').value,
+    estado: document.getElementById('comp-estado').value,
+    responsable: currentUser?.nombre||currentUser?.user||'—'
+  };
+  compras.push(obj);
+  guardarEnSheets('Compras',[obj.fecha,obj.numero,obj.proveedor,obj.empresa,obj.descripcion,obj.monto,obj.estado,obj.responsable]);
+  logAudit('Compras','NUEVA ORDEN','#'+obj.numero+' - '+obj.proveedor);
+  closeModal('modalCompra'); renderCompras(); showToast('✅ Orden guardada');
+}
+function delCompra(i){if(!confirm('¿Eliminar?'))return;logAudit('Compras','ELIMINÓ ORDEN','#'+compras[i].numero);compras.splice(i,1);renderCompras();}
+
+// --- PROVEEDORES ---
+function renderProveedores() {
+  const q = (document.getElementById('sProveedores')?.value||'').toLowerCase();
+  const rows = proveedores.filter(r => JSON.stringify(r).toLowerCase().includes(q));
+  const tb = document.getElementById('tProveedores');
+  if (!tb) return;
+  if (!rows.length) { tb.innerHTML=`<tr><td colspan="7"><div class="empty-state"><div class="empty-icon">🏭</div><div>Sin proveedores cargados</div></div></td></tr>`; return; }
+  tb.innerHTML = rows.map(r => `<tr>
+    <td><strong>${r.razon}</strong></td><td style="color:var(--muted2)">${r.cuit||'—'}</td>
+    <td>${r.rubro||'—'}</td><td>${r.contacto||'—'}</td><td>${r.telefono||'—'}</td><td>${r.email||'—'}</td>
+    <td><button class="action-btn" onclick="delProveedor(${proveedores.indexOf(r)})">🗑️</button></td>
+  </tr>`).join('');
+}
+function saveProveedor(){
+  const obj={razon:document.getElementById('prov-razon').value.trim(),cuit:document.getElementById('prov-cuit').value.trim(),rubro:document.getElementById('prov-rubro').value.trim(),contacto:document.getElementById('prov-contacto').value.trim(),telefono:document.getElementById('prov-tel').value.trim(),email:document.getElementById('prov-email').value.trim()};
+  if(!obj.razon){showToast('Ingresá la razón social','err');return;}
+  proveedores.push(obj);guardarEnSheets('Proveedores',[obj.razon,obj.cuit,obj.rubro,obj.contacto,obj.telefono,obj.email]);
+  logAudit('Compras','NUEVO PROVEEDOR',obj.razon);closeModal('modalProveedor');renderProveedores();showToast('✅ Proveedor guardado');
+}
+function delProveedor(i){if(!confirm('¿Eliminar?'))return;proveedores.splice(i,1);renderProveedores();}
+
+// --- STOCK ---
+function renderStock(){
+  const q=(document.getElementById('sStock')?.value||'').toLowerCase();
+  const fc=document.getElementById('fStockCategoria')?.value||'';
+  const rows=stockItems.filter(r=>JSON.stringify(r).toLowerCase().includes(q)&&(!fc||r.categoria===fc));
+  const tb=document.getElementById('tStock');
+  if(!tb)return;
+  if(!rows.length){tb.innerHTML=`<tr><td colspan="9"><div class="empty-state"><div class="empty-icon">📦</div><div>Sin ítems en stock</div></div></td></tr>`;return;}
+  tb.innerHTML=rows.map(r=>{
+    const alerta=+r.actual<=+r.minimo;
+    return`<tr>
+      <td style="color:var(--accent);font-weight:700">${r.codigo||'—'}</td><td><strong>${r.descripcion}</strong></td>
+      <td>${r.categoria||'—'}</td><td><span class="chip blue">${r.empresa||'—'}</span></td>
+      <td style="font-weight:700;color:${alerta?'var(--red)':'var(--accent)'}">${r.actual} ${alerta?'⚠️':''}</td>
+      <td style="color:var(--muted2)">${r.minimo||0}</td><td>${r.unidad||'u'}</td><td style="color:var(--muted2)">${r.ubicacion||'—'}</td>
+      <td><button class="action-btn" onclick="delStock(${stockItems.indexOf(r)})">🗑️</button></td>
+    </tr>`;}).join('');
+}
+function saveStock(){
+  const obj={codigo:document.getElementById('stk-codigo').value.trim(),descripcion:document.getElementById('stk-desc').value.trim(),categoria:document.getElementById('stk-cat').value,empresa:document.getElementById('stk-empresa').value,actual:document.getElementById('stk-actual').value||0,minimo:document.getElementById('stk-minimo').value||0,unidad:document.getElementById('stk-unidad').value.trim()||'u',ubicacion:document.getElementById('stk-ubicacion').value.trim()};
+  if(!obj.descripcion){showToast('Ingresá una descripción','err');return;}
+  stockItems.push(obj);guardarEnSheets('Stock',[obj.codigo,obj.descripcion,obj.categoria,obj.empresa,obj.actual,obj.minimo,obj.unidad,obj.ubicacion]);
+  logAudit('Stock','NUEVO ÍTEM',obj.descripcion);closeModal('modalStockItem');renderStock();showToast('✅ Ítem guardado');
+}
+function delStock(i){if(!confirm('¿Eliminar?'))return;stockItems.splice(i,1);renderStock();}
+
+// --- EQUIPOS ---
+function renderEquipos(){
+  const q=(document.getElementById('sEquipos')?.value||'').toLowerCase();
+  const fe=document.getElementById('fEquiposEmpresa')?.value||'';
+  const rows=equipos.filter(r=>JSON.stringify(r).toLowerCase().includes(q)&&(!fe||r.empresa===fe));
+  const tb=document.getElementById('tEquipos');
+  if(!tb)return;
+  if(!rows.length){tb.innerHTML=`<tr><td colspan="10"><div class="empty-state"><div class="empty-icon">🚜</div><div>Sin equipos cargados</div></div></td></tr>`;return;}
+  const estColor={Operativo:'green',Mantenimiento:'',Baja:'red'};
+  tb.innerHTML=rows.map(r=>`<tr>
+    <td style="color:var(--accent);font-weight:700">${r.codigo||'—'}</td><td><strong>${r.descripcion}</strong></td>
+    <td>${r.tipo||'—'}</td><td><span class="chip blue">${r.empresa}</span></td>
+    <td style="color:var(--muted2)">${r.marca||'—'}</td><td style="color:var(--muted2)">${r.anio||'—'}</td>
+    <td style="color:var(--muted2)">${r.patente||'—'}</td>
+    <td><span class="chip ${estColor[r.estado]||''}">${r.estado||'—'}</span></td>
+    <td style="color:var(--muted2);font-size:12px">${r.proximoService||'—'}</td>
+    <td><button class="action-btn" onclick="delEquipo(${equipos.indexOf(r)})">🗑️</button></td>
+  </tr>`).join('');
+}
+function saveEquipo(){
+  const obj={codigo:document.getElementById('eq-codigo').value.trim(),descripcion:document.getElementById('eq-desc').value.trim(),tipo:document.getElementById('eq-tipo').value,empresa:document.getElementById('eq-empresa').value,marca:document.getElementById('eq-marca').value.trim(),anio:document.getElementById('eq-anio').value,patente:document.getElementById('eq-patente').value.trim(),estado:document.getElementById('eq-estado').value,proximoService:document.getElementById('eq-service').value};
+  if(!obj.descripcion){showToast('Ingresá una descripción','err');return;}
+  equipos.push(obj);guardarEnSheets('Equipos',[obj.codigo,obj.descripcion,obj.tipo,obj.empresa,obj.marca,obj.anio,obj.patente,obj.estado,obj.proximoService]);
+  logAudit('Mantenimiento','NUEVO EQUIPO',obj.descripcion);closeModal('modalEquipo');renderEquipos();showToast('✅ Equipo guardado');
+}
+function delEquipo(i){if(!confirm('¿Eliminar?'))return;equipos.splice(i,1);renderEquipos();}
+
+// --- PROYECTOS ---
+function renderProyectos(){
+  const q=(document.getElementById('sProyectos')?.value||'').toLowerCase();
+  const fe=document.getElementById('fProyEstado')?.value||'';
+  const rows=proyectos.filter(r=>JSON.stringify(r).toLowerCase().includes(q)&&(!fe||r.estado===fe));
+  const tb=document.getElementById('tProyectos');
+  if(!tb)return;
+  if(!rows.length){tb.innerHTML=`<tr><td colspan="8"><div class="empty-state"><div class="empty-icon">📌</div><div>Sin proyectos cargados</div></div></td></tr>`;return;}
+  const estColor={'En curso':'green',Pausado:'',Completado:'blue',Cancelado:'red'};
+  tb.innerHTML=rows.map(r=>`<tr>
+    <td><strong>${r.nombre}</strong></td><td><span class="chip blue">${r.empresa}</span></td>
+    <td>${r.responsable||'—'}</td><td style="color:var(--muted2);font-size:12px">${r.inicio||'—'}</td>
+    <td style="color:var(--muted2);font-size:12px">${r.fin||'—'}</td>
+    <td><div style="background:var(--border);border-radius:20px;height:8px;width:100%;min-width:80px"><div style="background:var(--accent);height:8px;border-radius:20px;width:${r.avance||0}%"></div></div><div style="font-size:11px;color:var(--muted2);margin-top:2px">${r.avance||0}%</div></td>
+    <td><span class="chip ${estColor[r.estado]||''}">${r.estado}</span></td>
+    <td><button class="action-btn" onclick="delProyecto(${proyectos.indexOf(r)})">🗑️</button></td>
+  </tr>`).join('');
+}
+function saveProyecto(){
+  const obj={nombre:document.getElementById('proy-nombre').value.trim(),empresa:document.getElementById('proy-empresa').value,responsable:document.getElementById('proy-resp').value.trim(),inicio:document.getElementById('proy-inicio').value,fin:document.getElementById('proy-fin').value,avance:document.getElementById('proy-avance').value||0,estado:document.getElementById('proy-estado').value,descripcion:document.getElementById('proy-desc').value.trim()};
+  if(!obj.nombre){showToast('Ingresá el nombre','err');return;}
+  proyectos.push(obj);guardarEnSheets('Proyectos',[obj.nombre,obj.empresa,obj.responsable,obj.inicio,obj.fin,obj.avance,obj.estado,obj.descripcion]);
+  logAudit('Proyectos','NUEVO PROYECTO',obj.nombre);closeModal('modalProyecto');renderProyectos();showToast('✅ Proyecto guardado');
+}
+function delProyecto(i){if(!confirm('¿Eliminar?'))return;proyectos.splice(i,1);renderProyectos();}
+
+// --- DOCUMENTOS ---
+function renderDocs(){
+  const q=(document.getElementById('sDocs')?.value||'').toLowerCase();
+  const fc=document.getElementById('fDocsCategoria')?.value||'';
+  const rows=documentos.filter(r=>JSON.stringify(r).toLowerCase().includes(q)&&(!fc||r.categoria===fc));
+  const tb=document.getElementById('tDocs');
+  if(!tb)return;
+  if(!rows.length){tb.innerHTML=`<tr><td colspan="7"><div class="empty-state"><div class="empty-icon">📁</div><div>Sin documentos cargados</div></div></td></tr>`;return;}
+  tb.innerHTML=rows.map(r=>`<tr>
+    <td><strong>${r.nombre}</strong></td><td>${r.categoria}</td><td><span class="chip blue">${r.empresa}</span></td>
+    <td>${r.subidoPor||'—'}</td><td style="color:var(--muted2);font-size:12px">${r.fecha||'—'}</td>
+    <td style="color:var(--muted2);font-size:12px">${r.descripcion||'—'}</td>
+    <td><button class="action-btn" onclick="delDoc(${documentos.indexOf(r)})">🗑️</button></td>
+  </tr>`).join('');
+}
+function saveDoc(){
+  const obj={nombre:document.getElementById('doc-nombre').value.trim(),categoria:document.getElementById('doc-cat').value,empresa:document.getElementById('doc-empresa').value,descripcion:document.getElementById('doc-desc').value.trim(),fecha:new Date().toLocaleDateString('es-AR'),subidoPor:currentUser?.nombre||currentUser?.user||'—'};
+  if(!obj.nombre){showToast('Ingresá el nombre','err');return;}
+  documentos.push(obj);guardarEnSheets('Documentos',[obj.nombre,obj.categoria,obj.empresa,obj.subidoPor,obj.fecha,obj.descripcion]);
+  logAudit('Documentos','SUBIÓ DOCUMENTO',obj.nombre);closeModal('modalDoc');renderDocs();showToast('✅ Documento guardado');
+}
+function delDoc(i){if(!confirm('¿Eliminar?'))return;documentos.splice(i,1);renderDocs();}
+
+// --- AUDITORÍA ---
+function renderAuditoria(){
+  const q=(document.getElementById('sAudit')?.value||'').toLowerCase();
+  const fm=document.getElementById('fAuditModulo')?.value||'';
+  const rows=auditLog.filter(r=>JSON.stringify(r).toLowerCase().includes(q)&&(!fm||r.modulo===fm));
+  const tb=document.getElementById('tAuditoria');
+  if(!tb)return;
+  if(!rows.length){tb.innerHTML=`<tr><td colspan="5"><div class="empty-state"><div class="empty-icon">📊</div><div>Sin registros de auditoría</div></div></td></tr>`;return;}
+  tb.innerHTML=rows.map(r=>`<tr>
+    <td style="color:var(--muted2);font-size:12px;white-space:nowrap">${r.fecha}</td>
+    <td><strong>${r.usuario}</strong></td>
+    <td><span class="chip">${r.modulo}</span></td>
+    <td style="color:var(--accent);font-weight:600">${r.accion}</td>
+    <td style="color:var(--muted2);font-size:12px">${r.detalle}</td>
+  </tr>`).join('');
+}
+
+// Mostrar auditoría solo a admins
+function checkAuditoriaAcceso(){
+  const nav=document.getElementById('navAuditoria');
+  if(nav&&currentUser&&(currentUser.rol==='dueno'||currentUser.rol==='admin')) nav.style.display='flex';
+}
+
+// Extender cargarDesdeSheets para cargar módulos genéricos
+const _origCargar = cargarDesdeSheets;
+async function cargarDesdeSheets() {
+  await _origCargar();
+  try {
+    const res = await fetch(SHEETS_URL);
+    const data = await res.json();
+    empleados   = (data['Empleados']   ||[]).slice(1).filter(r=>r[0]).map(r=>({nombre:r[0],dni:r[1],empresa:r[2],area:r[3],puesto:r[4],ingreso:r[5],estado:r[6],contacto:r[7]}));
+    compras     = (data['Compras']     ||[]).slice(1).filter(r=>r[0]).map(r=>({fecha:r[0],numero:r[1],proveedor:r[2],empresa:r[3],descripcion:r[4],monto:r[5],estado:r[6],responsable:r[7]}));
+    proveedores = (data['Proveedores'] ||[]).slice(1).filter(r=>r[0]).map(r=>({razon:r[0],cuit:r[1],rubro:r[2],contacto:r[3],telefono:r[4],email:r[5]}));
+    stockItems  = (data['Stock']       ||[]).slice(1).filter(r=>r[0]).map(r=>({codigo:r[0],descripcion:r[1],categoria:r[2],empresa:r[3],actual:r[4],minimo:r[5],unidad:r[6],ubicacion:r[7]}));
+    equipos     = (data['Equipos']     ||[]).slice(1).filter(r=>r[0]).map(r=>({codigo:r[0],descripcion:r[1],tipo:r[2],empresa:r[3],marca:r[4],anio:r[5],patente:r[6],estado:r[7],proximoService:r[8]}));
+    proyectos   = (data['Proyectos']   ||[]).slice(1).filter(r=>r[0]).map(r=>({nombre:r[0],empresa:r[1],responsable:r[2],inicio:r[3],fin:r[4],avance:r[5],estado:r[6],descripcion:r[7]}));
+    documentos  = (data['Documentos']  ||[]).slice(1).filter(r=>r[0]).map(r=>({nombre:r[0],categoria:r[1],empresa:r[2],subidoPor:r[3],fecha:r[4],descripcion:r[5]}));
+    auditLog    = (data['Auditoria']   ||[]).slice(1).filter(r=>r[0]).map(r=>({fecha:r[0],usuario:r[1],modulo:r[2],accion:r[3],detalle:r[4]}));
+  } catch(e) { console.log('Módulos genéricos: sin datos aún'); }
+  checkAuditoriaAcceso();
+}
+
 // ========== GOOGLE SHEETS API ==========
 const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbx6JgKocPPGIWjngs2Co3eJBJAH4dbxlIy1rsdkdW1_p_VhlplzrVVsOO7uOADFNUd9ow/exec';
 
