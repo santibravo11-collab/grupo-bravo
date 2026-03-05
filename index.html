@@ -545,16 +545,7 @@ tbody td { padding:11px 14px; font-size:13px; vertical-align:middle; }
       <div class="nav-item" id="navPistachos" onclick="showPanel('pistachos',this)"><span class="icon">🌿</span> Bravo Pistachos</div>
       <div class="nav-item" id="navConstruccion" onclick="showPanel('construccion',this)"><span class="icon">🏗️</span> BC Construcciones</div>
       <div class="nav-item" id="navCamiones" onclick="showPanel('camiones',this)"><span class="icon">🚛</span> Bravo CAMC</div>
-      <div class="nav-section">Operaciones</div>
-      <div class="nav-item" onclick="showPanel('agroquimicos',this)"><span class="icon">🧪</span> Agroquímicos</div>
-      <div class="nav-item" onclick="showPanel('inventario',this)"><span class="icon">📦</span> Inventario</div>
-      <div class="nav-item" onclick="showPanel('herramientas',this)"><span class="icon">🔨</span> Herramientas</div>
-      <div class="nav-item" onclick="showPanel('activos',this)"><span class="icon">🚜</span> Activos</div>
-      <div class="nav-item" onclick="showPanel('combustible',this)"><span class="icon">⛽</span> Combustible</div>
-      <div class="nav-item" onclick="showPanel('conteos',this)"><span class="icon">🌳</span> Conteos</div>
-      <div class="nav-section">RRHH</div>
-      <div class="nav-item" onclick="showPanel('personas',this)"><span class="icon">👷</span> Personas</div>
-      <div class="nav-item" onclick="showPanel('asistencia',this)"><span class="icon">🕐</span> Asistencia</div>
+
       <div class="nav-section" id="navAdminSec" style="display:none">Admin</div>
       <div class="nav-item" id="navPermisos" style="display:none" onclick="showPanel('permisos',this)"><span class="icon">🔐</span> Usuarios y Permisos</div>
       <div class="nav-item" id="navAuditoria" style="display:none" onclick="showPanel('auditoria',this)"><span class="icon">📊</span> Auditoría</div>
@@ -591,9 +582,133 @@ tbody td { padding:11px 14px; font-size:13px; vertical-align:middle; }
         </div>
       </div>
 
-      <!-- AGROQUÍMICOS Y FERTILIZANTES -->
-      <div id="panel-agroquimicos" class="tab-panel">
-        <div class="inner-tabs">
+      <!-- PISTACHOS -->
+      <div id="panel-pistachos" class="tab-panel">
+
+        <!-- HEADER -->
+        <div class="bp-header">
+          <div class="bp-header-left">
+            <div class="bp-breadcrumb">GRUPO BRAVO · AGRICULTURA</div>
+            <h1 class="bp-title">Bravo Pistachos</h1>
+            <div class="bp-subtitle">1.000 ha · San Juan, Argentina · Temporada 2025/2026</div>
+          </div>
+          <div class="bp-header-stats">
+            <div class="bp-stat-card"><div class="bp-stat-value" id="stat-partes-hoy">—</div><div class="bp-stat-label">Partes hoy</div></div>
+            <div class="bp-stat-card"><div class="bp-stat-value" id="stat-jornales">—</div><div class="bp-stat-label">Jornales semana</div></div>
+            <div class="bp-stat-card"><div class="bp-stat-value" id="stat-hectareas">—</div><div class="bp-stat-label">Ha trabajadas</div></div>
+            <div class="bp-stat-card bp-stat-accent"><div class="bp-stat-value" id="stat-tarea-top">—</div><div class="bp-stat-label">Tarea principal</div></div>
+          </div>
+        </div>
+
+        <!-- TABS -->
+        <div class="bp-tabs" id="bpTabsBar">
+          <button class="bp-tab active" onclick="showBPTab('bp-partes',this)"><span class="bp-tab-icon">📋</span> Partes</button>
+          <button class="bp-tab" onclick="showBPTab('bp-mapa',this);renderMapa()"><span class="bp-tab-icon">🗺</span> Mapa</button>
+          <button class="bp-tab" onclick="showBPTab('bp-agroquimicos',this)"><span class="bp-tab-icon">🧪</span> Agroquímicos</button>
+          <button class="bp-tab" onclick="showBPTab('bp-inventario',this)"><span class="bp-tab-icon">📦</span> Inventario</button>
+          <button class="bp-tab" onclick="showBPTab('bp-herramientas',this)"><span class="bp-tab-icon">🔨</span> Herramientas</button>
+          <button class="bp-tab" onclick="showBPTab('bp-activos',this)"><span class="bp-tab-icon">🚜</span> Activos</button>
+          <button class="bp-tab" onclick="showBPTab('bp-combustible',this)"><span class="bp-tab-icon">⛽</span> Combustible</button>
+          <button class="bp-tab" onclick="showBPTab('bp-conteos',this)"><span class="bp-tab-icon">🌳</span> Conteos</button>
+          <button class="bp-tab" onclick="showBPTab('bp-personas',this)"><span class="bp-tab-icon">👷</span> Personas</button>
+          <button class="bp-tab" onclick="showBPTab('bp-asistencia',this)"><span class="bp-tab-icon">🕐</span> Asistencia</button>
+          <button class="bp-tab" onclick="showBPTab('bp-analytics',this);renderAnalytics()"><span class="bp-tab-icon">📊</span> Analítica</button>
+          <button class="bp-tab" onclick="showBPTab('bp-org',this);renderOrg()"><span class="bp-tab-icon">👥</span> Equipo</button>
+        </div>
+
+        <!-- PARTES -->
+        <div id="bp-partes" class="bp-panel active">
+          <div class="bp-parte-selector">
+            <button class="bp-parte-btn active campo" onclick="showParte('campo',this)"><span>🌾</span> Campo</button>
+            <button class="bp-parte-btn" onclick="showParte('riego',this)"><span>💧</span> Riego</button>
+            <button class="bp-parte-btn" onclick="showParte('tractor',this)"><span>🚜</span> Tractores</button>
+          </div>
+          <div id="parte-campo" class="parte-panel active">
+            <div class="bp-table-wrap">
+              <div class="bp-table-header">
+                <div><div class="bp-table-title">Partes de Campo</div><div class="bp-table-sub" id="bp-campo-count">— registros</div></div>
+                <div class="bp-table-actions">
+                  <input class="bp-search" type="text" placeholder="Buscar..." id="sCampo" oninput="renderCampo()">
+                  <select class="bp-filter" id="fCampoTarea" onchange="renderCampo()"><option value="">Todas las tareas</option></select>
+                  <button class="bp-btn-primary" id="btnNuevoCampo" onclick="abrirModalCampo()">+ Nuevo Parte</button>
+                </div>
+              </div>
+              <div style="overflow-x:auto"><table class="bp-table">
+                <thead><tr><th>Fecha</th><th>Responsable</th><th>Horario</th><th>Tarea</th><th>Empresa</th><th>Sector</th><th>Desde</th><th>Hasta</th><th>Melgas</th><th>P/Melga</th><th>Rend.</th><th>Jornales</th><th></th></tr></thead>
+                <tbody id="tCampo"></tbody>
+              </table></div>
+            </div>
+          </div>
+          <div id="parte-riego" class="parte-panel">
+            <div class="bp-table-wrap">
+              <div class="bp-table-header">
+                <div><div class="bp-table-title">Partes de Riego</div><div class="bp-table-sub" id="bp-riego-count">— registros</div></div>
+                <div class="bp-table-actions">
+                  <input class="bp-search" type="text" placeholder="Buscar..." id="sRiego" oninput="renderRiego()">
+                  <select class="bp-filter" id="fRiegoTarea" onchange="renderRiego()"><option value="">Todas las tareas</option></select>
+                  <button class="bp-btn-primary" id="btnNuevoRiego" onclick="abrirModalRiego()">+ Nuevo Parte</button>
+                </div>
+              </div>
+              <div style="overflow-x:auto"><table class="bp-table">
+                <thead><tr><th>Fecha</th><th>Responsable</th><th>Horario</th><th>Tarea</th><th>Empresa</th><th>Sector</th><th>Desde</th><th>Hasta</th><th>Jornales</th><th>Notas</th><th></th></tr></thead>
+                <tbody id="tRiego"></tbody>
+              </table></div>
+            </div>
+          </div>
+          <div id="parte-tractor" class="parte-panel">
+            <div class="bp-table-wrap">
+              <div class="bp-table-header">
+                <div><div class="bp-table-title">Partes de Tractores</div><div class="bp-table-sub" id="bp-tractor-count">— registros</div></div>
+                <div class="bp-table-actions">
+                  <input class="bp-search" type="text" placeholder="Buscar..." id="sTractor" oninput="renderTractor()">
+                  <select class="bp-filter" id="fTractorTarea" onchange="renderTractor()"><option value="">Todas las tareas</option></select>
+                  <button class="bp-btn-primary" id="btnNuevoTractor" onclick="abrirModalTractor()">+ Nuevo Parte</button>
+                </div>
+              </div>
+              <div style="overflow-x:auto"><table class="bp-table">
+                <thead><tr><th>Fecha</th><th>Responsable</th><th>Horario</th><th>Tractor</th><th>Implemento</th><th>Tarea</th><th>Empresa</th><th>Sector</th><th>Melgas</th><th>Jornales</th><th></th></tr></thead>
+                <tbody id="tTractor"></tbody>
+              </table></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- MAPA -->
+        <div id="bp-mapa" class="bp-panel">
+          <div class="bp-map-controls">
+            <div class="bp-map-fincas">
+              <button class="bp-finca-btn active" onclick="switchFinca('oeste',this)">Finca Oeste</button>
+              <button class="bp-finca-btn" onclick="switchFinca('este',this)">Finca Este</button>
+            </div>
+            <div class="bp-map-filters">
+              <select class="bp-filter" id="mapTemporada" onchange="renderMapaActivo()">
+                <option value="2025-2026">Temporada 2025/2026</option>
+                <option value="2024-2025">Temporada 2024/2025</option>
+                <option value="2026-2027">Temporada 2026/2027</option>
+              </select>
+              <select class="bp-filter" id="mapFTipo" onchange="renderMapaActivo()">
+                <option value="">Todos los tipos</option>
+                <option value="campo">🌾 Campo</option>
+                <option value="riego">💧 Riego</option>
+                <option value="tractor">🚜 Tractor</option>
+              </select>
+              <select class="bp-filter" id="mapFT" onchange="renderMapaActivo()"><option value="">Todas las tareas</option></select>
+            </div>
+          </div>
+          <div class="bp-map-legend">
+            <span class="bp-legend-item"><span class="bp-legend-dot" style="background:rgba(46,204,113,0.6)"></span>Desbrote/Atada</span>
+            <span class="bp-legend-item"><span class="bp-legend-dot" style="background:rgba(240,180,41,0.6)"></span>Poda</span>
+            <span class="bp-legend-item"><span class="bp-legend-dot" style="background:rgba(52,152,219,0.6)"></span>Riego</span>
+            <span class="bp-legend-item"><span class="bp-legend-dot" style="background:rgba(231,76,60,0.6)"></span>Herbicida</span>
+            <span class="bp-legend-item"><span class="bp-legend-dot" style="background:rgba(155,89,182,0.6)"></span>Foliar</span>
+            <span class="bp-legend-item"><span class="bp-legend-dot" style="background:rgba(230,126,34,0.6)"></span>Cosecha</span>
+          </div>
+          <div id="pasadasContainer"></div>
+        </div>
+
+        <!-- AGROQUÍMICOS -->
+        <div id="bp-agroquimicos" class="bp-panel">
+          <div class="inner-tabs">
           <div class="inner-tab active" onclick="showInner('aq-stock',this)">🧪 Stock</div>
           <div class="inner-tab" onclick="showInner('aq-entradas',this)">📥 Entradas</div>
           <div class="inner-tab" onclick="showInner('aq-salidas',this)">📤 Aplicaciones</div>
@@ -652,11 +767,11 @@ tbody td { padding:11px 14px; font-size:13px; vertical-align:middle; }
             <div class="empty-state"><div class="empty-icon">✅</div><div>Sin alertas activas</div></div>
           </div>
         </div>
-      </div>
+        </div>
 
-      <!-- INVENTARIO GENERAL -->
-      <div id="panel-inventario" class="tab-panel">
-        <div class="inner-tabs">
+        <!-- INVENTARIO -->
+        <div id="bp-inventario" class="bp-panel">
+          <div class="inner-tabs">
           <div class="inner-tab active" onclick="showInner('inv-items',this)">📦 Ítems</div>
           <div class="inner-tab" onclick="showInner('inv-movimientos',this)">↔️ Movimientos</div>
         </div>
@@ -694,11 +809,11 @@ tbody td { padding:11px 14px; font-size:13px; vertical-align:middle; }
             </table></div>
           </div>
         </div>
-      </div>
+        </div>
 
-      <!-- HERRAMIENTAS Y EQUIPOS MENORES -->
-      <div id="panel-herramientas" class="tab-panel">
-        <div class="inner-tabs">
+        <!-- HERRAMIENTAS -->
+        <div id="bp-herramientas" class="bp-panel">
+          <div class="inner-tabs">
           <div class="inner-tab active" onclick="showInner('her-catalogo',this)">🔨 Catálogo</div>
           <div class="inner-tab" onclick="showInner('her-asignadas',this)">👤 Asignadas</div>
           <div class="inner-tab" onclick="showInner('her-historial',this)">📋 Historial</div>
@@ -744,11 +859,11 @@ tbody td { padding:11px 14px; font-size:13px; vertical-align:middle; }
             </table></div>
           </div>
         </div>
-      </div>
+        </div>
 
-      <!-- ACTIVOS Y MANTENIMIENTO -->
-      <div id="panel-activos" class="tab-panel">
-        <div class="inner-tabs">
+        <!-- ACTIVOS -->
+        <div id="bp-activos" class="bp-panel">
+          <div class="inner-tabs">
           <div class="inner-tab active" onclick="showInner('act-flota',this)">🚜 Flota / Activos</div>
           <div class="inner-tab" onclick="showInner('act-ordenes',this)">🔧 Órdenes de Trabajo</div>
           <div class="inner-tab" onclick="showInner('act-preventivo',this)">📅 Preventivo</div>
@@ -818,11 +933,11 @@ tbody td { padding:11px 14px; font-size:13px; vertical-align:middle; }
             </table></div>
           </div>
         </div>
-      </div>
+        </div>
 
-      <!-- COMBUSTIBLE -->
-      <div id="panel-combustible" class="tab-panel">
-        <div class="inner-tabs">
+        <!-- COMBUSTIBLE -->
+        <div id="bp-combustible" class="bp-panel">
+          <div class="inner-tabs">
           <div class="inner-tab active" onclick="showInner('comb-registros',this)">⛽ Cargas</div>
           <div class="inner-tab" onclick="showInner('comb-resumen',this)">📊 Resumen por Activo</div>
         </div>
@@ -845,11 +960,11 @@ tbody td { padding:11px 14px; font-size:13px; vertical-align:middle; }
         <div id="comb-resumen" class="inner-panel">
           <div id="combResumenContainer" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;padding:4px"></div>
         </div>
-      </div>
+        </div>
 
-      <!-- CONTEOS AGRONÓMICOS -->
-      <div id="panel-conteos" class="tab-panel">
-        <div class="inner-tabs">
+        <!-- CONTEOS -->
+        <div id="bp-conteos" class="bp-panel">
+          <div class="inner-tabs">
           <div class="inner-tab active" onclick="showInner('cnt-nuevo',this)">📋 Nuevo Conteo</div>
           <div class="inner-tab" onclick="showInner('cnt-historial',this)">📊 Historial</div>
           <div class="inner-tab" onclick="showInner('cnt-resumen',this)">🌳 Resumen por Cuadro</div>
@@ -916,11 +1031,11 @@ tbody td { padding:11px 14px; font-size:13px; vertical-align:middle; }
             </table></div>
           </div>
         </div>
-      </div>
+        </div>
 
-      <!-- PERSONAS -->
-      <div id="panel-personas" class="tab-panel">
-        <div class="inner-tabs">
+        <!-- PERSONAS -->
+        <div id="bp-personas" class="bp-panel">
+          <div class="inner-tabs">
           <div class="inner-tab active" onclick="showInner('per-lista',this)">👷 Empleados</div>
           <div class="inner-tab" onclick="showInner('per-ingresos',this)">✅ Ingresos</div>
           <div class="inner-tab" onclick="showInner('per-egresos',this)">🚪 Egresos</div>
@@ -990,15 +1105,42 @@ tbody td { padding:11px 14px; font-size:13px; vertical-align:middle; }
             </table></div>
           </div>
         </div>
-      </div>
+        </div>
 
-      <!-- ASISTENCIA (solo estructura) -->
-      <div id="panel-asistencia" class="tab-panel">
-        <div class="empty-state" style="padding:80px 24px">
+        <!-- ASISTENCIA -->
+        <div id="bp-asistencia" class="bp-panel">
+          <div class="empty-state" style="padding:80px 24px">
           <div class="empty-icon">🕐</div>
           <div style="font-size:20px;font-weight:600;color:var(--text);margin-bottom:8px">Asistencia</div>
           <div style="color:var(--muted);max-width:360px;text-align:center">Módulo en construcción. Próximamente: fichaje diario, control de presentismo y vinculación con partes.</div>
         </div>
+        </div>
+
+        <!-- ANALÍTICA -->
+        <div id="bp-analytics" class="bp-panel">
+          <div class="bp-analytics-grid">
+            <div class="bp-analytics-card bp-analytics-wide"><div class="bp-analytics-title">Jornales por semana</div><canvas id="chartJornales" height="120"></canvas></div>
+            <div class="bp-analytics-card"><div class="bp-analytics-title">Distribución de tareas</div><canvas id="chartTareas" height="160"></canvas></div>
+            <div class="bp-analytics-card"><div class="bp-analytics-title">Actividad por sector</div><canvas id="chartSectores" height="160"></canvas></div>
+          </div>
+        </div>
+
+        <!-- EQUIPO -->
+        <div id="bp-org" class="bp-panel">
+          <div style="margin-bottom:20px"><button class="bp-btn-primary" onclick="openModal('modalOrg')">+ Agregar Posición</button></div>
+          <div class="org-container" id="orgTree"></div>
+        </div>
+
+      </div><!-- fin pistachos -->
+
+      <!-- CONSTRUCCION -->
+      <div id="panel-construccion" class="tab-panel">
+        <div class="empty-state"><div class="empty-icon">🏗️</div><div style="font-size:18px;font-weight:600;color:var(--text);margin-bottom:8px">BC Construcciones</div><div>Próximamente</div></div>
+      </div>
+
+      <!-- CAMIONES -->
+      <div id="panel-camiones" class="tab-panel">
+        <div class="empty-state"><div class="empty-icon">🚛</div><div style="font-size:18px;font-weight:600;color:var(--text);margin-bottom:8px">Bravo CAMC</div><div>Próximamente</div></div>
       </div>
 
       <!-- PERMISOS -->
@@ -2748,9 +2890,13 @@ function mostrarSyncStatus(msg) {
 function showBPTab(id, btn) {
   document.querySelectorAll('.bp-panel').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.bp-tab').forEach(b => b.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  btn.classList.add('active');
-  if (id === 'bp-analytics') renderAnalytics();
+  const el = document.getElementById(id);
+  if(el) el.classList.add('active');
+  if(btn) btn.classList.add('active');
+  if(id==='bp-analytics') renderAnalytics();
+  if(id==='bp-conteos') renderCuadrosConteo();
+  if(id==='bp-activos') renderActivos();
+  if(id==='bp-combustible') renderComb();
 }
 
 function updateBPStats() {
