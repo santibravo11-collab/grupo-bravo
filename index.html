@@ -2866,577 +2866,117 @@ function renderEgresos(){
 // Extender carga de Sheets para nuevos módulos
 const _origCargarModulos = cargarDesdeSheets;
 async function cargarDesdeSheets() {
-  await _origCargarModulos();
-  try {
-    const res = await fetch(SHEETS_URL);
-    const data = await res.json();
-    aqProductos  = (data['AqProductos'] ||[]).slice(1).filter(r=>r[0]).map(r=>({nombre:r[0],tipo:r[1],principioActivo:r[2],unidad:r[3],stockActual:r[4],stockMin:r[5],vencimiento:r[6],deposito:r[7],senasa:r[8]}));
-    aqEntradas   = (data['AqEntradas']  ||[]).slice(1).filter(r=>r[0]).map(r=>({fecha:r[0],producto:r[1],cantidad:r[2],unidad:r[3],proveedor:r[4],remito:r[5],vencimiento:r[6],responsable:r[7]}));
-    aqSalidas    = (data['AqSalidas']   ||[]).slice(1).filter(r=>r[0]).map(r=>({fecha:r[0],producto:r[1],cantidad:r[2],sector:r[3],desde:r[4],hasta:r[5],dosis:r[6],operador:r[7],obs:r[8]}));
-    invItems     = (data['Inventario']  ||[]).slice(1).filter(r=>r[0]).map(r=>({codigo:r[0],descripcion:r[1],categoria:r[2],deposito:r[3],stock:r[4],minimo:r[5],unidad:r[6],ultMov:'—'}));
-    invMovimientos=(data['InvMovimientos']||[]).slice(1).filter(r=>r[0]).map(r=>({fecha:r[0],tipo:r[1],item:r[2],cantidad:r[3],deposito:r[4],responsable:r[5],motivo:r[6]}));
-    herramientas = (data['Herramientas']||[]).slice(1).filter(r=>r[0]).map(r=>({codigo:r[0],descripcion:r[1],tipo:r[2],estado:r[3]||'Disponible',asignadaA:'—',desdeAsig:'—'}));
-    herHistorial = (data['HerHistorial']||[]).slice(1).filter(r=>r[0]).map(r=>({fecha:r[0],herramienta:r[1],accion:r[2],persona:r[3],estadoDev:r[4],obs:r[5]}));
-    activos      = (data['Activos']     ||[]).slice(1).filter(r=>r[0]).map(r=>({codigo:r[0],descripcion:r[1],tipo:r[2],marca:r[3],anio:r[4],patente:r[5],horasKm:r[6],estado:r[7],proximoService:r[8]}));
-    ordenesTrabajo=(data['OrdenesTrabajo']||[]).slice(1).filter(r=>r[0]).map(r=>({numero:r[0],activo:r[1],tipo:r[2],descripcion:r[3],fechaApertura:r[4],fechaCierre:r[5],tecnico:r[6],costo:r[7],estado:r[8]}));
-    preventivos  = (data['Preventivos'] ||[]).slice(1).filter(r=>r[0]).map(r=>({activo:r[0],tarea:r[1],frecuencia:r[2],ultimoRealizado:r[3],proximo:r[4]}));
-    combustibles = (data['Combustible'] ||[]).slice(1).filter(r=>r[0]).map(r=>({fecha:r[0],activo:r[1],operador:r[2],litros:r[3],tipo:r[4],horometro:r[5],tarea:r[6],obs:r[7]}));
-    conteos      = (data['ConteosResumen']||[]).slice(1).filter(r=>r[0]).map(r=>({fecha:r[0],sector:r[1],cuadrosConDatos:r[2],resp:r[3],pctMuerte:r[4],pctInjerto:r[5],obs:r[6],filas:[]}));
-    personas     = (data['Personas']    ||[]).slice(1).filter(r=>r[0]).map(r=>({nombre:r[0],dni:r[1],empresa:r[2],area:r[3],puesto:r[4],contrato:r[5],ingreso:r[6],estado:r[7],contacto:r[8],regPor:r[9]}));
-    egresos      = (data['Egresos']     ||[]).slice(1).filter(r=>r[0]).map(r=>({fecha:r[0],nombre:r[1],dni:r[2],empresa:r[3],motivo:r[4],obs:r[5],regPor:r[6]}));
-    if(otCounter<=1&&ordenesTrabajo.length) otCounter=Math.max(...ordenesTrabajo.map(o=>+o.numero||0))+1;
-  } catch(e){ console.log('Módulos operacionales: sin datos aún'); }
-}
-
-// ========== PARTES HERBICIDAS / FOLIAR ==========
-let partesGlifo=[], partesParaquat=[], partesFoliar=[];
-
-const SECTORES_LIST = ['SUR','NORTE','A','B','C','D','E','F','G','H','I','J','K','L','M','N'];
-
-function poblarFiltroSectores(selId, arr){
-  const sel=document.getElementById(selId); if(!sel)return;
-  const sects=[...new Set(arr.map(r=>r.sector).filter(Boolean))].sort();
-  sel.innerHTML='<option value="">Todos los sectores</option>'+sects.map(s=>`<option>${s}</option>`).join('');
-}
-
-// ── GLIFOSATO ──
-function renderGlifo(){
-  const q=(document.getElementById('sGlifo')?.value||'').toLowerCase();
-  const fs=document.getElementById('fGlifoSector')?.value||'';
-  const rows=partesGlifo.filter(r=>JSON.stringify(r).toLowerCase().includes(q)&&(!fs||r.sector===fs));
-  const tb=document.getElementById('tGlifo'); if(!tb)return;
-  const el=document.getElementById('bp-glifo-count'); if(el)el.textContent=partesGlifo.length+' registros';
-  poblarFiltroSectores('fGlifoSector',partesGlifo);
-  const ce=currentUser&&currentUser.rol!=='visor';
-  if(!rows.length){tb.innerHTML=`<tr><td colspan="23"><div class="empty-state"><div class="empty-icon">🧴</div><div>Sin partes de glifosato</div></div></td></tr>`;return;}
-  tb.innerHTML=rows.map(r=>{
-    const i=partesGlifo.indexOf(r);
-    return`<tr>
-      <td style="white-space:nowrap;color:var(--muted2);font-size:12px;font-family:'DM Mono',monospace">${r.fecha}</td>
-      <td><strong>${r.responsable}</strong></td>
-      <td style="font-size:12px;color:var(--muted2)">${r.horario||'—'}</td>
-      <td><span class="bp-badge bp-badge-muted">${r.empresa||'—'}</span></td>
-      <td style="font-size:12px">${r.tractor||'—'}</td>
-      <td style="font-size:12px">${r.implemento||'—'}</td>
-      <td style="font-family:'Fraunces',serif;font-size:18px;color:var(--accent)">${r.jornales||0}</td>
-      <td><span class="bp-badge bp-badge-muted">${r.sector||'—'}</span></td>
-      <td style="font-family:'DM Mono',monospace;text-align:center">${r.cuadro||'—'}</td>
-      <td style="font-family:'DM Mono',monospace;text-align:center">${r.melgas||'—'}</td>
-      <td style="font-family:'DM Mono',monospace;text-align:center">${r.plantasMelga||'—'}</td>
-      <td style="font-family:'DM Mono',monospace;text-align:center">${r.totalPlantas||'—'}</td>
-      <td style="font-family:'DM Mono',monospace;text-align:center">${r.superficie||'—'}</td>
-      <td style="font-family:'DM Mono',monospace;text-align:center">${r.nBidon||'—'}</td>
-      <td style="font-family:'DM Mono',monospace;text-align:center">${r.ltsHerbicida||'—'}</td>
-      <td style="font-family:'DM Mono',monospace;text-align:center">${r.ltsPrepared||'—'}</td>
-      <td style="font-family:'DM Mono',monospace;text-align:center">${r.ltsAplicados||'—'}</td>
-      <td style="font-family:'DM Mono',monospace;text-align:center;color:${+r.sobro>0?'var(--gold)':'var(--muted2)'}">${r.sobro||0}</td>
-      <td style="font-size:12px">${r.producto||'—'}</td>
-      <td style="font-size:11px;color:var(--muted2)">${r.concentracion||'—'}</td>
-      <td style="font-family:'DM Mono',monospace;font-size:12px">${r.rendimiento||'—'}</td>
-      <td style="font-family:'DM Mono',monospace;font-size:12px">${r.ltsHa||'—'}</td>
-      <td>${ce?`<button class="action-btn" onclick="delGlifo(${i})">🗑️</button>`:''}</td>
-    </tr>`;
-  }).join('');
-}
-function saveGlifo(){
-  const melgas=+document.getElementById('gl-melgas').value||0;
-  const pMelga=+document.getElementById('gl-pmelga').value||0;
-  const totalPlantas=melgas*pMelga;
-  const superficie=totalPlantas>0?(totalPlantas/333).toFixed(3):0;
-  const ltsApl=+document.getElementById('gl-ltsapl').value||0;
-  const conc=document.getElementById('gl-producto').value==='ROUNDUP TOP + HEAT'?'1,5%':'3%';
-  const rend=superficie>0?((ltsApl/superficie)/0.36).toFixed(2):0;
-  const ltsHa=+rend*(conc==='1,5%'?0.015:0.03);
-  const obj={
-    fecha:document.getElementById('gl-fecha').value||new Date().toLocaleDateString('es-AR'),
-    responsable:document.getElementById('gl-resp').value.trim(),
-    horario:document.getElementById('gl-horario').value.trim(),
-    empresa:document.getElementById('gl-empresa').value,
-    tractor:document.getElementById('gl-tractor').value.trim(),
-    implemento:document.getElementById('gl-implemento').value.trim(),
-    jornales:+document.getElementById('gl-jornales').value||0,
-    sector:document.getElementById('gl-sector').value,
-    cuadro:document.getElementById('gl-cuadro').value,
-    melgas,plantasMelga:pMelga,totalPlantas,superficie,
-    nBidon:document.getElementById('gl-nbidon').value.trim(),
-    ltsHerbicida:+document.getElementById('gl-ltsherbicida').value||0,
-    ltsPrepared:+document.getElementById('gl-ltsprep').value||0,
-    ltsAplicados:ltsApl,
-    sobro:+document.getElementById('gl-sobro').value||0,
-    producto:document.getElementById('gl-producto').value,
-    concentracion:conc,rendimiento:rend,ltsHa:ltsHa.toFixed(3)
-  };
-  if(!obj.responsable){showToast('Ingresá el responsable','err');return;}
-  partesGlifo.push(obj);
-  guardarEnSheets('Glifosato',[obj.fecha,obj.responsable,obj.horario,obj.empresa,obj.tractor,obj.implemento,obj.jornales,obj.sector,obj.cuadro,obj.melgas,obj.plantasMelga,obj.totalPlantas,obj.superficie,obj.nBidon,obj.ltsHerbicida,obj.ltsPrepared,obj.ltsAplicados,obj.sobro,obj.producto,obj.concentracion,obj.rendimiento,obj.ltsHa]);
-  closeModal('modalGlifo');renderGlifo();showToast('✅ Parte de glifosato guardado');
-}
-function delGlifo(i){if(!confirm('¿Eliminar?'))return;partesGlifo.splice(i,1);renderGlifo();}
-
-// ── PARAQUAT ──
-function renderParaquat(){
-  const q=(document.getElementById('sParaquat')?.value||'').toLowerCase();
-  const fs=document.getElementById('fParaquatSector')?.value||'';
-  const rows=partesParaquat.filter(r=>JSON.stringify(r).toLowerCase().includes(q)&&(!fs||r.sector===fs));
-  const tb=document.getElementById('tParaquat'); if(!tb)return;
-  const el=document.getElementById('bp-paraquat-count'); if(el)el.textContent=partesParaquat.length+' registros';
-  poblarFiltroSectores('fParaquatSector',partesParaquat);
-  const ce=currentUser&&currentUser.rol!=='visor';
-  if(!rows.length){tb.innerHTML=`<tr><td colspan="23"><div class="empty-state"><div class="empty-icon">⚗️</div><div>Sin partes de paraquat</div></div></td></tr>`;return;}
-  tb.innerHTML=rows.map(r=>{
-    const i=partesParaquat.indexOf(r);
-    return`<tr>
-      <td style="white-space:nowrap;color:var(--muted2);font-size:12px;font-family:'DM Mono',monospace">${r.fecha}</td>
-      <td><strong>${r.responsable}</strong></td>
-      <td style="font-size:12px;color:var(--muted2)">${r.horario||'—'}</td>
-      <td><span class="bp-badge bp-badge-muted">${r.empresa||'—'}</span></td>
-      <td style="font-size:12px">${r.tractor||'—'}</td>
-      <td style="font-size:12px">${r.implemento||'—'}</td>
-      <td style="font-family:'Fraunces',serif;font-size:18px;color:var(--accent)">${r.jornales||0}</td>
-      <td><span class="bp-badge bp-badge-muted">${r.sector||'—'}</span></td>
-      <td style="font-family:'DM Mono',monospace;text-align:center">${r.cuadro||'—'}</td>
-      <td style="font-family:'DM Mono',monospace;text-align:center">${r.melgas||'—'}</td>
-      <td style="font-family:'DM Mono',monospace;text-align:center">${r.plantasMelga||'—'}</td>
-      <td style="font-family:'DM Mono',monospace;text-align:center">${r.totalPlantas||'—'}</td>
-      <td style="font-family:'DM Mono',monospace;text-align:center">${r.superficie||'—'}</td>
-      <td style="font-size:12px">${r.producto||'PARAQUAT'}</td>
-      <td style="font-family:'DM Mono',monospace;text-align:center">${r.nBidon||'—'}</td>
-      <td style="font-family:'DM Mono',monospace;text-align:center">${r.ltsProd||'—'}</td>
-      <td style="font-family:'DM Mono',monospace;text-align:center">${r.concentracion||'2%'}</td>
-      <td style="font-family:'DM Mono',monospace;text-align:center">${r.ltsPrepared||'—'}</td>
-      <td style="font-family:'DM Mono',monospace;text-align:center">${r.ltsAplicados||'—'}</td>
-      <td style="font-family:'DM Mono',monospace;text-align:center;color:${+r.sobro>0?'var(--gold)':'var(--muted2)'}">${r.sobro||0}</td>
-      <td style="font-family:'DM Mono',monospace;font-size:12px">${r.rendimiento||'—'}</td>
-      <td style="font-family:'DM Mono',monospace;font-size:12px">${r.ltsHa||'—'}</td>
-      <td>${ce?`<button class="action-btn" onclick="delParaquat(${i})">🗑️</button>`:''}</td>
-    </tr>`;
-  }).join('');
-}
-function saveParaquat(){
-  const melgas=+document.getElementById('pq-melgas').value||0;
-  const pMelga=+document.getElementById('pq-pmelga').value||0;
-  const totalPlantas=melgas*pMelga;
-  const superficie=totalPlantas>0?(totalPlantas/333).toFixed(3):0;
-  const ltsApl=+document.getElementById('pq-ltsapl').value||0;
-  const conc=0.02;
-  const rend=superficie>0?((ltsApl/superficie)/0.4).toFixed(2):0;
-  const obj={
-    fecha:document.getElementById('pq-fecha').value||new Date().toLocaleDateString('es-AR'),
-    responsable:document.getElementById('pq-resp').value.trim(),
-    horario:document.getElementById('pq-horario').value.trim(),
-    empresa:document.getElementById('pq-empresa').value,
-    tractor:document.getElementById('pq-tractor').value.trim(),
-    implemento:document.getElementById('pq-implemento').value.trim(),
-    jornales:+document.getElementById('pq-jornales').value||0,
-    sector:document.getElementById('pq-sector').value,
-    cuadro:document.getElementById('pq-cuadro').value,
-    melgas,plantasMelga:pMelga,totalPlantas,superficie,
-    producto:'PARAQUAT',
-    nBidon:document.getElementById('pq-nbidon').value.trim(),
-    ltsProd:+document.getElementById('pq-ltsprod').value||0,
-    concentracion:'2%',
-    ltsPrepared:+document.getElementById('pq-ltsprep').value||0,
-    ltsAplicados:ltsApl,
-    sobro:+document.getElementById('pq-sobro').value||0,
-    rendimiento:rend,
-    ltsHa:(+rend*conc).toFixed(3)
-  };
-  if(!obj.responsable){showToast('Ingresá el responsable','err');return;}
-  partesParaquat.push(obj);
-  guardarEnSheets('Paraquat',[obj.fecha,obj.responsable,obj.horario,obj.empresa,obj.tractor,obj.implemento,obj.jornales,obj.sector,obj.cuadro,obj.melgas,obj.plantasMelga,obj.totalPlantas,obj.superficie,obj.producto,obj.nBidon,obj.ltsProd,obj.concentracion,obj.ltsPrepared,obj.ltsAplicados,obj.sobro,obj.rendimiento,obj.ltsHa]);
-  closeModal('modalParaquat');renderParaquat();showToast('✅ Parte de paraquat guardado');
-}
-function delParaquat(i){if(!confirm('¿Eliminar?'))return;partesParaquat.splice(i,1);renderParaquat();}
-
-// ── FOLIAR ──
-function renderFoliar(){
-  const q=(document.getElementById('sFoliar')?.value||'').toLowerCase();
-  const fs=document.getElementById('fFoliarSector')?.value||'';
-  const rows=partesFoliar.filter(r=>JSON.stringify(r).toLowerCase().includes(q)&&(!fs||r.sector===fs));
-  const tb=document.getElementById('tFoliar'); if(!tb)return;
-  const el=document.getElementById('bp-foliar-count'); if(el)el.textContent=partesFoliar.length+' registros';
-  poblarFiltroSectores('fFoliarSector',partesFoliar);
-  const ce=currentUser&&currentUser.rol!=='visor';
-  if(!rows.length){tb.innerHTML=`<tr><td colspan="23"><div class="empty-state"><div class="empty-icon">🌿</div><div>Sin partes de foliar</div></div></td></tr>`;return;}
-  tb.innerHTML=rows.map(r=>{
-    const i=partesFoliar.indexOf(r);
-    return`<tr>
-      <td style="white-space:nowrap;color:var(--muted2);font-size:12px;font-family:'DM Mono',monospace">${r.fecha}</td>
-      <td><strong>${r.responsable}</strong></td>
-      <td><span class="bp-badge bp-badge-muted">${r.empresa||'—'}</span></td>
-      <td style="font-size:12px">${r.tractor||'—'}</td>
-      <td style="font-size:12px">${r.implemento||'—'}</td>
-      <td style="font-size:12px;color:var(--muted2)">${r.horario||'—'}</td>
-      <td style="font-family:'Fraunces',serif;font-size:18px;color:var(--accent)">${r.jornales||0}</td>
-      <td><span class="bp-badge bp-badge-muted">${r.sector||'—'}</span></td>
-      <td style="font-family:'DM Mono',monospace;text-align:center">${r.cuadro||'—'}</td>
-      <td style="font-family:'DM Mono',monospace;text-align:center">${r.melgas||'—'}</td>
-      <td style="font-family:'DM Mono',monospace;text-align:center">${r.plantasMelga||'—'}</td>
-      <td style="font-family:'DM Mono',monospace;text-align:center">${r.totalPlantas||'—'}</td>
-      <td style="font-family:'DM Mono',monospace;text-align:center">${r.superficie||'—'}</td>
-      <td style="font-family:'DM Mono',monospace;text-align:center">${r.preparacion||'—'}</td>
-      <td style="font-family:'DM Mono',monospace;text-align:center">${r.ltsAplicados||'—'}</td>
-      <td style="font-family:'DM Mono',monospace;text-align:center;color:${+r.sobro>0?'var(--gold)':'var(--muted2)'}">${r.sobro||0}</td>
-      <td style="font-size:12px">${r.producto||'—'}</td>
-      <td style="font-family:'DM Mono',monospace;font-size:12px">${r.rendimiento||'—'}</td>
-      <td style="font-family:'DM Mono',monospace;text-align:center">${r.nBidon||'—'}</td>
-      <td style="font-family:'DM Mono',monospace;text-align:center">${r.cc||'—'}</td>
-      <td style="font-size:12px">${r.coadyuvante||'—'}</td>
-      <td style="font-family:'DM Mono',monospace;text-align:center">${r.ml||'—'}</td>
-      <td>${ce?`<button class="action-btn" onclick="delFoliar(${i})">🗑️</button>`:''}</td>
-    </tr>`;
-  }).join('');
-}
-function saveFoliar(){
-  const melgas=+document.getElementById('fl-melgas').value||0;
-  const pMelga=+document.getElementById('fl-pmelga').value||0;
-  const totalPlantas=melgas*pMelga;
-  const superficie=totalPlantas>0?(totalPlantas/333).toFixed(3):0;
-  const ltsApl=+document.getElementById('fl-ltsapl').value||0;
-  const rend=superficie>0?(ltsApl/superficie).toFixed(2):0;
-  const obj={
-    fecha:document.getElementById('fl-fecha').value||new Date().toLocaleDateString('es-AR'),
-    responsable:document.getElementById('fl-resp').value.trim(),
-    empresa:document.getElementById('fl-empresa').value,
-    tractor:document.getElementById('fl-tractor').value.trim(),
-    implemento:document.getElementById('fl-implemento').value.trim(),
-    horario:document.getElementById('fl-horario').value.trim(),
-    jornales:+document.getElementById('fl-jornales').value||0,
-    sector:document.getElementById('fl-sector').value,
-    cuadro:document.getElementById('fl-cuadro').value,
-    melgas,plantasMelga:pMelga,totalPlantas,superficie,
-    preparacion:+document.getElementById('fl-prep').value||0,
-    ltsAplicados:ltsApl,
-    sobro:+document.getElementById('fl-sobro').value||0,
-    producto:document.getElementById('fl-producto').value.trim(),
-    rendimiento:rend,
-    nBidon:document.getElementById('fl-nbidon').value.trim(),
-    cc:document.getElementById('fl-cc').value.trim(),
-    coadyuvante:document.getElementById('fl-coadyuvante').value.trim(),
-    ml:document.getElementById('fl-ml').value.trim()
-  };
-  if(!obj.responsable){showToast('Ingresá el responsable','err');return;}
-  partesFoliar.push(obj);
-  guardarEnSheets('Foliar',[obj.fecha,obj.responsable,obj.empresa,obj.tractor,obj.implemento,obj.horario,obj.jornales,obj.sector,obj.cuadro,obj.melgas,obj.plantasMelga,obj.totalPlantas,obj.superficie,obj.preparacion,obj.ltsAplicados,obj.sobro,obj.producto,obj.rendimiento,obj.nBidon,obj.cc,obj.coadyuvante,obj.ml]);
-  closeModal('modalFoliar');renderFoliar();showToast('✅ Parte de foliar guardado');
-}
-function delFoliar(i){if(!confirm('¿Eliminar?'))return;partesFoliar.splice(i,1);renderFoliar();}
-
-// Cargar desde Sheets — extender
-const _origCargarHerb = cargarDesdeSheets;
-async function cargarDesdeSheets(){
-  await _origCargarHerb();
-  try{
-    const res=await fetch(SHEETS_URL);
-    const data=await res.json();
-    partesGlifo   =(data['Glifosato']||[]).slice(1).filter(r=>r[0]).map(r=>({fecha:r[0],responsable:r[1],horario:r[2],empresa:r[3],tractor:r[4],implemento:r[5],jornales:r[6],sector:r[7],cuadro:r[8],melgas:r[9],plantasMelga:r[10],totalPlantas:r[11],superficie:r[12],nBidon:r[13],ltsHerbicida:r[14],ltsPrepared:r[15],ltsAplicados:r[16],sobro:r[17],producto:r[18],concentracion:r[19],rendimiento:r[20],ltsHa:r[21]}));
-    partesParaquat=(data['Paraquat']||[]).slice(1).filter(r=>r[0]).map(r=>({fecha:r[0],responsable:r[1],horario:r[2],empresa:r[3],tractor:r[4],implemento:r[5],jornales:r[6],sector:r[7],cuadro:r[8],melgas:r[9],plantasMelga:r[10],totalPlantas:r[11],superficie:r[12],producto:r[13],nBidon:r[14],ltsProd:r[15],concentracion:r[16],ltsPrepared:r[17],ltsAplicados:r[18],sobro:r[19],rendimiento:r[20],ltsHa:r[21]}));
-    partesFoliar  =(data['Foliar']||[]).slice(1).filter(r=>r[0]).map(r=>({fecha:r[0],responsable:r[1],empresa:r[2],tractor:r[3],implemento:r[4],horario:r[5],jornales:r[6],sector:r[7],cuadro:r[8],melgas:r[9],plantasMelga:r[10],totalPlantas:r[11],superficie:r[12],preparacion:r[13],ltsAplicados:r[14],sobro:r[15],producto:r[16],rendimiento:r[17],nBidon:r[18],cc:r[19],coadyuvante:r[20],ml:r[21]}));
-  }catch(e){console.log('Herbicidas/foliar: sin datos aún');}
-}
-
-// ========== MÓDULOS GENÉRICOS ==========
-
-// --- Datos en memoria ---
-let empleados = [], compras = [], proveedores = [], stockItems = [], equipos = [], proyectos = [], documentos = [], auditLog = [];
-
-// --- Auditoría ---
-function logAudit(modulo, accion, detalle) {
-  const entry = {
-    fecha: new Date().toLocaleString('es-AR'),
-    usuario: currentUser ? currentUser.nombre || currentUser.user : '—',
-    modulo, accion, detalle
-  };
-  auditLog.unshift(entry);
-  guardarEnSheets('Auditoria', [entry.fecha, entry.usuario, entry.modulo, entry.accion, entry.detalle]);
-  renderAuditoria();
-}
-
-// --- RRHH ---
-function renderRrhh() {
-  const q = (document.getElementById('sRrhh')?.value||'').toLowerCase();
-  const fe = document.getElementById('fRrhhEmpresa')?.value||'';
-  const rows = empleados.filter(r => JSON.stringify(r).toLowerCase().includes(q) && (!fe||r.empresa===fe));
-  const tb = document.getElementById('tRrhh');
-  if (!tb) return;
-  if (!rows.length) { tb.innerHTML=`<tr><td colspan="9"><div class="empty-state"><div class="empty-icon">👷</div><div>Sin empleados cargados</div></div></td></tr>`; return; }
-  const ce = currentUser && currentUser.rol !== 'visor';
-  tb.innerHTML = rows.map((r,i) => `<tr>
-    <td><strong>${r.nombre}</strong></td><td style="color:var(--muted2)">${r.dni||'—'}</td>
-    <td><span class="chip blue">${r.empresa}</span></td><td>${r.area||'—'}</td><td>${r.puesto||'—'}</td>
-    <td style="color:var(--muted2);font-size:12px">${r.ingreso||'—'}</td>
-    <td><span class="chip ${r.estado==='Activo'?'':'red'}">${r.estado||'Activo'}</span></td>
-    <td style="font-size:12px">${r.contacto||'—'}</td>
-    <td>${ce?`<button class="action-btn" onclick="delEmpleado(${empleados.indexOf(r)})">🗑️</button>`:''}</td>
-  </tr>`).join('');
-}
-function saveEmpleado() {
-  const obj = {
-    nombre: document.getElementById('emp-nombre').value.trim(),
-    dni: document.getElementById('emp-dni').value.trim(),
-    empresa: document.getElementById('emp-empresa').value,
-    area: document.getElementById('emp-area').value.trim(),
-    puesto: document.getElementById('emp-puesto').value.trim(),
-    ingreso: document.getElementById('emp-ingreso').value,
-    estado: document.getElementById('emp-estado').value,
-    contacto: document.getElementById('emp-contacto').value.trim()
-  };
-  if (!obj.nombre) { showToast('Ingresá el nombre','err'); return; }
-  empleados.push(obj);
-  guardarEnSheets('Empleados', [obj.nombre,obj.dni,obj.empresa,obj.area,obj.puesto,obj.ingreso,obj.estado,obj.contacto]);
-  logAudit('RRHH', 'ALTA EMPLEADO', obj.nombre);
-  closeModal('modalEmpleado'); renderRrhh(); showToast('✅ Empleado guardado');
-}
-function delEmpleado(i) { if(!confirm('¿Eliminar?'))return; logAudit('RRHH','BAJA EMPLEADO',empleados[i].nombre); empleados.splice(i,1); renderRrhh(); }
-
-// --- COMPRAS ---
-let ordenCounter = 1;
-function renderCompras() {
-  const q = (document.getElementById('sCompras')?.value||'').toLowerCase();
-  const fe = document.getElementById('fComprasEstado')?.value||'';
-  const rows = compras.filter(r => JSON.stringify(r).toLowerCase().includes(q) && (!fe||r.estado===fe));
-  const tb = document.getElementById('tCompras');
-  if (!tb) return;
-  if (!rows.length) { tb.innerHTML=`<tr><td colspan="9"><div class="empty-state"><div class="empty-icon">🛒</div><div>Sin órdenes de compra</div></div></td></tr>`; return; }
-  const estadoColor = {Pendiente:'',Aprobada:'green',Recibida:'blue',Cancelada:'red'};
-  tb.innerHTML = rows.map(r => `<tr>
-    <td style="color:var(--muted2);font-size:12px">${r.fecha}</td>
-    <td><strong style="color:var(--accent)">#${r.numero}</strong></td>
-    <td>${r.proveedor||'—'}</td><td><span class="chip blue">${r.empresa}</span></td>
-    <td>${r.descripcion||'—'}</td>
-    <td style="font-weight:700">$${Number(r.monto||0).toLocaleString('es-AR')}</td>
-    <td><span class="chip ${estadoColor[r.estado]||''}">${r.estado}</span></td>
-    <td>${r.responsable||'—'}</td>
-    <td><button class="action-btn" onclick="delCompra(${compras.indexOf(r)})">🗑️</button></td>
-  </tr>`).join('');
-}
-function saveCompra() {
-  const obj = {
-    fecha: document.getElementById('comp-fecha').value||new Date().toLocaleDateString('es-AR'),
-    numero: ordenCounter++,
-    proveedor: document.getElementById('comp-proveedor').value.trim(),
-    empresa: document.getElementById('comp-empresa').value,
-    descripcion: document.getElementById('comp-desc').value.trim(),
-    monto: document.getElementById('comp-monto').value,
-    estado: document.getElementById('comp-estado').value,
-    responsable: currentUser?.nombre||currentUser?.user||'—'
-  };
-  compras.push(obj);
-  guardarEnSheets('Compras',[obj.fecha,obj.numero,obj.proveedor,obj.empresa,obj.descripcion,obj.monto,obj.estado,obj.responsable]);
-  logAudit('Compras','NUEVA ORDEN','#'+obj.numero+' - '+obj.proveedor);
-  closeModal('modalCompra'); renderCompras(); showToast('✅ Orden guardada');
-}
-function delCompra(i){if(!confirm('¿Eliminar?'))return;logAudit('Compras','ELIMINÓ ORDEN','#'+compras[i].numero);compras.splice(i,1);renderCompras();}
-
-// --- PROVEEDORES ---
-function renderProveedores() {
-  const q = (document.getElementById('sProveedores')?.value||'').toLowerCase();
-  const rows = proveedores.filter(r => JSON.stringify(r).toLowerCase().includes(q));
-  const tb = document.getElementById('tProveedores');
-  if (!tb) return;
-  if (!rows.length) { tb.innerHTML=`<tr><td colspan="7"><div class="empty-state"><div class="empty-icon">🏭</div><div>Sin proveedores cargados</div></div></td></tr>`; return; }
-  tb.innerHTML = rows.map(r => `<tr>
-    <td><strong>${r.razon}</strong></td><td style="color:var(--muted2)">${r.cuit||'—'}</td>
-    <td>${r.rubro||'—'}</td><td>${r.contacto||'—'}</td><td>${r.telefono||'—'}</td><td>${r.email||'—'}</td>
-    <td><button class="action-btn" onclick="delProveedor(${proveedores.indexOf(r)})">🗑️</button></td>
-  </tr>`).join('');
-}
-function saveProveedor(){
-  const obj={razon:document.getElementById('prov-razon').value.trim(),cuit:document.getElementById('prov-cuit').value.trim(),rubro:document.getElementById('prov-rubro').value.trim(),contacto:document.getElementById('prov-contacto').value.trim(),telefono:document.getElementById('prov-tel').value.trim(),email:document.getElementById('prov-email').value.trim()};
-  if(!obj.razon){showToast('Ingresá la razón social','err');return;}
-  proveedores.push(obj);guardarEnSheets('Proveedores',[obj.razon,obj.cuit,obj.rubro,obj.contacto,obj.telefono,obj.email]);
-  logAudit('Compras','NUEVO PROVEEDOR',obj.razon);closeModal('modalProveedor');renderProveedores();showToast('✅ Proveedor guardado');
-}
-function delProveedor(i){if(!confirm('¿Eliminar?'))return;proveedores.splice(i,1);renderProveedores();}
-
-// --- STOCK ---
-function renderStock(){
-  const q=(document.getElementById('sStock')?.value||'').toLowerCase();
-  const fc=document.getElementById('fStockCategoria')?.value||'';
-  const rows=stockItems.filter(r=>JSON.stringify(r).toLowerCase().includes(q)&&(!fc||r.categoria===fc));
-  const tb=document.getElementById('tStock');
-  if(!tb)return;
-  if(!rows.length){tb.innerHTML=`<tr><td colspan="9"><div class="empty-state"><div class="empty-icon">📦</div><div>Sin ítems en stock</div></div></td></tr>`;return;}
-  tb.innerHTML=rows.map(r=>{
-    const alerta=+r.actual<=+r.minimo;
-    return`<tr>
-      <td style="color:var(--accent);font-weight:700">${r.codigo||'—'}</td><td><strong>${r.descripcion}</strong></td>
-      <td>${r.categoria||'—'}</td><td><span class="chip blue">${r.empresa||'—'}</span></td>
-      <td style="font-weight:700;color:${alerta?'var(--red)':'var(--accent)'}">${r.actual} ${alerta?'⚠️':''}</td>
-      <td style="color:var(--muted2)">${r.minimo||0}</td><td>${r.unidad||'u'}</td><td style="color:var(--muted2)">${r.ubicacion||'—'}</td>
-      <td><button class="action-btn" onclick="delStock(${stockItems.indexOf(r)})">🗑️</button></td>
-    </tr>`;}).join('');
-}
-function saveStock(){
-  const obj={codigo:document.getElementById('stk-codigo').value.trim(),descripcion:document.getElementById('stk-desc').value.trim(),categoria:document.getElementById('stk-cat').value,empresa:document.getElementById('stk-empresa').value,actual:document.getElementById('stk-actual').value||0,minimo:document.getElementById('stk-minimo').value||0,unidad:document.getElementById('stk-unidad').value.trim()||'u',ubicacion:document.getElementById('stk-ubicacion').value.trim()};
-  if(!obj.descripcion){showToast('Ingresá una descripción','err');return;}
-  stockItems.push(obj);guardarEnSheets('Stock',[obj.codigo,obj.descripcion,obj.categoria,obj.empresa,obj.actual,obj.minimo,obj.unidad,obj.ubicacion]);
-  logAudit('Stock','NUEVO ÍTEM',obj.descripcion);closeModal('modalStockItem');renderStock();showToast('✅ Ítem guardado');
-}
-function delStock(i){if(!confirm('¿Eliminar?'))return;stockItems.splice(i,1);renderStock();}
-
-// --- EQUIPOS ---
-function renderEquipos(){
-  const q=(document.getElementById('sEquipos')?.value||'').toLowerCase();
-  const fe=document.getElementById('fEquiposEmpresa')?.value||'';
-  const rows=equipos.filter(r=>JSON.stringify(r).toLowerCase().includes(q)&&(!fe||r.empresa===fe));
-  const tb=document.getElementById('tEquipos');
-  if(!tb)return;
-  if(!rows.length){tb.innerHTML=`<tr><td colspan="10"><div class="empty-state"><div class="empty-icon">🚜</div><div>Sin equipos cargados</div></div></td></tr>`;return;}
-  const estColor={Operativo:'green',Mantenimiento:'',Baja:'red'};
-  tb.innerHTML=rows.map(r=>`<tr>
-    <td style="color:var(--accent);font-weight:700">${r.codigo||'—'}</td><td><strong>${r.descripcion}</strong></td>
-    <td>${r.tipo||'—'}</td><td><span class="chip blue">${r.empresa}</span></td>
-    <td style="color:var(--muted2)">${r.marca||'—'}</td><td style="color:var(--muted2)">${r.anio||'—'}</td>
-    <td style="color:var(--muted2)">${r.patente||'—'}</td>
-    <td><span class="chip ${estColor[r.estado]||''}">${r.estado||'—'}</span></td>
-    <td style="color:var(--muted2);font-size:12px">${r.proximoService||'—'}</td>
-    <td><button class="action-btn" onclick="delEquipo(${equipos.indexOf(r)})">🗑️</button></td>
-  </tr>`).join('');
-}
-function saveEquipo(){
-  const obj={codigo:document.getElementById('eq-codigo').value.trim(),descripcion:document.getElementById('eq-desc').value.trim(),tipo:document.getElementById('eq-tipo').value,empresa:document.getElementById('eq-empresa').value,marca:document.getElementById('eq-marca').value.trim(),anio:document.getElementById('eq-anio').value,patente:document.getElementById('eq-patente').value.trim(),estado:document.getElementById('eq-estado').value,proximoService:document.getElementById('eq-service').value};
-  if(!obj.descripcion){showToast('Ingresá una descripción','err');return;}
-  equipos.push(obj);guardarEnSheets('Equipos',[obj.codigo,obj.descripcion,obj.tipo,obj.empresa,obj.marca,obj.anio,obj.patente,obj.estado,obj.proximoService]);
-  logAudit('Mantenimiento','NUEVO EQUIPO',obj.descripcion);closeModal('modalEquipo');renderEquipos();showToast('✅ Equipo guardado');
-}
-function delEquipo(i){if(!confirm('¿Eliminar?'))return;equipos.splice(i,1);renderEquipos();}
-
-// --- PROYECTOS ---
-function renderProyectos(){
-  const q=(document.getElementById('sProyectos')?.value||'').toLowerCase();
-  const fe=document.getElementById('fProyEstado')?.value||'';
-  const rows=proyectos.filter(r=>JSON.stringify(r).toLowerCase().includes(q)&&(!fe||r.estado===fe));
-  const tb=document.getElementById('tProyectos');
-  if(!tb)return;
-  if(!rows.length){tb.innerHTML=`<tr><td colspan="8"><div class="empty-state"><div class="empty-icon">📌</div><div>Sin proyectos cargados</div></div></td></tr>`;return;}
-  const estColor={'En curso':'green',Pausado:'',Completado:'blue',Cancelado:'red'};
-  tb.innerHTML=rows.map(r=>`<tr>
-    <td><strong>${r.nombre}</strong></td><td><span class="chip blue">${r.empresa}</span></td>
-    <td>${r.responsable||'—'}</td><td style="color:var(--muted2);font-size:12px">${r.inicio||'—'}</td>
-    <td style="color:var(--muted2);font-size:12px">${r.fin||'—'}</td>
-    <td><div style="background:var(--border);border-radius:20px;height:8px;width:100%;min-width:80px"><div style="background:var(--accent);height:8px;border-radius:20px;width:${r.avance||0}%"></div></div><div style="font-size:11px;color:var(--muted2);margin-top:2px">${r.avance||0}%</div></td>
-    <td><span class="chip ${estColor[r.estado]||''}">${r.estado}</span></td>
-    <td><button class="action-btn" onclick="delProyecto(${proyectos.indexOf(r)})">🗑️</button></td>
-  </tr>`).join('');
-}
-function saveProyecto(){
-  const obj={nombre:document.getElementById('proy-nombre').value.trim(),empresa:document.getElementById('proy-empresa').value,responsable:document.getElementById('proy-resp').value.trim(),inicio:document.getElementById('proy-inicio').value,fin:document.getElementById('proy-fin').value,avance:document.getElementById('proy-avance').value||0,estado:document.getElementById('proy-estado').value,descripcion:document.getElementById('proy-desc').value.trim()};
-  if(!obj.nombre){showToast('Ingresá el nombre','err');return;}
-  proyectos.push(obj);guardarEnSheets('Proyectos',[obj.nombre,obj.empresa,obj.responsable,obj.inicio,obj.fin,obj.avance,obj.estado,obj.descripcion]);
-  logAudit('Proyectos','NUEVO PROYECTO',obj.nombre);closeModal('modalProyecto');renderProyectos();showToast('✅ Proyecto guardado');
-}
-function delProyecto(i){if(!confirm('¿Eliminar?'))return;proyectos.splice(i,1);renderProyectos();}
-
-// --- DOCUMENTOS ---
-function renderDocs(){
-  const q=(document.getElementById('sDocs')?.value||'').toLowerCase();
-  const fc=document.getElementById('fDocsCategoria')?.value||'';
-  const rows=documentos.filter(r=>JSON.stringify(r).toLowerCase().includes(q)&&(!fc||r.categoria===fc));
-  const tb=document.getElementById('tDocs');
-  if(!tb)return;
-  if(!rows.length){tb.innerHTML=`<tr><td colspan="7"><div class="empty-state"><div class="empty-icon">📁</div><div>Sin documentos cargados</div></div></td></tr>`;return;}
-  tb.innerHTML=rows.map(r=>`<tr>
-    <td><strong>${r.nombre}</strong></td><td>${r.categoria}</td><td><span class="chip blue">${r.empresa}</span></td>
-    <td>${r.subidoPor||'—'}</td><td style="color:var(--muted2);font-size:12px">${r.fecha||'—'}</td>
-    <td style="color:var(--muted2);font-size:12px">${r.descripcion||'—'}</td>
-    <td><button class="action-btn" onclick="delDoc(${documentos.indexOf(r)})">🗑️</button></td>
-  </tr>`).join('');
-}
-function saveDoc(){
-  const obj={nombre:document.getElementById('doc-nombre').value.trim(),categoria:document.getElementById('doc-cat').value,empresa:document.getElementById('doc-empresa').value,descripcion:document.getElementById('doc-desc').value.trim(),fecha:new Date().toLocaleDateString('es-AR'),subidoPor:currentUser?.nombre||currentUser?.user||'—'};
-  if(!obj.nombre){showToast('Ingresá el nombre','err');return;}
-  documentos.push(obj);guardarEnSheets('Documentos',[obj.nombre,obj.categoria,obj.empresa,obj.subidoPor,obj.fecha,obj.descripcion]);
-  logAudit('Documentos','SUBIÓ DOCUMENTO',obj.nombre);closeModal('modalDoc');renderDocs();showToast('✅ Documento guardado');
-}
-function delDoc(i){if(!confirm('¿Eliminar?'))return;documentos.splice(i,1);renderDocs();}
-
-// --- AUDITORÍA ---
-function renderAuditoria(){
-  const q=(document.getElementById('sAudit')?.value||'').toLowerCase();
-  const fm=document.getElementById('fAuditModulo')?.value||'';
-  const rows=auditLog.filter(r=>JSON.stringify(r).toLowerCase().includes(q)&&(!fm||r.modulo===fm));
-  const tb=document.getElementById('tAuditoria');
-  if(!tb)return;
-  if(!rows.length){tb.innerHTML=`<tr><td colspan="5"><div class="empty-state"><div class="empty-icon">📊</div><div>Sin registros de auditoría</div></div></td></tr>`;return;}
-  tb.innerHTML=rows.map(r=>`<tr>
-    <td style="color:var(--muted2);font-size:12px;white-space:nowrap">${r.fecha}</td>
-    <td><strong>${r.usuario}</strong></td>
-    <td><span class="chip">${r.modulo}</span></td>
-    <td style="color:var(--accent);font-weight:600">${r.accion}</td>
-    <td style="color:var(--muted2);font-size:12px">${r.detalle}</td>
-  </tr>`).join('');
-}
-
-// Mostrar auditoría solo a admins
-function checkAuditoriaAcceso(){
-  const nav=document.getElementById('navAuditoria');
-  if(nav&&currentUser&&(currentUser.rol==='dueno'||currentUser.rol==='admin')) nav.style.display='flex';
-}
-
-// Extender cargarDesdeSheets para cargar módulos genéricos
-const _origCargar = cargarDesdeSheets;
-async function cargarDesdeSheets() {
-  await _origCargar();
-  try {
-    const res = await fetch(SHEETS_URL);
-    const data = await res.json();
-    empleados   = (data['Empleados']   ||[]).slice(1).filter(r=>r[0]).map(r=>({nombre:r[0],dni:r[1],empresa:r[2],area:r[3],puesto:r[4],ingreso:r[5],estado:r[6],contacto:r[7]}));
-    compras     = (data['Compras']     ||[]).slice(1).filter(r=>r[0]).map(r=>({fecha:r[0],numero:r[1],proveedor:r[2],empresa:r[3],descripcion:r[4],monto:r[5],estado:r[6],responsable:r[7]}));
-    proveedores = (data['Proveedores'] ||[]).slice(1).filter(r=>r[0]).map(r=>({razon:r[0],cuit:r[1],rubro:r[2],contacto:r[3],telefono:r[4],email:r[5]}));
-    stockItems  = (data['Stock']       ||[]).slice(1).filter(r=>r[0]).map(r=>({codigo:r[0],descripcion:r[1],categoria:r[2],empresa:r[3],actual:r[4],minimo:r[5],unidad:r[6],ubicacion:r[7]}));
-    equipos     = (data['Equipos']     ||[]).slice(1).filter(r=>r[0]).map(r=>({codigo:r[0],descripcion:r[1],tipo:r[2],empresa:r[3],marca:r[4],anio:r[5],patente:r[6],estado:r[7],proximoService:r[8]}));
-    proyectos   = (data['Proyectos']   ||[]).slice(1).filter(r=>r[0]).map(r=>({nombre:r[0],empresa:r[1],responsable:r[2],inicio:r[3],fin:r[4],avance:r[5],estado:r[6],descripcion:r[7]}));
-    documentos  = (data['Documentos']  ||[]).slice(1).filter(r=>r[0]).map(r=>({nombre:r[0],categoria:r[1],empresa:r[2],subidoPor:r[3],fecha:r[4],descripcion:r[5]}));
-    auditLog    = (data['Auditoria']   ||[]).slice(1).filter(r=>r[0]).map(r=>({fecha:r[0],usuario:r[1],modulo:r[2],accion:r[3],detalle:r[4]}));
-  } catch(e) { console.log('Módulos genéricos: sin datos aún'); }
-  checkAuditoriaAcceso();
-}
-
-// ========== GOOGLE SHEETS API ==========
-const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbx6JgKocPPGIWjngs2Co3eJBJAH4dbxlIy1rsdkdW1_p_VhlplzrVVsOO7uOADFNUd9ow/exec';
-
-async function guardarEnSheets(hoja, fila) {
-  try {
-    await fetch(SHEETS_URL, {
-      method: 'POST',
-      body: JSON.stringify({ accion: 'guardar', hoja, fila }),
-    });
-  } catch(e) {
-    console.error('Error guardando en Sheets:', e);
-  }
-}
-
-async function cargarDesdeSheets() {
   mostrarSyncStatus('⏳ Cargando datos...');
   try {
     const res = await fetch(SHEETS_URL);
     const data = await res.json();
 
-    partesCampo   = (data['Campo']    || []).slice(1).filter(r=>r[0]).map(r=>({
-      fecha:r[0], resp:r[1], horario:r[2], jornales:+r[3], empleados:r[4],
-      tarea:r[5], empresa:r[6], sector:r[7], desde:+r[8], hasta:+r[9],
-      melgas:+r[10], pmelga:+r[11], rend:r[12], obs:r[13]
+    // ── PARTES DE CAMPO ──────────────────────────────────────────
+    partesCampo = (data['PartesCampo'] || data['CAMPO '] || []).slice(1)
+      .filter(r => r[0])
+      .map(r => ({
+        fecha: r[0], responsable: r[1], horario: r[2], tarea: r[3],
+        jornales: r[4], empresa: r[5], sector: r[6], desde: r[7], hasta: r[8],
+        melgas: r[9], pMelga: r[10], plantas: r[11], rendimiento: r[12],
+        otrasTareas: r[13], observaciones: r[14], insumos: r[15]
+      }));
+
+    // ── PARTES DE RIEGO ───────────────────────────────────────────
+    partesRiego = (data['PartesRiego'] || data['RIEGO '] || []).slice(1)
+      .filter(r => r[0])
+      .map(r => ({
+        fecha: r[0], responsable: r[1], horario: r[2], tarea: r[3],
+        jornales: r[4], empresa: r[5], sector: r[6], desde: r[7], hasta: r[8],
+        melgas: r[9], pMelga: r[10], plantas: r[11], rendimiento: r[12],
+        otrasTareas: r[13], observaciones: r[14]
+      }));
+
+    // ── PARTES DE TRACTORES ───────────────────────────────────────
+    partesTractor = (data['PartesTractor'] || data['TRACTORES '] || []).slice(1)
+      .filter(r => r[0])
+      .map(r => ({
+        fecha: r[0], responsable: r[1], horario: r[2], tractor: r[3],
+        implemento: r[4], tarea: r[5], jornales: r[6], empresa: r[7],
+        sector: r[8], desde: r[9], hasta: r[10], melgas: r[11],
+        pMelga: r[12], plantas: r[13], rendimiento: r[14], nota: r[15],
+        otrasTareas: r[17], superficie: r[18]
+      }));
+
+    // ── GLIFOSATO ─────────────────────────────────────────────────
+    partesGlifo = (data['Glifosato'] || data['GLIFO (120-200)'] || []).slice(1)
+      .filter(r => r[0])
+      .map(r => ({
+        fecha: r[0], responsable: r[1], horario: r[2], empresa: r[3],
+        tractor: r[4], implemento: r[5], jornales: r[6], sector: r[7],
+        cuadro: r[8], melgas: r[9], plantasMelga: r[10], totalPlantas: r[11],
+        superficie: r[12], nBidon: r[13], ltsHerbicida: r[14],
+        ltsPrepared: r[15], ltsAplicados: r[16], sobro: r[17],
+        producto: r[18], concentracion: r[19], rendimiento: r[20], ltsHa: r[21]
+      }));
+
+    // ── PARAQUAT ──────────────────────────────────────────────────
+    partesParaquat = (data['Paraquat'] || data['PARAQUAT'] || []).slice(1)
+      .filter(r => r[0])
+      .map(r => ({
+        fecha: r[0], responsable: r[1], horario: r[2], empresa: r[3],
+        tractor: r[4], implemento: r[5], jornales: r[6], sector: r[7],
+        cuadro: r[8], melgas: r[9], plantasMelga: r[10], totalPlantas: r[11],
+        superficie: r[12], producto: r[13], nBidon: r[14], ltsProd: r[15],
+        concentracion: r[16], ltsPrepared: r[17], ltsAplicados: r[18],
+        sobro: r[19], rendimiento: r[20], ltsHa: r[21]
+      }));
+
+    // ── FOLIAR ────────────────────────────────────────────────────
+    partesFoliar = (data['Foliar'] || data['FOLIAR '] || []).slice(1)
+      .filter(r => r[0])
+      .map(r => ({
+        fecha: r[0], responsable: r[1], empresa: r[2], tractor: r[3],
+        implemento: r[4], horario: r[5], jornales: r[6], sector: r[7],
+        cuadro: r[8], melgas: r[9], plantasMelga: r[10], totalPlantas: r[11],
+        superficie: r[12], preparacion: r[13], ltsAplicados: r[14],
+        sobro: r[15], producto: r[16], rendimiento: r[17], nBidon: r[18],
+        cc: r[19], coadyuvante: r[20], ml: r[21]
+      }));
+
+    // ── MÓDULOS OPERACIONALES ─────────────────────────────────────
+    aqProductos   = (data['AqProductos']    || []).slice(1).filter(r=>r[0]).map(r=>({nombre:r[0],tipo:r[1],principioActivo:r[2],unidad:r[3],stockActual:r[4],stockMin:r[5],vencimiento:r[6],deposito:r[7],senasa:r[8]}));
+    aqEntradas    = (data['AqEntradas']     || []).slice(1).filter(r=>r[0]).map(r=>({fecha:r[0],producto:r[1],cantidad:r[2],unidad:r[3],proveedor:r[4],remito:r[5],vencimiento:r[6],responsable:r[7]}));
+    aqSalidas     = (data['AqSalidas']      || []).slice(1).filter(r=>r[0]).map(r=>({fecha:r[0],producto:r[1],cantidad:r[2],sector:r[3],desde:r[4],hasta:r[5],dosis:r[6],operador:r[7],obs:r[8]}));
+    invItems      = (data['Inventario']     || []).slice(1).filter(r=>r[0]).map(r=>({codigo:r[0],descripcion:r[1],categoria:r[2],deposito:r[3],stock:r[4],minimo:r[5],unidad:r[6],ultMov:'—'}));
+    invMovimientos= (data['InvMovimientos'] || []).slice(1).filter(r=>r[0]).map(r=>({fecha:r[0],tipo:r[1],item:r[2],cantidad:r[3],deposito:r[4],responsable:r[5],motivo:r[6]}));
+    herramientas  = (data['Herramientas']   || []).slice(1).filter(r=>r[0]).map(r=>({codigo:r[0],descripcion:r[1],tipo:r[2],estado:r[3]||'Disponible',asignadaA:'—',desdeAsig:'—'}));
+    herHistorial  = (data['HerHistorial']   || []).slice(1).filter(r=>r[0]).map(r=>({fecha:r[0],herramienta:r[1],accion:r[2],persona:r[3],estadoDev:r[4],obs:r[5]}));
+    activos       = (data['Activos']        || []).slice(1).filter(r=>r[0]).map(r=>({codigo:r[0],descripcion:r[1],tipo:r[2],marca:r[3],anio:r[4],patente:r[5],horasKm:r[6],estado:r[7],proximoService:r[8]}));
+    ordenesTrabajo= (data['OrdenesTrabajo'] || []).slice(1).filter(r=>r[0]).map(r=>({numero:r[0],activo:r[1],tipo:r[2],descripcion:r[3],fechaApertura:r[4],fechaCierre:r[5],tecnico:r[6],costo:r[7],estado:r[8]}));
+    preventivos   = (data['Preventivos']    || []).slice(1).filter(r=>r[0]).map(r=>({activo:r[0],tarea:r[1],frecuencia:r[2],ultimoRealizado:r[3],proximo:r[4]}));
+    combustibles  = (data['Combustible']    || []).slice(1).filter(r=>r[0]).map(r=>({fecha:r[0],activo:r[1],operador:r[2],litros:r[3],tipo:r[4],horometro:r[5],tarea:r[6],obs:r[7]}));
+    conteos       = (data['ConteosResumen'] || []).slice(1).filter(r=>r[0]).map(r=>({fechaInicio:r[0],fechaCierre:r[1],sector:r[2],nombre:r[3],totalPlantas:r[4],totalMuertas:r[5],totalInjerto:r[6],pctMuerte:r[10],pctInjerto:r[11],resp:r[12],obs:r[13],filas:[]}));
+    personas      = (data['Personas']       || []).slice(1).filter(r=>r[0]).map(r=>({nombre:r[0],dni:r[1],empresa:r[2],area:r[3],puesto:r[4],contrato:r[5],ingreso:r[6],estado:r[7],contacto:r[8],regPor:r[9]}));
+    egresos       = (data['Egresos']        || []).slice(1).filter(r=>r[0]).map(r=>({fecha:r[0],nombre:r[1],dni:r[2],empresa:r[3],motivo:r[4],obs:r[5],regPor:r[6]}));
+
+    if (otCounter <= 1 && ordenesTrabajo.length)
+      otCounter = Math.max(...ordenesTrabajo.map(o => +o.numero || 0)) + 1;
+
+    // ── SOLICITUDES ───────────────────────────────────────────────
+    solicitudes = (data['Solicitudes'] || []).slice(1).filter(r=>r[0]).map(r=>({
+      nombre:r[0], user:r[1], pass:r[2], empresa:r[3], rol:r[4], estado:r[5]||'Pendiente'
     }));
-    partesRiego   = (data['Riego']    || []).slice(1).filter(r=>r[0]).map(r=>({
-      fecha:r[0], resp:r[1], horario:r[2], jornales:+r[3], empleados:r[4],
-      tarea:r[5], empresa:r[6], sector:r[7], desde:+r[8], hasta:+r[9], notas:r[10]
-    }));
-    partesTractor = (data['Tractores']|| []).slice(1).filter(r=>r[0]).map(r=>({
-      fecha:r[0], resp:r[1], horario:r[2], jornales:+r[3], empleados:r[4],
-      tractor:r[5], implemento:r[6], tarea:r[7], empresa:r[8], sector:r[9],
-      desde:+r[10], hasta:+r[11], melgas:+r[12], nota:r[13]
+    usuarios = (data['Usuarios'] || []).slice(1).filter(r=>r[0]).map(r=>({
+      nombre:r[0], user:r[1], pass:r[2], empresa:r[3], rol:r[4]
     }));
 
-    renderTablas();
-    renderMapaActivo();
-    mostrarSyncStatus('✅ Datos sincronizados'); updateBPStats();
-    setTimeout(()=>mostrarSyncStatus(''), 3000);
+    // ── RENDER ────────────────────────────────────────────────────
+    renderCampo(); renderRiego(); renderTractor();
+    renderGlifo(); renderParaquat(); renderFoliar();
+    updateBPStats();
+    mostrarSyncStatus('✅ Datos actualizados');
+
   } catch(e) {
     mostrarSyncStatus('⚠️ Sin conexión — datos locales');
     console.error(e);
   }
 }
+
 
 function mostrarSyncStatus(msg) {
   const el = document.getElementById('syncStatus');
