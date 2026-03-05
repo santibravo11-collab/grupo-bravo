@@ -622,6 +622,9 @@ tbody td { padding:11px 14px; font-size:13px; vertical-align:middle; }
             <button class="bp-parte-btn active campo" onclick="showParte('campo',this)"><span>🌾</span> Campo</button>
             <button class="bp-parte-btn" onclick="showParte('riego',this)"><span>💧</span> Riego</button>
             <button class="bp-parte-btn" onclick="showParte('tractor',this)"><span>🚜</span> Tractores</button>
+            <button class="bp-parte-btn" onclick="showParte('glifo',this)"><span>🧴</span> Glifosato</button>
+            <button class="bp-parte-btn" onclick="showParte('paraquat',this)"><span>⚗️</span> Paraquat</button>
+            <button class="bp-parte-btn" onclick="showParte('foliar',this)"><span>🌿</span> Foliar</button>
           </div>
           <div id="parte-campo" class="parte-panel active">
             <div class="bp-table-wrap">
@@ -671,6 +674,79 @@ tbody td { padding:11px 14px; font-size:13px; vertical-align:middle; }
               </table></div>
             </div>
           </div>
+
+          <!-- GLIFOSATO -->
+          <div id="parte-glifo" class="parte-panel">
+            <div class="bp-table-wrap">
+              <div class="bp-table-header">
+                <div><div class="bp-table-title">Partes de Glifosato</div><div class="bp-table-sub" id="bp-glifo-count">— registros</div></div>
+                <div class="bp-table-actions">
+                  <input class="bp-search" placeholder="Buscar..." id="sGlifo" oninput="renderGlifo()">
+                  <select class="bp-filter" id="fGlifoSector" onchange="renderGlifo()"><option value="">Todos los sectores</option></select>
+                  <button class="bp-btn-primary" id="btnNuevoGlifo" onclick="openModal('modalGlifo')">+ Nuevo Parte</button>
+                </div>
+              </div>
+              <div style="overflow-x:auto"><table class="bp-table">
+                <thead><tr>
+                  <th>Fecha</th><th>Responsable</th><th>Horario</th><th>Empresa</th>
+                  <th>Tractor</th><th>Implemento</th><th>Jornales</th><th>Sector</th><th>Cuadro</th>
+                  <th>Melgas</th><th>Pl×Melga</th><th>Total Pl.</th><th>Sup.(ha)</th>
+                  <th>N°Bidón</th><th>Lts Herb.</th><th>Lts Prep.</th><th>Lts Aplic.</th><th>Sobró</th>
+                  <th>Producto</th><th>Conc.</th><th>Rend.</th><th>Lts/ha</th><th></th>
+                </tr></thead>
+                <tbody id="tGlifo"></tbody>
+              </table></div>
+            </div>
+          </div>
+
+          <!-- PARAQUAT -->
+          <div id="parte-paraquat" class="parte-panel">
+            <div class="bp-table-wrap">
+              <div class="bp-table-header">
+                <div><div class="bp-table-title">Partes de Paraquat</div><div class="bp-table-sub" id="bp-paraquat-count">— registros</div></div>
+                <div class="bp-table-actions">
+                  <input class="bp-search" placeholder="Buscar..." id="sParaquat" oninput="renderParaquat()">
+                  <select class="bp-filter" id="fParaquatSector" onchange="renderParaquat()"><option value="">Todos los sectores</option></select>
+                  <button class="bp-btn-primary" id="btnNuevoParaquat" onclick="openModal('modalParaquat')">+ Nuevo Parte</button>
+                </div>
+              </div>
+              <div style="overflow-x:auto"><table class="bp-table">
+                <thead><tr>
+                  <th>Fecha</th><th>Responsable</th><th>Horario</th><th>Empresa</th>
+                  <th>Tractor</th><th>Implemento</th><th>Jornales</th><th>Sector</th><th>Cuadro</th>
+                  <th>Melgas</th><th>Pl×Melga</th><th>Total Pl.</th><th>Sup.(ha)</th>
+                  <th>Producto</th><th>N°Bidón</th><th>Lts Prod.</th><th>Conc.</th>
+                  <th>Lts Prep.</th><th>Lts Aplic.</th><th>Sobró</th><th>Rend.</th><th>Lts/ha</th><th></th>
+                </tr></thead>
+                <tbody id="tParaquat"></tbody>
+              </table></div>
+            </div>
+          </div>
+
+          <!-- FOLIAR -->
+          <div id="parte-foliar" class="parte-panel">
+            <div class="bp-table-wrap">
+              <div class="bp-table-header">
+                <div><div class="bp-table-title">Partes de Foliar</div><div class="bp-table-sub" id="bp-foliar-count">— registros</div></div>
+                <div class="bp-table-actions">
+                  <input class="bp-search" placeholder="Buscar..." id="sFoliar" oninput="renderFoliar()">
+                  <select class="bp-filter" id="fFoliarSector" onchange="renderFoliar()"><option value="">Todos los sectores</option></select>
+                  <button class="bp-btn-primary" id="btnNuevoFoliar" onclick="openModal('modalFoliar')">+ Nuevo Parte</button>
+                </div>
+              </div>
+              <div style="overflow-x:auto"><table class="bp-table">
+                <thead><tr>
+                  <th>Fecha</th><th>Responsable</th><th>Empresa</th>
+                  <th>Tractor</th><th>Implemento</th><th>Horario</th><th>Jornales</th>
+                  <th>Sector</th><th>Cuadro</th><th>Melgas</th><th>Pl×Melga</th>
+                  <th>Total Pl.</th><th>Sup.(ha)</th><th>Prep.(lts)</th><th>Lts Aplic.</th><th>Sobró</th>
+                  <th>Producto</th><th>Rend.</th><th>N°Bidón</th><th>CC</th><th>Coadyuvante</th><th>ml</th><th></th>
+                </tr></thead>
+                <tbody id="tFoliar"></tbody>
+              </table></div>
+            </div>
+          </div>
+
         </div>
 
         <!-- MAPA -->
@@ -1227,6 +1303,114 @@ tbody td { padding:11px 14px; font-size:13px; vertical-align:middle; }
   </div>
 </div>
 
+
+
+<!-- MODAL GLIFOSATO -->
+<div class="modal-overlay" id="modalGlifo"><div class="modal" style="max-width:720px">
+  <div class="modal-head"><span class="modal-title">🧴 Nuevo Parte de Glifosato</span><button class="modal-close" onclick="closeModal('modalGlifo')">✕</button></div>
+  <div class="modal-body"><div class="form-grid">
+    <div class="form-group"><label>Fecha</label><input type="date" id="gl-fecha"></div>
+    <div class="form-group"><label>Responsable</label><input id="gl-resp" placeholder="Nombre"></div>
+    <div class="form-group"><label>Horario</label><input id="gl-horario" placeholder="7:00-15:00"></div>
+    <div class="form-group"><label>Empresa</label>
+      <select id="gl-empresa"><option>SAP</option><option>TRIWEAR</option></select></div>
+    <div class="form-group"><label>Tractor</label><input id="gl-tractor" placeholder="VALTRA 2, JOHN DEERE..."></div>
+    <div class="form-group"><label>Implemento</label><input id="gl-implemento" placeholder="GUTIERREZ, MOCHILAS..."></div>
+    <div class="form-group"><label>Jornales</label><input type="number" id="gl-jornales" placeholder="0" step="0.5" min="0"></div>
+    <div class="form-group"><label>Sector</label>
+      <select id="gl-sector"><option>SUR</option><option>NORTE</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option><option>H</option><option>I</option><option>J</option><option>K</option><option>L</option><option>M</option><option>N</option></select></div>
+    <div class="form-group"><label>Cuadro</label><input id="gl-cuadro" placeholder="1-3, 5, 10-15..."></div>
+    <div class="form-group"><label>Melgas</label><input type="number" id="gl-melgas" placeholder="0" min="0" oninput="calcGlifoModal()"></div>
+    <div class="form-group"><label>Plantas × Melga</label><input type="number" id="gl-pmelga" placeholder="0" min="0" oninput="calcGlifoModal()"></div>
+    <div class="form-group"><label>N° Bidón</label><input id="gl-nbidon" placeholder="1, 1 Y 2..."></div>
+    <div class="form-group"><label>Lts Herbicida</label><input type="number" id="gl-ltsherbicida" placeholder="0" min="0"></div>
+    <div class="form-group"><label>Lts Preparados</label><input type="number" id="gl-ltsprep" placeholder="0" min="0"></div>
+    <div class="form-group"><label>Lts Aplicados</label><input type="number" id="gl-ltsapl" placeholder="0" min="0" oninput="calcGlifoModal()"></div>
+    <div class="form-group"><label>Sobró</label><input type="number" id="gl-sobro" placeholder="0" min="0"></div>
+    <div class="form-group"><label>Tipo de Producto</label>
+      <select id="gl-producto" onchange="calcGlifoModal()">
+        <option>ROUNDUP TOP + HEAT</option><option>POWER PLUS + SHARK</option><option>Otro</option>
+      </select></div>
+    <div class="form-group"><label>Total Plantas <span style="color:var(--muted2);font-size:11px">(auto)</span></label>
+      <input id="gl-total-plantas" readonly style="opacity:.6"></div>
+    <div class="form-group"><label>Superficie ha <span style="color:var(--muted2);font-size:11px">(auto)</span></label>
+      <input id="gl-superficie" readonly style="opacity:.6"></div>
+    <div class="form-group"><label>Concentración <span style="color:var(--muted2);font-size:11px">(auto)</span></label>
+      <input id="gl-conc-display" readonly style="opacity:.6"></div>
+    <div class="form-group"><label>Rendimiento <span style="color:var(--muted2);font-size:11px">(auto)</span></label>
+      <input id="gl-rend-display" readonly style="opacity:.6"></div>
+  </div></div>
+  <div class="modal-foot"><button class="btn btn-secondary" onclick="closeModal('modalGlifo')">Cancelar</button><button class="btn btn-primary" onclick="saveGlifo()">Guardar</button></div>
+</div></div>
+
+<!-- MODAL PARAQUAT -->
+<div class="modal-overlay" id="modalParaquat"><div class="modal" style="max-width:720px">
+  <div class="modal-head"><span class="modal-title">⚗️ Nuevo Parte de Paraquat</span><button class="modal-close" onclick="closeModal('modalParaquat')">✕</button></div>
+  <div class="modal-body"><div class="form-grid">
+    <div class="form-group"><label>Fecha</label><input type="date" id="pq-fecha"></div>
+    <div class="form-group"><label>Responsable</label><input id="pq-resp" placeholder="Nombre"></div>
+    <div class="form-group"><label>Horario</label><input id="pq-horario" placeholder="7:00-14:00"></div>
+    <div class="form-group"><label>Empresa</label>
+      <select id="pq-empresa"><option>SAP</option><option>TRIWEAR</option></select></div>
+    <div class="form-group"><label>Tractor</label><input id="pq-tractor" placeholder="VALTRA 6..."></div>
+    <div class="form-group"><label>Implemento</label><input id="pq-implemento" placeholder="GUTIERREZ N2, MOCHILAS..."></div>
+    <div class="form-group"><label>Jornales</label><input type="number" id="pq-jornales" placeholder="0" step="0.5" min="0"></div>
+    <div class="form-group"><label>Sector</label>
+      <select id="pq-sector"><option>SUR</option><option>NORTE</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option><option>H</option><option>I</option><option>J</option><option>K</option><option>L</option><option>M</option><option>N</option></select></div>
+    <div class="form-group"><label>Cuadro</label><input id="pq-cuadro" placeholder="D-E-F, 1-6..."></div>
+    <div class="form-group"><label>Melgas</label><input type="number" id="pq-melgas" placeholder="0" min="0" oninput="calcPqModal()"></div>
+    <div class="form-group"><label>Plantas × Melga</label><input type="number" id="pq-pmelga" placeholder="0" min="0" oninput="calcPqModal()"></div>
+    <div class="form-group"><label>N° Bidón</label><input id="pq-nbidon" placeholder="9, 60-50..."></div>
+    <div class="form-group"><label>Lts de Producto</label><input type="number" id="pq-ltsprod" placeholder="0" min="0"></div>
+    <div class="form-group"><label>Lts Preparados</label><input type="number" id="pq-ltsprep" placeholder="0" min="0"></div>
+    <div class="form-group"><label>Lts Aplicados</label><input type="number" id="pq-ltsapl" placeholder="0" min="0" oninput="calcPqModal()"></div>
+    <div class="form-group"><label>Sobró</label><input type="number" id="pq-sobro" placeholder="0" min="0"></div>
+    <div class="form-group"><label>Total Plantas <span style="color:var(--muted2);font-size:11px">(auto)</span></label>
+      <input id="pq-total-plantas" readonly style="opacity:.6"></div>
+    <div class="form-group"><label>Superficie ha <span style="color:var(--muted2);font-size:11px">(auto)</span></label>
+      <input id="pq-superficie" readonly style="opacity:.6"></div>
+    <div class="form-group"><label>Rendimiento <span style="color:var(--muted2);font-size:11px">(auto)</span></label>
+      <input id="pq-rend-display" readonly style="opacity:.6"></div>
+    <div class="form-group"><label>Lts/ha <span style="color:var(--muted2);font-size:11px">(auto)</span></label>
+      <input id="pq-ltsHa-display" readonly style="opacity:.6"></div>
+  </div></div>
+  <div class="modal-foot"><button class="btn btn-secondary" onclick="closeModal('modalParaquat')">Cancelar</button><button class="btn btn-primary" onclick="saveParaquat()">Guardar</button></div>
+</div></div>
+
+<!-- MODAL FOLIAR -->
+<div class="modal-overlay" id="modalFoliar"><div class="modal" style="max-width:720px">
+  <div class="modal-head"><span class="modal-title">🌿 Nuevo Parte de Foliar</span><button class="modal-close" onclick="closeModal('modalFoliar')">✕</button></div>
+  <div class="modal-body"><div class="form-grid">
+    <div class="form-group"><label>Fecha</label><input type="date" id="fl-fecha"></div>
+    <div class="form-group"><label>Responsable</label><input id="fl-resp" placeholder="Nombre"></div>
+    <div class="form-group"><label>Empresa</label>
+      <select id="fl-empresa"><option>SAP</option><option>TRIWEAR</option></select></div>
+    <div class="form-group"><label>Tractor</label><input id="fl-tractor" placeholder="VALTRA 6, JOHN DEERE..."></div>
+    <div class="form-group"><label>Implemento</label><input id="fl-implemento" placeholder="METALFOR, MOCHILAS..."></div>
+    <div class="form-group"><label>Horario</label><input id="fl-horario" placeholder="20:00-22:00"></div>
+    <div class="form-group"><label>Jornales</label><input type="number" id="fl-jornales" placeholder="0" step="0.5" min="0"></div>
+    <div class="form-group"><label>Sector</label>
+      <select id="fl-sector"><option>SUR</option><option>NORTE</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option><option>H</option><option>I</option><option>J</option><option>K</option><option>L</option><option>M</option><option>N</option></select></div>
+    <div class="form-group"><label>Cuadro</label><input id="fl-cuadro" placeholder="13-14, 1-2..."></div>
+    <div class="form-group"><label>Melgas</label><input type="number" id="fl-melgas" placeholder="0" min="0" oninput="calcFlModal()"></div>
+    <div class="form-group"><label>Plantas × Melga</label><input type="number" id="fl-pmelga" placeholder="0" min="0" oninput="calcFlModal()"></div>
+    <div class="form-group"><label>Preparación (lts)</label><input type="number" id="fl-prep" placeholder="0" min="0"></div>
+    <div class="form-group"><label>Lts Aplicados</label><input type="number" id="fl-ltsapl" placeholder="0" min="0" oninput="calcFlModal()"></div>
+    <div class="form-group"><label>Sobró</label><input type="number" id="fl-sobro" placeholder="0" min="0"></div>
+    <div class="form-group"><label>Tipo de Producto</label><input id="fl-producto" placeholder="NATIVO, TRIGAL 43 SC..."></div>
+    <div class="form-group"><label>N° Bidón</label><input id="fl-nbidon" placeholder="1, 12-..."></div>
+    <div class="form-group"><label>CC</label><input id="fl-cc" placeholder="800, 1200..."></div>
+    <div class="form-group"><label>Tipo Coadyuvante</label><input id="fl-coadyuvante" placeholder="RIZOSPRAY, RAY GRIN..."></div>
+    <div class="form-group"><label>ml Coadyuvante</label><input id="fl-ml" placeholder="200000..."></div>
+    <div class="form-group"><label>Total Plantas <span style="color:var(--muted2);font-size:11px">(auto)</span></label>
+      <input id="fl-total-plantas" readonly style="opacity:.6"></div>
+    <div class="form-group"><label>Superficie ha <span style="color:var(--muted2);font-size:11px">(auto)</span></label>
+      <input id="fl-superficie" readonly style="opacity:.6"></div>
+    <div class="form-group"><label>Rendimiento <span style="color:var(--muted2);font-size:11px">(auto)</span></label>
+      <input id="fl-rend-display" readonly style="opacity:.6"></div>
+  </div></div>
+  <div class="modal-foot"><button class="btn btn-secondary" onclick="closeModal('modalFoliar')">Cancelar</button><button class="btn btn-primary" onclick="saveFoliar()">Guardar</button></div>
+</div></div>
 
 <!-- MODAL AQ PRODUCTO -->
 <div class="modal-overlay" id="modalAqProducto"><div class="modal">
@@ -2704,6 +2888,253 @@ async function cargarDesdeSheets() {
   } catch(e){ console.log('Módulos operacionales: sin datos aún'); }
 }
 
+// ========== PARTES HERBICIDAS / FOLIAR ==========
+let partesGlifo=[], partesParaquat=[], partesFoliar=[];
+
+const SECTORES_LIST = ['SUR','NORTE','A','B','C','D','E','F','G','H','I','J','K','L','M','N'];
+
+function poblarFiltroSectores(selId, arr){
+  const sel=document.getElementById(selId); if(!sel)return;
+  const sects=[...new Set(arr.map(r=>r.sector).filter(Boolean))].sort();
+  sel.innerHTML='<option value="">Todos los sectores</option>'+sects.map(s=>`<option>${s}</option>`).join('');
+}
+
+// ── GLIFOSATO ──
+function renderGlifo(){
+  const q=(document.getElementById('sGlifo')?.value||'').toLowerCase();
+  const fs=document.getElementById('fGlifoSector')?.value||'';
+  const rows=partesGlifo.filter(r=>JSON.stringify(r).toLowerCase().includes(q)&&(!fs||r.sector===fs));
+  const tb=document.getElementById('tGlifo'); if(!tb)return;
+  const el=document.getElementById('bp-glifo-count'); if(el)el.textContent=partesGlifo.length+' registros';
+  poblarFiltroSectores('fGlifoSector',partesGlifo);
+  const ce=currentUser&&currentUser.rol!=='visor';
+  if(!rows.length){tb.innerHTML=`<tr><td colspan="23"><div class="empty-state"><div class="empty-icon">🧴</div><div>Sin partes de glifosato</div></div></td></tr>`;return;}
+  tb.innerHTML=rows.map(r=>{
+    const i=partesGlifo.indexOf(r);
+    return`<tr>
+      <td style="white-space:nowrap;color:var(--muted2);font-size:12px;font-family:'DM Mono',monospace">${r.fecha}</td>
+      <td><strong>${r.responsable}</strong></td>
+      <td style="font-size:12px;color:var(--muted2)">${r.horario||'—'}</td>
+      <td><span class="bp-badge bp-badge-muted">${r.empresa||'—'}</span></td>
+      <td style="font-size:12px">${r.tractor||'—'}</td>
+      <td style="font-size:12px">${r.implemento||'—'}</td>
+      <td style="font-family:'Fraunces',serif;font-size:18px;color:var(--accent)">${r.jornales||0}</td>
+      <td><span class="bp-badge bp-badge-muted">${r.sector||'—'}</span></td>
+      <td style="font-family:'DM Mono',monospace;text-align:center">${r.cuadro||'—'}</td>
+      <td style="font-family:'DM Mono',monospace;text-align:center">${r.melgas||'—'}</td>
+      <td style="font-family:'DM Mono',monospace;text-align:center">${r.plantasMelga||'—'}</td>
+      <td style="font-family:'DM Mono',monospace;text-align:center">${r.totalPlantas||'—'}</td>
+      <td style="font-family:'DM Mono',monospace;text-align:center">${r.superficie||'—'}</td>
+      <td style="font-family:'DM Mono',monospace;text-align:center">${r.nBidon||'—'}</td>
+      <td style="font-family:'DM Mono',monospace;text-align:center">${r.ltsHerbicida||'—'}</td>
+      <td style="font-family:'DM Mono',monospace;text-align:center">${r.ltsPrepared||'—'}</td>
+      <td style="font-family:'DM Mono',monospace;text-align:center">${r.ltsAplicados||'—'}</td>
+      <td style="font-family:'DM Mono',monospace;text-align:center;color:${+r.sobro>0?'var(--gold)':'var(--muted2)'}">${r.sobro||0}</td>
+      <td style="font-size:12px">${r.producto||'—'}</td>
+      <td style="font-size:11px;color:var(--muted2)">${r.concentracion||'—'}</td>
+      <td style="font-family:'DM Mono',monospace;font-size:12px">${r.rendimiento||'—'}</td>
+      <td style="font-family:'DM Mono',monospace;font-size:12px">${r.ltsHa||'—'}</td>
+      <td>${ce?`<button class="action-btn" onclick="delGlifo(${i})">🗑️</button>`:''}</td>
+    </tr>`;
+  }).join('');
+}
+function saveGlifo(){
+  const melgas=+document.getElementById('gl-melgas').value||0;
+  const pMelga=+document.getElementById('gl-pmelga').value||0;
+  const totalPlantas=melgas*pMelga;
+  const superficie=totalPlantas>0?(totalPlantas/333).toFixed(3):0;
+  const ltsApl=+document.getElementById('gl-ltsapl').value||0;
+  const conc=document.getElementById('gl-producto').value==='ROUNDUP TOP + HEAT'?'1,5%':'3%';
+  const rend=superficie>0?((ltsApl/superficie)/0.36).toFixed(2):0;
+  const ltsHa=+rend*(conc==='1,5%'?0.015:0.03);
+  const obj={
+    fecha:document.getElementById('gl-fecha').value||new Date().toLocaleDateString('es-AR'),
+    responsable:document.getElementById('gl-resp').value.trim(),
+    horario:document.getElementById('gl-horario').value.trim(),
+    empresa:document.getElementById('gl-empresa').value,
+    tractor:document.getElementById('gl-tractor').value.trim(),
+    implemento:document.getElementById('gl-implemento').value.trim(),
+    jornales:+document.getElementById('gl-jornales').value||0,
+    sector:document.getElementById('gl-sector').value,
+    cuadro:document.getElementById('gl-cuadro').value,
+    melgas,plantasMelga:pMelga,totalPlantas,superficie,
+    nBidon:document.getElementById('gl-nbidon').value.trim(),
+    ltsHerbicida:+document.getElementById('gl-ltsherbicida').value||0,
+    ltsPrepared:+document.getElementById('gl-ltsprep').value||0,
+    ltsAplicados:ltsApl,
+    sobro:+document.getElementById('gl-sobro').value||0,
+    producto:document.getElementById('gl-producto').value,
+    concentracion:conc,rendimiento:rend,ltsHa:ltsHa.toFixed(3)
+  };
+  if(!obj.responsable){showToast('Ingresá el responsable','err');return;}
+  partesGlifo.push(obj);
+  guardarEnSheets('Glifosato',[obj.fecha,obj.responsable,obj.horario,obj.empresa,obj.tractor,obj.implemento,obj.jornales,obj.sector,obj.cuadro,obj.melgas,obj.plantasMelga,obj.totalPlantas,obj.superficie,obj.nBidon,obj.ltsHerbicida,obj.ltsPrepared,obj.ltsAplicados,obj.sobro,obj.producto,obj.concentracion,obj.rendimiento,obj.ltsHa]);
+  closeModal('modalGlifo');renderGlifo();showToast('✅ Parte de glifosato guardado');
+}
+function delGlifo(i){if(!confirm('¿Eliminar?'))return;partesGlifo.splice(i,1);renderGlifo();}
+
+// ── PARAQUAT ──
+function renderParaquat(){
+  const q=(document.getElementById('sParaquat')?.value||'').toLowerCase();
+  const fs=document.getElementById('fParaquatSector')?.value||'';
+  const rows=partesParaquat.filter(r=>JSON.stringify(r).toLowerCase().includes(q)&&(!fs||r.sector===fs));
+  const tb=document.getElementById('tParaquat'); if(!tb)return;
+  const el=document.getElementById('bp-paraquat-count'); if(el)el.textContent=partesParaquat.length+' registros';
+  poblarFiltroSectores('fParaquatSector',partesParaquat);
+  const ce=currentUser&&currentUser.rol!=='visor';
+  if(!rows.length){tb.innerHTML=`<tr><td colspan="23"><div class="empty-state"><div class="empty-icon">⚗️</div><div>Sin partes de paraquat</div></div></td></tr>`;return;}
+  tb.innerHTML=rows.map(r=>{
+    const i=partesParaquat.indexOf(r);
+    return`<tr>
+      <td style="white-space:nowrap;color:var(--muted2);font-size:12px;font-family:'DM Mono',monospace">${r.fecha}</td>
+      <td><strong>${r.responsable}</strong></td>
+      <td style="font-size:12px;color:var(--muted2)">${r.horario||'—'}</td>
+      <td><span class="bp-badge bp-badge-muted">${r.empresa||'—'}</span></td>
+      <td style="font-size:12px">${r.tractor||'—'}</td>
+      <td style="font-size:12px">${r.implemento||'—'}</td>
+      <td style="font-family:'Fraunces',serif;font-size:18px;color:var(--accent)">${r.jornales||0}</td>
+      <td><span class="bp-badge bp-badge-muted">${r.sector||'—'}</span></td>
+      <td style="font-family:'DM Mono',monospace;text-align:center">${r.cuadro||'—'}</td>
+      <td style="font-family:'DM Mono',monospace;text-align:center">${r.melgas||'—'}</td>
+      <td style="font-family:'DM Mono',monospace;text-align:center">${r.plantasMelga||'—'}</td>
+      <td style="font-family:'DM Mono',monospace;text-align:center">${r.totalPlantas||'—'}</td>
+      <td style="font-family:'DM Mono',monospace;text-align:center">${r.superficie||'—'}</td>
+      <td style="font-size:12px">${r.producto||'PARAQUAT'}</td>
+      <td style="font-family:'DM Mono',monospace;text-align:center">${r.nBidon||'—'}</td>
+      <td style="font-family:'DM Mono',monospace;text-align:center">${r.ltsProd||'—'}</td>
+      <td style="font-family:'DM Mono',monospace;text-align:center">${r.concentracion||'2%'}</td>
+      <td style="font-family:'DM Mono',monospace;text-align:center">${r.ltsPrepared||'—'}</td>
+      <td style="font-family:'DM Mono',monospace;text-align:center">${r.ltsAplicados||'—'}</td>
+      <td style="font-family:'DM Mono',monospace;text-align:center;color:${+r.sobro>0?'var(--gold)':'var(--muted2)'}">${r.sobro||0}</td>
+      <td style="font-family:'DM Mono',monospace;font-size:12px">${r.rendimiento||'—'}</td>
+      <td style="font-family:'DM Mono',monospace;font-size:12px">${r.ltsHa||'—'}</td>
+      <td>${ce?`<button class="action-btn" onclick="delParaquat(${i})">🗑️</button>`:''}</td>
+    </tr>`;
+  }).join('');
+}
+function saveParaquat(){
+  const melgas=+document.getElementById('pq-melgas').value||0;
+  const pMelga=+document.getElementById('pq-pmelga').value||0;
+  const totalPlantas=melgas*pMelga;
+  const superficie=totalPlantas>0?(totalPlantas/333).toFixed(3):0;
+  const ltsApl=+document.getElementById('pq-ltsapl').value||0;
+  const conc=0.02;
+  const rend=superficie>0?((ltsApl/superficie)/0.4).toFixed(2):0;
+  const obj={
+    fecha:document.getElementById('pq-fecha').value||new Date().toLocaleDateString('es-AR'),
+    responsable:document.getElementById('pq-resp').value.trim(),
+    horario:document.getElementById('pq-horario').value.trim(),
+    empresa:document.getElementById('pq-empresa').value,
+    tractor:document.getElementById('pq-tractor').value.trim(),
+    implemento:document.getElementById('pq-implemento').value.trim(),
+    jornales:+document.getElementById('pq-jornales').value||0,
+    sector:document.getElementById('pq-sector').value,
+    cuadro:document.getElementById('pq-cuadro').value,
+    melgas,plantasMelga:pMelga,totalPlantas,superficie,
+    producto:'PARAQUAT',
+    nBidon:document.getElementById('pq-nbidon').value.trim(),
+    ltsProd:+document.getElementById('pq-ltsprod').value||0,
+    concentracion:'2%',
+    ltsPrepared:+document.getElementById('pq-ltsprep').value||0,
+    ltsAplicados:ltsApl,
+    sobro:+document.getElementById('pq-sobro').value||0,
+    rendimiento:rend,
+    ltsHa:(+rend*conc).toFixed(3)
+  };
+  if(!obj.responsable){showToast('Ingresá el responsable','err');return;}
+  partesParaquat.push(obj);
+  guardarEnSheets('Paraquat',[obj.fecha,obj.responsable,obj.horario,obj.empresa,obj.tractor,obj.implemento,obj.jornales,obj.sector,obj.cuadro,obj.melgas,obj.plantasMelga,obj.totalPlantas,obj.superficie,obj.producto,obj.nBidon,obj.ltsProd,obj.concentracion,obj.ltsPrepared,obj.ltsAplicados,obj.sobro,obj.rendimiento,obj.ltsHa]);
+  closeModal('modalParaquat');renderParaquat();showToast('✅ Parte de paraquat guardado');
+}
+function delParaquat(i){if(!confirm('¿Eliminar?'))return;partesParaquat.splice(i,1);renderParaquat();}
+
+// ── FOLIAR ──
+function renderFoliar(){
+  const q=(document.getElementById('sFoliar')?.value||'').toLowerCase();
+  const fs=document.getElementById('fFoliarSector')?.value||'';
+  const rows=partesFoliar.filter(r=>JSON.stringify(r).toLowerCase().includes(q)&&(!fs||r.sector===fs));
+  const tb=document.getElementById('tFoliar'); if(!tb)return;
+  const el=document.getElementById('bp-foliar-count'); if(el)el.textContent=partesFoliar.length+' registros';
+  poblarFiltroSectores('fFoliarSector',partesFoliar);
+  const ce=currentUser&&currentUser.rol!=='visor';
+  if(!rows.length){tb.innerHTML=`<tr><td colspan="23"><div class="empty-state"><div class="empty-icon">🌿</div><div>Sin partes de foliar</div></div></td></tr>`;return;}
+  tb.innerHTML=rows.map(r=>{
+    const i=partesFoliar.indexOf(r);
+    return`<tr>
+      <td style="white-space:nowrap;color:var(--muted2);font-size:12px;font-family:'DM Mono',monospace">${r.fecha}</td>
+      <td><strong>${r.responsable}</strong></td>
+      <td><span class="bp-badge bp-badge-muted">${r.empresa||'—'}</span></td>
+      <td style="font-size:12px">${r.tractor||'—'}</td>
+      <td style="font-size:12px">${r.implemento||'—'}</td>
+      <td style="font-size:12px;color:var(--muted2)">${r.horario||'—'}</td>
+      <td style="font-family:'Fraunces',serif;font-size:18px;color:var(--accent)">${r.jornales||0}</td>
+      <td><span class="bp-badge bp-badge-muted">${r.sector||'—'}</span></td>
+      <td style="font-family:'DM Mono',monospace;text-align:center">${r.cuadro||'—'}</td>
+      <td style="font-family:'DM Mono',monospace;text-align:center">${r.melgas||'—'}</td>
+      <td style="font-family:'DM Mono',monospace;text-align:center">${r.plantasMelga||'—'}</td>
+      <td style="font-family:'DM Mono',monospace;text-align:center">${r.totalPlantas||'—'}</td>
+      <td style="font-family:'DM Mono',monospace;text-align:center">${r.superficie||'—'}</td>
+      <td style="font-family:'DM Mono',monospace;text-align:center">${r.preparacion||'—'}</td>
+      <td style="font-family:'DM Mono',monospace;text-align:center">${r.ltsAplicados||'—'}</td>
+      <td style="font-family:'DM Mono',monospace;text-align:center;color:${+r.sobro>0?'var(--gold)':'var(--muted2)'}">${r.sobro||0}</td>
+      <td style="font-size:12px">${r.producto||'—'}</td>
+      <td style="font-family:'DM Mono',monospace;font-size:12px">${r.rendimiento||'—'}</td>
+      <td style="font-family:'DM Mono',monospace;text-align:center">${r.nBidon||'—'}</td>
+      <td style="font-family:'DM Mono',monospace;text-align:center">${r.cc||'—'}</td>
+      <td style="font-size:12px">${r.coadyuvante||'—'}</td>
+      <td style="font-family:'DM Mono',monospace;text-align:center">${r.ml||'—'}</td>
+      <td>${ce?`<button class="action-btn" onclick="delFoliar(${i})">🗑️</button>`:''}</td>
+    </tr>`;
+  }).join('');
+}
+function saveFoliar(){
+  const melgas=+document.getElementById('fl-melgas').value||0;
+  const pMelga=+document.getElementById('fl-pmelga').value||0;
+  const totalPlantas=melgas*pMelga;
+  const superficie=totalPlantas>0?(totalPlantas/333).toFixed(3):0;
+  const ltsApl=+document.getElementById('fl-ltsapl').value||0;
+  const rend=superficie>0?(ltsApl/superficie).toFixed(2):0;
+  const obj={
+    fecha:document.getElementById('fl-fecha').value||new Date().toLocaleDateString('es-AR'),
+    responsable:document.getElementById('fl-resp').value.trim(),
+    empresa:document.getElementById('fl-empresa').value,
+    tractor:document.getElementById('fl-tractor').value.trim(),
+    implemento:document.getElementById('fl-implemento').value.trim(),
+    horario:document.getElementById('fl-horario').value.trim(),
+    jornales:+document.getElementById('fl-jornales').value||0,
+    sector:document.getElementById('fl-sector').value,
+    cuadro:document.getElementById('fl-cuadro').value,
+    melgas,plantasMelga:pMelga,totalPlantas,superficie,
+    preparacion:+document.getElementById('fl-prep').value||0,
+    ltsAplicados:ltsApl,
+    sobro:+document.getElementById('fl-sobro').value||0,
+    producto:document.getElementById('fl-producto').value.trim(),
+    rendimiento:rend,
+    nBidon:document.getElementById('fl-nbidon').value.trim(),
+    cc:document.getElementById('fl-cc').value.trim(),
+    coadyuvante:document.getElementById('fl-coadyuvante').value.trim(),
+    ml:document.getElementById('fl-ml').value.trim()
+  };
+  if(!obj.responsable){showToast('Ingresá el responsable','err');return;}
+  partesFoliar.push(obj);
+  guardarEnSheets('Foliar',[obj.fecha,obj.responsable,obj.empresa,obj.tractor,obj.implemento,obj.horario,obj.jornales,obj.sector,obj.cuadro,obj.melgas,obj.plantasMelga,obj.totalPlantas,obj.superficie,obj.preparacion,obj.ltsAplicados,obj.sobro,obj.producto,obj.rendimiento,obj.nBidon,obj.cc,obj.coadyuvante,obj.ml]);
+  closeModal('modalFoliar');renderFoliar();showToast('✅ Parte de foliar guardado');
+}
+function delFoliar(i){if(!confirm('¿Eliminar?'))return;partesFoliar.splice(i,1);renderFoliar();}
+
+// Cargar desde Sheets — extender
+const _origCargarHerb = cargarDesdeSheets;
+async function cargarDesdeSheets(){
+  await _origCargarHerb();
+  try{
+    const res=await fetch(SHEETS_URL);
+    const data=await res.json();
+    partesGlifo   =(data['Glifosato']||[]).slice(1).filter(r=>r[0]).map(r=>({fecha:r[0],responsable:r[1],horario:r[2],empresa:r[3],tractor:r[4],implemento:r[5],jornales:r[6],sector:r[7],cuadro:r[8],melgas:r[9],plantasMelga:r[10],totalPlantas:r[11],superficie:r[12],nBidon:r[13],ltsHerbicida:r[14],ltsPrepared:r[15],ltsAplicados:r[16],sobro:r[17],producto:r[18],concentracion:r[19],rendimiento:r[20],ltsHa:r[21]}));
+    partesParaquat=(data['Paraquat']||[]).slice(1).filter(r=>r[0]).map(r=>({fecha:r[0],responsable:r[1],horario:r[2],empresa:r[3],tractor:r[4],implemento:r[5],jornales:r[6],sector:r[7],cuadro:r[8],melgas:r[9],plantasMelga:r[10],totalPlantas:r[11],superficie:r[12],producto:r[13],nBidon:r[14],ltsProd:r[15],concentracion:r[16],ltsPrepared:r[17],ltsAplicados:r[18],sobro:r[19],rendimiento:r[20],ltsHa:r[21]}));
+    partesFoliar  =(data['Foliar']||[]).slice(1).filter(r=>r[0]).map(r=>({fecha:r[0],responsable:r[1],empresa:r[2],tractor:r[3],implemento:r[4],horario:r[5],jornales:r[6],sector:r[7],cuadro:r[8],melgas:r[9],plantasMelga:r[10],totalPlantas:r[11],superficie:r[12],preparacion:r[13],ltsAplicados:r[14],sobro:r[15],producto:r[16],rendimiento:r[17],nBidon:r[18],cc:r[19],coadyuvante:r[20],ml:r[21]}));
+  }catch(e){console.log('Herbicidas/foliar: sin datos aún');}
+}
+
 // ========== MÓDULOS GENÉRICOS ==========
 
 // --- Datos en memoria ---
@@ -3010,6 +3441,49 @@ async function cargarDesdeSheets() {
 function mostrarSyncStatus(msg) {
   const el = document.getElementById('syncStatus');
   if (el) el.textContent = msg;
+}
+
+
+function calcGlifoModal(){
+  const m=+document.getElementById('gl-melgas')?.value||0;
+  const p=+document.getElementById('gl-pmelga')?.value||0;
+  const tp=m*p;
+  const sup=tp>0?(tp/333).toFixed(3):0;
+  const la=+document.getElementById('gl-ltsapl')?.value||0;
+  const prod=document.getElementById('gl-producto')?.value||'';
+  const conc=prod==='ROUNDUP TOP + HEAT'?'1,5%':'3%';
+  const rend=sup>0?((la/sup)/0.36).toFixed(2):0;
+  const setV=(id,v)=>{const e=document.getElementById(id);if(e)e.value=v;};
+  setV('gl-total-plantas',tp||'');
+  setV('gl-superficie',sup>0?sup:'');
+  setV('gl-conc-display',conc);
+  setV('gl-rend-display',rend>0?rend:'');
+}
+function calcPqModal(){
+  const m=+document.getElementById('pq-melgas')?.value||0;
+  const p=+document.getElementById('pq-pmelga')?.value||0;
+  const tp=m*p;
+  const sup=tp>0?(tp/333).toFixed(3):0;
+  const la=+document.getElementById('pq-ltsapl')?.value||0;
+  const rend=sup>0?((la/sup)/0.4).toFixed(2):0;
+  const ltsHa=(+rend*0.02).toFixed(3);
+  const setV=(id,v)=>{const e=document.getElementById(id);if(e)e.value=v;};
+  setV('pq-total-plantas',tp||'');
+  setV('pq-superficie',sup>0?sup:'');
+  setV('pq-rend-display',rend>0?rend:'');
+  setV('pq-ltsHa-display',ltsHa>0?ltsHa:'');
+}
+function calcFlModal(){
+  const m=+document.getElementById('fl-melgas')?.value||0;
+  const p=+document.getElementById('fl-pmelga')?.value||0;
+  const tp=m*p;
+  const sup=tp>0?(tp/333).toFixed(3):0;
+  const la=+document.getElementById('fl-ltsapl')?.value||0;
+  const rend=sup>0?(la/sup).toFixed(2):0;
+  const setV=(id,v)=>{const e=document.getElementById(id);if(e)e.value=v;};
+  setV('fl-total-plantas',tp||'');
+  setV('fl-superficie',sup>0?sup:'');
+  setV('fl-rend-display',rend>0?rend:'');
 }
 
 // ===== BRAVO PISTACHOS UI =====
