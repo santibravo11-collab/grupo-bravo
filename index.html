@@ -245,6 +245,201 @@ tbody td { padding:11px 14px; font-size:13px; vertical-align:middle; }
 .mq.z-fabrica { background:rgba(254,243,199,0.15); border-color:rgba(240,180,41,0.3); color:var(--gold); }
 .mq.z-monte   { background:rgba(75,85,99,0.3);     border-color:rgba(107,114,128,0.4); color:var(--muted2); }
 
+/* ============ BRAVO PISTACHOS — PREMIUM UI ============ */
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&family=Fraunces:opsz,wght@9..144,300;9..144,600&display=swap');
+
+/* HEADER */
+.bp-header {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: 24px; margin-bottom: 24px; flex-wrap: wrap;
+}
+.bp-breadcrumb {
+  font-size: 10px; font-weight: 600; letter-spacing: 3px;
+  color: var(--accent); text-transform: uppercase; margin-bottom: 6px;
+  font-family: 'DM Mono', monospace;
+}
+.bp-title {
+  font-family: 'Fraunces', serif; font-size: 36px; font-weight: 600;
+  color: var(--text); line-height: 1; margin: 0 0 6px;
+  letter-spacing: -0.5px;
+}
+.bp-subtitle {
+  font-size: 13px; color: var(--muted); font-family: 'DM Sans', sans-serif;
+}
+.bp-header-stats {
+  display: flex; gap: 12px; flex-wrap: wrap;
+}
+.bp-stat-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; padding: 16px 20px; min-width: 110px;
+  text-align: center; transition: border-color 0.2s;
+}
+.bp-stat-card:hover { border-color: var(--border2); }
+.bp-stat-accent { border-color: rgba(46,204,113,0.3); background: rgba(46,204,113,0.06); }
+.bp-stat-value {
+  font-family: 'Fraunces', serif; font-size: 28px; font-weight: 600;
+  color: var(--text); line-height: 1; margin-bottom: 4px;
+}
+.bp-stat-accent .bp-stat-value { color: var(--accent); }
+.bp-stat-label {
+  font-size: 10px; font-weight: 600; letter-spacing: 1.5px;
+  color: var(--muted); text-transform: uppercase; font-family: 'DM Mono', monospace;
+}
+
+/* TABS */
+.bp-tabs {
+  display: flex; gap: 2px; margin-bottom: 24px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; padding: 4px;
+}
+.bp-tab {
+  flex: 1; padding: 10px 16px; border: none; background: transparent;
+  color: var(--muted); font-family: 'DM Sans', sans-serif; font-size: 13px;
+  font-weight: 500; cursor: pointer; border-radius: 9px;
+  transition: all 0.15s; display: flex; align-items: center;
+  justify-content: center; gap: 7px;
+}
+.bp-tab:hover { color: var(--text); background: var(--surface2); }
+.bp-tab.active {
+  background: var(--surface2); color: var(--text);
+  font-weight: 600; box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+.bp-tab-icon { font-size: 14px; }
+.bp-panel { display: none; }
+.bp-panel.active { display: block; }
+
+/* PARTE SELECTOR */
+.bp-parte-selector {
+  display: flex; gap: 8px; margin-bottom: 20px;
+}
+.bp-parte-btn {
+  padding: 8px 20px; border-radius: 8px;
+  border: 1px solid var(--border2); background: var(--surface2);
+  color: var(--muted); font-family: 'DM Sans', sans-serif;
+  font-size: 13px; font-weight: 500; cursor: pointer;
+  transition: all 0.15s; display: flex; align-items: center; gap: 6px;
+}
+.bp-parte-btn.active.campo { background: rgba(46,204,113,0.12); color: #2ecc71; border-color: rgba(46,204,113,0.35); }
+.bp-parte-btn.active { background: var(--surface); color: var(--text); border-color: var(--accent); }
+
+/* TABLA */
+.bp-table-wrap {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 14px; overflow: hidden;
+}
+.bp-table-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 20px 24px 16px; border-bottom: 1px solid var(--border);
+  flex-wrap: wrap; gap: 12px;
+}
+.bp-table-title {
+  font-family: 'DM Sans', sans-serif; font-size: 15px;
+  font-weight: 600; color: var(--text);
+}
+.bp-table-sub { font-size: 12px; color: var(--muted); margin-top: 2px; font-family: 'DM Mono', monospace; }
+.bp-table-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.bp-search {
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 8px; padding: 8px 14px; color: var(--text);
+  font-family: 'DM Sans', sans-serif; font-size: 13px; outline: none;
+  width: 200px; transition: border-color 0.2s;
+}
+.bp-search:focus { border-color: var(--accent); }
+.bp-filter {
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 8px; padding: 8px 12px; color: var(--text);
+  font-family: 'DM Sans', sans-serif; font-size: 13px; outline: none;
+}
+.bp-btn-primary {
+  background: var(--accent); color: #0a0c0f; border: none;
+  border-radius: 8px; padding: 9px 18px; font-family: 'DM Sans', sans-serif;
+  font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.15s;
+  white-space: nowrap;
+}
+.bp-btn-primary:hover { background: #2edb78; transform: translateY(-1px); }
+.bp-table {
+  width: 100%; border-collapse: collapse;
+  font-family: 'DM Sans', sans-serif; font-size: 13px;
+}
+.bp-table thead th {
+  padding: 11px 16px; text-align: left; font-size: 10px;
+  font-weight: 600; letter-spacing: 1.5px; color: var(--muted);
+  text-transform: uppercase; background: var(--surface);
+  border-bottom: 1px solid var(--border); font-family: 'DM Mono', monospace;
+  white-space: nowrap;
+}
+.bp-table tbody tr {
+  border-bottom: 1px solid var(--border);
+  transition: background 0.1s;
+}
+.bp-table tbody tr:last-child { border-bottom: none; }
+.bp-table tbody tr:hover { background: rgba(255,255,255,0.02); }
+.bp-table td {
+  padding: 12px 16px; color: var(--text); vertical-align: middle;
+}
+.bp-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 3px 10px; border-radius: 20px; font-size: 11px;
+  font-weight: 600; white-space: nowrap;
+}
+.bp-badge-green { background: rgba(46,204,113,0.12); color: #2ecc71; }
+.bp-badge-blue  { background: rgba(52,152,219,0.12); color: #3498db; }
+.bp-badge-gold  { background: rgba(240,180,41,0.12); color: #f0b429; }
+.bp-badge-red   { background: rgba(231,76,60,0.12);  color: #e74c3c; }
+.bp-badge-muted { background: var(--surface2); color: var(--muted2); }
+
+/* MAPA controls */
+.bp-map-controls {
+  display: flex; gap: 12px; align-items: center;
+  margin-bottom: 16px; flex-wrap: wrap;
+}
+.bp-map-fincas { display: flex; gap: 4px; }
+.bp-finca-btn {
+  padding: 8px 20px; border-radius: 8px; border: 1px solid var(--border2);
+  background: var(--surface2); color: var(--muted);
+  font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500;
+  cursor: pointer; transition: all 0.15s;
+}
+.bp-finca-btn.active {
+  background: rgba(46,204,113,0.12); color: var(--accent);
+  border-color: rgba(46,204,113,0.35);
+}
+.bp-map-filters { display: flex; gap: 8px; flex-wrap: wrap; }
+.bp-map-legend {
+  display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 16px;
+  padding: 12px 16px; background: var(--surface); border: 1px solid var(--border);
+  border-radius: 10px;
+}
+.bp-legend-item {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 11px; color: var(--muted2); font-family: 'DM Sans', sans-serif;
+}
+.bp-legend-dot {
+  width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0;
+}
+
+/* ANALYTICS */
+.bp-analytics-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.bp-analytics-wide { grid-column: span 2; }
+.bp-analytics-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 14px; padding: 20px 24px;
+}
+.bp-analytics-title {
+  font-family: 'DM Sans', sans-serif; font-size: 13px;
+  font-weight: 600; color: var(--muted2); margin-bottom: 16px;
+  text-transform: uppercase; letter-spacing: 1px; font-size: 11px;
+}
+
+/* ORG */
+.bp-org-actions { margin-bottom: 20px; }
+
+/* MAP TABLE dentro de bp */
+.mapa-tabla { font-family: 'DM Mono', monospace; }
+
 .tooltip { position:fixed; background:var(--surface); border:1px solid var(--border2); border-radius:10px; padding:12px 14px; font-size:12px; z-index:999; pointer-events:none; display:none; box-shadow:0 8px 24px rgba(0,0,0,0.5); max-width:240px; }
 .tooltip-title { font-weight:700; color:var(--accent); margin-bottom:6px; font-size:13px; }
 .tooltip-row { color:var(--muted2); margin-bottom:2px; }
@@ -622,33 +817,80 @@ tbody td { padding:11px 14px; font-size:13px; vertical-align:middle; }
 
       <!-- PISTACHOS -->
       <div id="panel-pistachos" class="tab-panel">
-        <div class="inner-tabs">
-          <div class="inner-tab active" onclick="showInner('p-partes',this)">📋 Partes Diarios</div>
-          <div class="inner-tab" onclick="showInner('p-mapa',this);renderMapa()">🗺️ Mapa de Finca</div>
-          <div class="inner-tab" onclick="showInner('p-org',this);renderOrg()">👥 Organigrama</div>
+
+        <!-- DASHBOARD HEADER -->
+        <div class="bp-header">
+          <div class="bp-header-left">
+            <div class="bp-breadcrumb">GRUPO BRAVO · AGRICULTURA</div>
+            <h1 class="bp-title">Bravo Pistachos</h1>
+            <div class="bp-subtitle">1.000 ha · San Juan, Argentina · Temporada 2025/2026</div>
+          </div>
+          <div class="bp-header-stats">
+            <div class="bp-stat-card">
+              <div class="bp-stat-value" id="stat-partes-hoy">—</div>
+              <div class="bp-stat-label">Partes hoy</div>
+            </div>
+            <div class="bp-stat-card">
+              <div class="bp-stat-value" id="stat-jornales">—</div>
+              <div class="bp-stat-label">Jornales semana</div>
+            </div>
+            <div class="bp-stat-card">
+              <div class="bp-stat-value" id="stat-hectareas">—</div>
+              <div class="bp-stat-label">Ha trabajadas</div>
+            </div>
+            <div class="bp-stat-card bp-stat-accent">
+              <div class="bp-stat-value" id="stat-tarea-top">—</div>
+              <div class="bp-stat-label">Tarea principal</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- INNER TABS -->
+        <div class="bp-tabs">
+          <button class="bp-tab active" onclick="showBPTab('bp-partes',this)">
+            <span class="bp-tab-icon">📋</span> Partes Diarios
+          </button>
+          <button class="bp-tab" onclick="showBPTab('bp-mapa',this);renderMapa()">
+            <span class="bp-tab-icon">🗺</span> Mapa de Finca
+          </button>
+          <button class="bp-tab" onclick="showBPTab('bp-analytics',this);renderAnalytics()">
+            <span class="bp-tab-icon">📊</span> Analítica
+          </button>
+          <button class="bp-tab" onclick="showBPTab('bp-org',this);renderOrg()">
+            <span class="bp-tab-icon">👥</span> Equipo
+          </button>
         </div>
 
         <!-- PARTES -->
-        <div id="p-partes" class="inner-panel active">
-          <div class="parte-tabs">
-            <div class="parte-tab active campo" onclick="showParte('campo',this)">🌾 Campo</div>
-            <div class="parte-tab" onclick="showParte('riego',this)">💧 Riego</div>
-            <div class="parte-tab" onclick="showParte('tractor',this)">🚜 Tractores</div>
+        <div id="bp-partes" class="bp-panel active">
+          <div class="bp-parte-selector">
+            <button class="bp-parte-btn active campo" onclick="showParte('campo',this)">
+              <span>🌾</span> Campo
+            </button>
+            <button class="bp-parte-btn" onclick="showParte('riego',this)">
+              <span>💧</span> Riego
+            </button>
+            <button class="bp-parte-btn" onclick="showParte('tractor',this)">
+              <span>🚜</span> Tractores
+            </button>
           </div>
 
           <div id="parte-campo" class="parte-panel active">
-            <div class="table-wrap">
-              <div class="table-top">
-                <div class="table-top-title" style="color:var(--accent)">🌾 Partes de Campo</div>
-                <div class="table-filters">
-                  <input class="search-input" type="text" placeholder="🔍 Buscar..." id="sCampo" oninput="renderCampo()">
-                  <select class="filter-select" id="fCampoTarea" onchange="renderCampo()"><option value="">Todas las tareas</option></select>
-                  <button class="btn btn-primary" id="btnNuevoCampo" onclick="abrirModalCampo()">+ Nuevo Parte</button>
+            <div class="bp-table-wrap">
+              <div class="bp-table-header">
+                <div>
+                  <div class="bp-table-title">Partes de Campo</div>
+                  <div class="bp-table-sub" id="bp-campo-count">— registros</div>
+                </div>
+                <div class="bp-table-actions">
+                  <input class="bp-search" type="text" placeholder="Buscar..." id="sCampo" oninput="renderCampo()">
+                  <select class="bp-filter" id="fCampoTarea" onchange="renderCampo()"><option value="">Todas las tareas</option></select>
+                  <button class="bp-btn-primary" id="btnNuevoCampo" onclick="abrirModalCampo()">+ Nuevo Parte</button>
                 </div>
               </div>
               <div style="overflow-x:auto">
-              <table>
-                <thead><tr><th>Fecha</th><th>Responsable</th><th>Horario</th><th>Tarea</th><th>Empresa</th><th>Sector</th><th>Desde</th><th>Hasta</th><th>Melgas</th><th>P/Melga</th><th>Rend.</th><th>Jornales</th><th>Acc.</th></tr></thead>
+              <table class="bp-table">
+                <thead><tr><th>Fecha</th><th>Responsable</th><th>Horario</th><th>Tarea</th><th>Empresa</th><th>Sector</th><th>Desde</th><th>Hasta</th><th>Melgas</th><th>P/Melga</th><th>Rend.</th><th>Jornales</th><th></th></tr></thead>
                 <tbody id="tCampo"></tbody>
               </table>
               </div>
@@ -656,18 +898,21 @@ tbody td { padding:11px 14px; font-size:13px; vertical-align:middle; }
           </div>
 
           <div id="parte-riego" class="parte-panel">
-            <div class="table-wrap">
-              <div class="table-top">
-                <div class="table-top-title" style="color:var(--blue)">💧 Partes de Riego</div>
-                <div class="table-filters">
-                  <input class="search-input" type="text" placeholder="🔍 Buscar..." id="sRiego" oninput="renderRiego()">
-                  <select class="filter-select" id="fRiegoTarea" onchange="renderRiego()"><option value="">Todas las tareas</option></select>
-                  <button class="btn btn-primary" id="btnNuevoRiego" onclick="abrirModalRiego()">+ Nuevo Parte</button>
+            <div class="bp-table-wrap">
+              <div class="bp-table-header">
+                <div>
+                  <div class="bp-table-title">Partes de Riego</div>
+                  <div class="bp-table-sub" id="bp-riego-count">— registros</div>
+                </div>
+                <div class="bp-table-actions">
+                  <input class="bp-search" type="text" placeholder="Buscar..." id="sRiego" oninput="renderRiego()">
+                  <select class="bp-filter" id="fRiegoTarea" onchange="renderRiego()"><option value="">Todas las tareas</option></select>
+                  <button class="bp-btn-primary" id="btnNuevoRiego" onclick="abrirModalRiego()">+ Nuevo Parte</button>
                 </div>
               </div>
               <div style="overflow-x:auto">
-              <table>
-                <thead><tr><th>Fecha</th><th>Responsable</th><th>Horario</th><th>Tarea</th><th>Empresa</th><th>Sector/Pozo</th><th>Desde</th><th>Hasta</th><th>Jornales</th><th>Notas</th><th>Acc.</th></tr></thead>
+              <table class="bp-table">
+                <thead><tr><th>Fecha</th><th>Responsable</th><th>Horario</th><th>Tarea</th><th>Empresa</th><th>Sector</th><th>Desde</th><th>Hasta</th><th>Jornales</th><th>Notas</th><th></th></tr></thead>
                 <tbody id="tRiego"></tbody>
               </table>
               </div>
@@ -675,18 +920,21 @@ tbody td { padding:11px 14px; font-size:13px; vertical-align:middle; }
           </div>
 
           <div id="parte-tractor" class="parte-panel">
-            <div class="table-wrap">
-              <div class="table-top">
-                <div class="table-top-title" style="color:var(--orange)">🚜 Partes de Tractores</div>
-                <div class="table-filters">
-                  <input class="search-input" type="text" placeholder="🔍 Buscar..." id="sTractor" oninput="renderTractor()">
-                  <select class="filter-select" id="fTractorTarea" onchange="renderTractor()"><option value="">Todas las tareas</option></select>
-                  <button class="btn btn-primary" id="btnNuevoTractor" onclick="abrirModalTractor()">+ Nuevo Parte</button>
+            <div class="bp-table-wrap">
+              <div class="bp-table-header">
+                <div>
+                  <div class="bp-table-title">Partes de Tractores</div>
+                  <div class="bp-table-sub" id="bp-tractor-count">— registros</div>
+                </div>
+                <div class="bp-table-actions">
+                  <input class="bp-search" type="text" placeholder="Buscar..." id="sTractor" oninput="renderTractor()">
+                  <select class="bp-filter" id="fTractorTarea" onchange="renderTractor()"><option value="">Todas las tareas</option></select>
+                  <button class="bp-btn-primary" id="btnNuevoTractor" onclick="abrirModalTractor()">+ Nuevo Parte</button>
                 </div>
               </div>
               <div style="overflow-x:auto">
-              <table>
-                <thead><tr><th>Fecha</th><th>Responsable</th><th>Horario</th><th>Tractor</th><th>Implemento</th><th>Tarea</th><th>Empresa</th><th>Sector</th><th>Desde</th><th>Hasta</th><th>Melgas</th><th>Jornales</th><th>Nota</th><th>Acc.</th></tr></thead>
+              <table class="bp-table">
+                <thead><tr><th>Fecha</th><th>Responsable</th><th>Horario</th><th>Tractor</th><th>Implemento</th><th>Tarea</th><th>Empresa</th><th>Sector</th><th>Melgas</th><th>Jornales</th><th></th></tr></thead>
                 <tbody id="tTractor"></tbody>
               </table>
               </div>
@@ -695,66 +943,74 @@ tbody td { padding:11px 14px; font-size:13px; vertical-align:middle; }
         </div>
 
         <!-- MAPA -->
-        <div id="p-mapa" class="inner-panel">
-          <!-- Controles superiores -->
-          <div class="map-controls-bar">
-            <div class="map-finca-tabs">
-              <button class="map-finca-btn active" onclick="switchFinca('oeste',this)">🌅 Finca Oeste</button>
-              <button class="map-finca-btn" onclick="switchFinca('este',this)">🌄 Finca Este</button>
+        <div id="bp-mapa" class="bp-panel">
+          <div class="bp-map-controls">
+            <div class="bp-map-fincas">
+              <button class="bp-finca-btn active" onclick="switchFinca('oeste',this)">Finca Oeste</button>
+              <button class="bp-finca-btn" onclick="switchFinca('este',this)">Finca Este</button>
             </div>
-            <div class="map-filter-row">
-              <span class="map-label">Temporada:</span>
-              <select class="filter-select" id="mapTemporada" onchange="renderMapaActivo()">
-                <option value="2025-2026">2025/2026 (May 25 – Abr 26)</option>
-                <option value="2026-2027" selected>2026/2027 (May 26 – Abr 27)</option>
-                <option value="2027-2028">2027/2028 (May 27 – Abr 28)</option>
+            <div class="bp-map-filters">
+              <select class="bp-filter" id="mapTemporada" onchange="renderMapaActivo()">
+                <option value="2025-2026">Temporada 2025/2026</option>
+                <option value="2024-2025">Temporada 2024/2025</option>
+                <option value="2026-2027">Temporada 2026/2027</option>
               </select>
-              <span class="map-label">Tarea:</span>
-              <select class="filter-select" id="mapFT" onchange="renderMapaActivo()">
-                <option value="">Última tarea (todas)</option>
-                <option>Desbrote y Atada</option><option>Poda</option><option>Herbicida</option>
-                <option>Foliar</option><option>Cosecha de Pistacho</option><option>Riego</option>
-                <option>Rastra</option><option>Desmalezadora</option><option>Tunducos</option>
+              <select class="bp-filter" id="mapFTipo" onchange="renderMapaActivo()">
+                <option value="">Todos los tipos</option>
+                <option value="campo">🌾 Campo</option>
+                <option value="riego">💧 Riego</option>
+                <option value="tractor">🚜 Tractor</option>
               </select>
-              <span class="map-label">Parte:</span>
-              <select class="filter-select" id="mapFTipo" onchange="renderMapaActivo()">
-                <option value="">Todos</option>
-                <option value="campo">Campo</option>
-                <option value="riego">Riego</option>
-                <option value="tractor">Tractores</option>
+              <select class="bp-filter" id="mapFT" onchange="renderMapaActivo()">
+                <option value="">Todas las tareas</option>
               </select>
             </div>
           </div>
-
-          <!-- Leyenda -->
-          <div class="map-leyenda">
-            <div class="legend-item"><div class="legend-dot" style="background:#2ecc71"></div>Desbrote/Atada</div>
-            <div class="legend-item"><div class="legend-dot" style="background:#f0b429"></div>Poda</div>
-            <div class="legend-item"><div class="legend-dot" style="background:#3498db"></div>Riego</div>
-            <div class="legend-item"><div class="legend-dot" style="background:#e74c3c"></div>Herbicida</div>
-            <div class="legend-item"><div class="legend-dot" style="background:#9b59b6"></div>Foliar</div>
-            <div class="legend-item"><div class="legend-dot" style="background:#e67e22"></div>Cosecha</div>
-            <div class="legend-item"><div class="legend-dot" style="background:#c0392b"></div>Tractor</div>
-            <div class="legend-item"><div class="legend-dot" style="background:#2c3e50;border:1px solid #4a5568"></div>Sin dato</div>
+          <div class="bp-map-legend">
+            <span class="bp-legend-item"><span class="bp-legend-dot" style="background:rgba(46,204,113,0.6)"></span>Desbrote/Atada</span>
+            <span class="bp-legend-item"><span class="bp-legend-dot" style="background:rgba(240,180,41,0.6)"></span>Poda</span>
+            <span class="bp-legend-item"><span class="bp-legend-dot" style="background:rgba(52,152,219,0.6)"></span>Riego</span>
+            <span class="bp-legend-item"><span class="bp-legend-dot" style="background:rgba(231,76,60,0.6)"></span>Herbicida</span>
+            <span class="bp-legend-item"><span class="bp-legend-dot" style="background:rgba(155,89,182,0.6)"></span>Foliar</span>
+            <span class="bp-legend-item"><span class="bp-legend-dot" style="background:rgba(230,126,34,0.6)"></span>Cosecha</span>
           </div>
-
-          <!-- Pasadas container -->
           <div id="pasadasContainer"></div>
         </div>
 
-        <!-- ORGANIGRAMA -->
-        <div id="p-org" class="inner-panel">
-          <div style="display:flex;justify-content:flex-end;margin-bottom:16px">
-            <button class="btn btn-primary" onclick="openModal('modalOrg')">+ Agregar Posición</button>
+        <!-- ANALÍTICA -->
+        <div id="bp-analytics" class="bp-panel">
+          <div class="bp-analytics-grid">
+            <div class="bp-analytics-card bp-analytics-wide">
+              <div class="bp-analytics-title">Jornales por semana</div>
+              <canvas id="chartJornales" height="120"></canvas>
+            </div>
+            <div class="bp-analytics-card">
+              <div class="bp-analytics-title">Distribución de tareas</div>
+              <canvas id="chartTareas" height="160"></canvas>
+            </div>
+            <div class="bp-analytics-card">
+              <div class="bp-analytics-title">Actividad por sector</div>
+              <canvas id="chartSectores" height="160"></canvas>
+            </div>
           </div>
-          <div class="org-container"><div id="orgTree"></div></div>
         </div>
-      </div>
 
-      <!-- CONSTRUCCION / CAMIONES -->
+        <!-- EQUIPO -->
+        <div id="bp-org" class="bp-panel">
+          <div class="bp-org-actions">
+            <button class="bp-btn-primary" onclick="openModal('modalOrg')">+ Agregar Posición</button>
+          </div>
+          <div class="org-container" id="orgTree"></div>
+        </div>
+
+      </div><!-- fin pistachos -->
+
+      <!-- CONSTRUCCION -->
       <div id="panel-construccion" class="tab-panel">
         <div class="empty-state"><div class="empty-icon">🏗️</div><div style="font-size:18px;font-weight:600;color:var(--text);margin-bottom:8px">BC Construcciones</div><div>Próximamente</div></div>
       </div>
+
+      <!-- CAMIONES -->
       <div id="panel-camiones" class="tab-panel">
         <div class="empty-state"><div class="empty-icon">🚛</div><div style="font-size:18px;font-weight:600;color:var(--text);margin-bottom:8px">Bravo CAMC</div><div>Próximamente</div></div>
       </div>
@@ -1276,15 +1532,20 @@ function renderCampo(){
   const tb=document.getElementById('tCampo'); const ce=currentUser&&currentUser.rol!=='visor';
   if(!rows.length){tb.innerHTML=`<tr><td colspan="13"><div class="empty-state"><div class="empty-icon">🌾</div><div>Sin partes de campo</div></div></td></tr>`;return;}
   tb.innerHTML=rows.map(r=>{const ri=partesCampo.indexOf(r);return`<tr>
-    <td style="white-space:nowrap">${r.fecha}</td><td><strong>${r.resp}</strong></td>
-    <td style="color:var(--muted2);font-size:12px">${r.horario}</td><td>${chipTarea(r.tarea)}</td>
-    <td><span class="chip blue">${r.empresa}</span></td><td><span class="chip">${r.sector}</span></td>
-    <td style="text-align:center">${r.desde||'—'}</td><td style="text-align:center">${r.hasta||'—'}</td>
-    <td style="text-align:center">${r.melgas||'—'}</td><td style="text-align:center">${r.pmelga||'—'}</td>
-    <td style="text-align:center;color:var(--muted2);font-size:12px">${r.rend}</td>
-    <td><strong style="color:var(--accent)">${r.jornales}</strong><br>${empHTML(r.empleados)}</td>
+    <td style="white-space:nowrap;color:var(--muted2);font-size:12px;font-family:'DM Mono',monospace">${r.fecha}</td>
+    <td><strong style="color:var(--text)">${r.resp}</strong><br><span style="font-size:11px;color:var(--muted)">${r.horario}</span></td>
+    <td>${chipTarea(r.tarea)}</td>
+    <td><span class="bp-badge bp-badge-blue">${r.empresa}</span></td>
+    <td><span class="bp-badge bp-badge-muted">${r.sector}</span></td>
+    <td style="text-align:center;font-family:'DM Mono',monospace;font-size:12px">${r.desde||'—'}</td>
+    <td style="text-align:center;font-family:'DM Mono',monospace;font-size:12px">${r.hasta||'—'}</td>
+    <td style="text-align:center;font-family:'DM Mono',monospace">${r.melgas||'—'}</td>
+    <td style="text-align:center;font-family:'DM Mono',monospace">${r.pmelga||'—'}</td>
+    <td style="text-align:center;color:var(--muted2);font-size:12px;font-family:'DM Mono',monospace">${r.rend}</td>
+    <td><span style="font-family:'Fraunces',serif;font-size:18px;font-weight:600;color:var(--accent)">${r.jornales}</span><br><span style="font-size:11px;color:var(--muted)">${empHTML(r.empleados)}</span></td>
     <td style="white-space:nowrap">${ce?`<button class="action-btn" onclick="editCampo(${ri})">✏️</button><button class="action-btn" onclick="delCampo(${ri})">🗑️</button>`:''}</td>
   </tr>`;}).join('');
+  updateBPStats();
 }
 
 // ========== RIEGO ==========
@@ -1328,11 +1589,14 @@ function renderRiego(){
   const tb=document.getElementById('tRiego'); const ce=currentUser&&currentUser.rol!=='visor';
   if(!rows.length){tb.innerHTML=`<tr><td colspan="11"><div class="empty-state"><div class="empty-icon">💧</div><div>Sin partes de riego</div></div></td></tr>`;return;}
   tb.innerHTML=rows.map(r=>{const ri=partesRiego.indexOf(r);return`<tr>
-    <td style="white-space:nowrap">${r.fecha}</td><td><strong>${r.resp}</strong></td>
-    <td style="color:var(--muted2);font-size:12px">${r.horario}</td><td>${chipTarea(r.tarea)}</td>
-    <td><span class="chip blue">${r.empresa}</span></td><td><span class="chip">${r.sector}</span></td>
-    <td style="text-align:center">${r.desde||'—'}</td><td style="text-align:center">${r.hasta||'—'}</td>
-    <td><strong style="color:var(--accent)">${r.jornales}</strong><br>${empHTML(r.empleados)}</td>
+    <td style="white-space:nowrap;color:var(--muted2);font-size:12px;font-family:'DM Mono',monospace">${r.fecha}</td>
+    <td><strong style="color:var(--text)">${r.resp}</strong><br><span style="font-size:11px;color:var(--muted)">${r.horario}</span></td>
+    <td>${chipTarea(r.tarea)}</td>
+    <td><span class="bp-badge bp-badge-blue">${r.empresa}</span></td>
+    <td><span class="bp-badge bp-badge-muted">${r.sector}</span></td>
+    <td style="text-align:center;font-family:'DM Mono',monospace;font-size:12px">${r.desde||'—'}</td>
+    <td style="text-align:center;font-family:'DM Mono',monospace;font-size:12px">${r.hasta||'—'}</td>
+    <td><span style="font-family:'Fraunces',serif;font-size:18px;font-weight:600;color:var(--accent)">${r.jornales}</span><br><span style="font-size:11px;color:var(--muted)">${empHTML(r.empleados)}</span></td>
     <td style="font-size:12px;color:var(--muted2);max-width:180px">${r.notas||'—'}</td>
     <td style="white-space:nowrap">${ce?`<button class="action-btn" onclick="editRiego(${ri})">✏️</button><button class="action-btn" onclick="delRiego(${ri})">🗑️</button>`:''}</td>
   </tr>`;}).join('');
@@ -1692,7 +1956,7 @@ async function cargarDesdeSheets() {
 
     renderTablas();
     renderMapaActivo();
-    mostrarSyncStatus('✅ Datos sincronizados');
+    mostrarSyncStatus('✅ Datos sincronizados'); updateBPStats();
     setTimeout(()=>mostrarSyncStatus(''), 3000);
   } catch(e) {
     mostrarSyncStatus('⚠️ Sin conexión — datos locales');
@@ -1705,11 +1969,152 @@ function mostrarSyncStatus(msg) {
   if (el) el.textContent = msg;
 }
 
+// ===== BRAVO PISTACHOS UI =====
+function showBPTab(id, btn) {
+  document.querySelectorAll('.bp-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.bp-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  if (id === 'bp-analytics') renderAnalytics();
+}
+
+function updateBPStats() {
+  const hoy = new Date().toISOString().split('T')[0];
+  const partesHoy = partesCampo.filter(p => p.fecha === hoy).length +
+                    partesRiego.filter(p => p.fecha === hoy).length +
+                    partesTractor.filter(p => p.fecha === hoy).length;
+
+  // Jornales de los últimos 7 días
+  const hace7 = new Date(); hace7.setDate(hace7.getDate() - 7);
+  const jornales = [...partesCampo, ...partesRiego, ...partesTractor]
+    .filter(p => p.fecha && new Date(p.fecha) >= hace7)
+    .reduce((s, p) => s + (p.jornales || 0), 0);
+
+  // Hectáreas aproximadas (melgas)
+  const melgas = partesCampo.reduce((s, p) => s + (p.melgas || 0), 0);
+
+  // Tarea más frecuente
+  const tareas = {};
+  partesCampo.forEach(p => { if(p.tarea) tareas[p.tarea] = (tareas[p.tarea]||0)+1; });
+  const topTarea = Object.entries(tareas).sort((a,b)=>b[1]-a[1])[0];
+
+  const el = id => document.getElementById(id);
+  if(el('stat-partes-hoy')) el('stat-partes-hoy').textContent = partesHoy || '0';
+  if(el('stat-jornales'))   el('stat-jornales').textContent   = jornales || '0';
+  if(el('stat-hectareas'))  el('stat-hectareas').textContent  = melgas ? melgas.toLocaleString('es-AR') : '0';
+  if(el('stat-tarea-top'))  el('stat-tarea-top').textContent  = topTarea ? topTarea[0].split(' ')[0] : '—';
+
+  // Conteos en tablas
+  if(el('bp-campo-count'))   el('bp-campo-count').textContent   = partesCampo.length + ' registros';
+  if(el('bp-riego-count'))   el('bp-riego-count').textContent   = partesRiego.length + ' registros';
+  if(el('bp-tractor-count')) el('bp-tractor-count').textContent = partesTractor.length + ' registros';
+}
+
+let chartsInit = false;
+function renderAnalytics() {
+  updateBPStats();
+  if (typeof Chart === 'undefined') {
+    const s = document.createElement('script');
+    s.src = 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js';
+    s.onload = () => buildCharts();
+    document.head.appendChild(s);
+  } else { buildCharts(); }
+}
+
+function buildCharts() {
+  const cfg = {
+    color: 'rgba(255,255,255,0.7)',
+    gridColor: 'rgba(255,255,255,0.06)',
+    font: { family: 'DM Sans, sans-serif', size: 11 }
+  };
+
+  // Chart jornales por semana (últimas 8 semanas)
+  const weeks = {};
+  [...partesCampo, ...partesRiego, ...partesTractor].forEach(p => {
+    if (!p.fecha || p.fecha === '—') return;
+    const d = new Date(p.fecha);
+    const week = `${d.getFullYear()}-S${Math.ceil((d.getDate())/7)}`;
+    weeks[week] = (weeks[week]||0) + (p.jornales||0);
+  });
+  const wKeys = Object.keys(weeks).sort().slice(-8);
+  const wVals = wKeys.map(k => weeks[k]);
+
+  const ctx1 = document.getElementById('chartJornales');
+  if (ctx1) {
+    if (ctx1._chart) ctx1._chart.destroy();
+    ctx1._chart = new Chart(ctx1, {
+      type: 'bar',
+      data: {
+        labels: wKeys.map(k => k.replace('-S',' S')),
+        datasets: [{
+          label: 'Jornales', data: wVals,
+          backgroundColor: 'rgba(46,204,113,0.4)',
+          borderColor: 'rgba(46,204,113,0.8)',
+          borderWidth: 1, borderRadius: 4
+        }]
+      },
+      options: { plugins: { legend: { display: false } },
+        scales: {
+          x: { ticks: { color: cfg.color, font: cfg.font }, grid: { color: cfg.gridColor } },
+          y: { ticks: { color: cfg.color, font: cfg.font }, grid: { color: cfg.gridColor } }
+        }
+      }
+    });
+  }
+
+  // Chart tareas
+  const tareas = {};
+  partesCampo.forEach(p => { if(p.tarea) tareas[p.tarea]=(tareas[p.tarea]||0)+1; });
+  const tKeys = Object.keys(tareas).slice(0,6);
+  const ctx2 = document.getElementById('chartTareas');
+  if (ctx2 && tKeys.length) {
+    if (ctx2._chart) ctx2._chart.destroy();
+    ctx2._chart = new Chart(ctx2, {
+      type: 'doughnut',
+      data: {
+        labels: tKeys,
+        datasets: [{ data: tKeys.map(k=>tareas[k]),
+          backgroundColor: ['rgba(46,204,113,0.7)','rgba(240,180,41,0.7)','rgba(52,152,219,0.7)','rgba(231,76,60,0.7)','rgba(155,89,182,0.7)','rgba(230,126,34,0.7)'],
+          borderWidth: 0
+        }]
+      },
+      options: { plugins: { legend: { position: 'bottom', labels: { color: cfg.color, font: cfg.font, boxWidth: 10 } } } }
+    });
+  }
+
+  // Chart sectores
+  const sectores = {};
+  partesCampo.forEach(p => { if(p.sector) sectores[p.sector]=(sectores[p.sector]||0)+1; });
+  const sKeys = Object.keys(sectores).sort().slice(0,10);
+  const ctx3 = document.getElementById('chartSectores');
+  if (ctx3 && sKeys.length) {
+    if (ctx3._chart) ctx3._chart.destroy();
+    ctx3._chart = new Chart(ctx3, {
+      type: 'bar',
+      data: {
+        labels: sKeys,
+        datasets: [{ label: 'Partes', data: sKeys.map(k=>sectores[k]),
+          backgroundColor: 'rgba(52,152,219,0.5)', borderColor: 'rgba(52,152,219,0.8)',
+          borderWidth: 1, borderRadius: 4
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { ticks: { color: cfg.color, font: cfg.font }, grid: { color: cfg.gridColor } },
+          y: { ticks: { color: cfg.color, font: cfg.font }, grid: { color: cfg.gridColor } }
+        }
+      }
+    });
+  }
+}
+
 let fincaActiva = 'oeste';
 
 function switchFinca(lado, btn) {
   fincaActiva = lado;
-  document.querySelectorAll('.map-finca-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.bp-finca-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   renderMapaActivo();
 }
