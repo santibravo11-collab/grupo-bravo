@@ -2972,7 +2972,7 @@ async function cargarDesdeSheets() {
     mostrarSyncStatus('✅ Datos actualizados');
 
   } catch(e) {
-    mostrarSyncStatus('⚠️ Sin conexión — datos locales');
+    mostrarSyncStatus('⚠️ Sin conexión — cargando datos locales');
     console.error(e);
   }
 }
@@ -3025,6 +3025,7 @@ function calcFlModal(){
   setV('fl-superficie',sup>0?sup:'');
   setV('fl-rend-display',rend>0?rend:'');
 }
+
 
 // ===== BRAVO PISTACHOS UI =====
 function showBPTab(id, btn) {
