@@ -46,6 +46,8 @@ body { font-family:'Barlow',sans-serif; background:var(--bg); color:var(--text);
 .login-form input:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba(46,204,113,0.1); }
 .btn-login { width:100%; background:var(--accent); color:#0a0c0f; border:none; border-radius:10px; padding:14px; font-family:'Barlow Condensed',sans-serif; font-size:16px; font-weight:700; letter-spacing:2px; text-transform:uppercase; cursor:pointer; margin-top:8px; transition:all 0.2s; }
 .btn-login:hover { background:#2edb78; transform:translateY(-1px); }
+.btn-solicitar { width:100%; background:transparent; color:var(--accent); border:1px solid rgba(46,204,113,0.3); border-radius:10px; padding:11px; font-family:'Barlow Condensed',sans-serif; font-size:14px; font-weight:700; letter-spacing:2px; text-transform:uppercase; cursor:pointer; margin-top:8px; transition:all 0.2s; }
+.btn-solicitar:hover { background:rgba(46,204,113,0.08); border-color:var(--accent); }
 .login-hint { margin-top:20px; padding:12px 16px; background:rgba(46,204,113,0.05); border:1px solid rgba(46,204,113,0.1); border-radius:8px; font-size:12px; color:var(--muted2); line-height:1.8; }
 .login-error { color:var(--red); font-size:13px; text-align:center; display:none; }
 
@@ -293,6 +295,7 @@ tbody td { padding:11px 14px; font-size:13px; vertical-align:middle; }
       <div><label>Contraseña</label><input type="password" id="loginPass" placeholder="••••••••"></div>
       <div class="login-error" id="loginError">Usuario o contraseña incorrectos</div>
       <button class="btn-login" onclick="doLogin()">Ingresar al Sistema</button>
+      <button class="btn-solicitar" onclick="showSolicitud()">Solicitar Acceso</button>
     </div>
     <div class="login-hint">
       <strong style="color:var(--accent)">Usuarios de prueba:</strong><br>
@@ -300,6 +303,34 @@ tbody td { padding:11px 14px; font-size:13px; vertical-align:middle; }
       📋 <b>admin2</b> / admin123 — Administrativo<br>
       🌿 <b>ingeniero</b> / ing123 — Ing. Agrónomo<br>
       👁️ <b>visor</b> / vis123 — Solo lectura
+    </div>
+  </div>
+</div>
+
+<!-- SOLICITUD DE ACCESO -->
+<div id="solicitudPanel" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);align-items:center;justify-content:center;z-index:200">
+  <div style="background:var(--surface);border:1px solid var(--border2);border-radius:20px;padding:40px;width:400px;position:relative">
+    <button onclick="hideSolicitud()" style="position:absolute;top:16px;right:16px;background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer">✕</button>
+    <div style="text-align:center;margin-bottom:24px">
+      <div style="font-size:32px;margin-bottom:8px">🙋</div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:700;letter-spacing:2px;color:var(--accent)">SOLICITAR ACCESO</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:4px">Tu solicitud llegará al administrador para aprobación</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div><label style="font-size:10px;font-weight:700;letter-spacing:2px;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:6px">Nombre completo</label>
+        <input type="text" id="sol-nombre" placeholder="Tu nombre" style="width:100%;background:var(--bg);border:1px solid var(--border2);border-radius:10px;padding:12px 16px;color:var(--text);font-family:'Barlow',sans-serif;font-size:14px;outline:none"></div>
+      <div><label style="font-size:10px;font-weight:700;letter-spacing:2px;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:6px">Usuario deseado</label>
+        <input type="text" id="sol-user" placeholder="usuario123" style="width:100%;background:var(--bg);border:1px solid var(--border2);border-radius:10px;padding:12px 16px;color:var(--text);font-family:'Barlow',sans-serif;font-size:14px;outline:none"></div>
+      <div><label style="font-size:10px;font-weight:700;letter-spacing:2px;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:6px">Contraseña deseada</label>
+        <input type="password" id="sol-pass" placeholder="••••••••" style="width:100%;background:var(--bg);border:1px solid var(--border2);border-radius:10px;padding:12px 16px;color:var(--text);font-family:'Barlow',sans-serif;font-size:14px;outline:none"></div>
+      <div><label style="font-size:10px;font-weight:700;letter-spacing:2px;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:6px">Rol solicitado</label>
+        <select id="sol-rol" style="width:100%;background:var(--bg);border:1px solid var(--border2);border-radius:10px;padding:12px 16px;color:var(--text);font-family:'Barlow',sans-serif;font-size:14px;outline:none">
+          <option value="editor">Editor — Puede cargar partes</option>
+          <option value="visor">Visor — Solo lectura</option>
+          <option value="admin">Admin — Gestión completa</option>
+        </select></div>
+      <button onclick="enviarSolicitud()" style="width:100%;background:var(--accent);color:#0a0c0f;border:none;border-radius:10px;padding:14px;font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;margin-top:8px">Enviar Solicitud</button>
+      <div id="sol-msg" style="text-align:center;font-size:13px;display:none"></div>
     </div>
   </div>
 </div>
@@ -502,7 +533,17 @@ tbody td { padding:11px 14px; font-size:13px; vertical-align:middle; }
           </div>
           <button class="btn btn-primary" onclick="openModal('modalUsuario')">+ Nuevo Usuario</button>
         </div>
-        <div class="permisos-grid" id="permisosGrid"></div>
+        <div style="margin-bottom:28px">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+    <div style="font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--accent)">🙋 Solicitudes Pendientes</div>
+    <button class="btn btn-secondary" onclick="cargarSolicitudes()" style="font-size:12px;padding:6px 14px">↻ Actualizar</button>
+  </div>
+  <div id="solicitudesGrid" style="display:flex;flex-direction:column;gap:10px">
+    <div style="color:var(--muted);font-size:13px">Clic en "Actualizar" para ver solicitudes pendientes.</div>
+  </div>
+</div>
+<div style="font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:14px">👥 Usuarios Activos</div>
+<div class="permisos-grid" id="permisosGrid"></div>
       </div>
 
     </div>
@@ -705,6 +746,36 @@ const FINCA_ESTE = [
 ];
 
 // ========== LOGIN ==========
+// ========== SOLICITUD DE ACCESO ==========
+function showSolicitud() {
+  const p = document.getElementById('solicitudPanel');
+  p.style.display = 'flex';
+}
+function hideSolicitud() {
+  document.getElementById('solicitudPanel').style.display = 'none';
+  document.getElementById('sol-msg').style.display = 'none';
+}
+async function enviarSolicitud() {
+  const nombre = document.getElementById('sol-nombre').value.trim();
+  const user   = document.getElementById('sol-user').value.trim();
+  const pass   = document.getElementById('sol-pass').value.trim();
+  const rol    = document.getElementById('sol-rol').value;
+  const msg    = document.getElementById('sol-msg');
+  if (!nombre || !user || !pass) {
+    msg.style.display = 'block'; msg.style.color = 'var(--red)';
+    msg.textContent = 'Completá todos los campos'; return;
+  }
+  msg.style.display = 'block'; msg.style.color = 'var(--muted)';
+  msg.textContent = '⏳ Enviando solicitud...';
+  const fecha = new Date().toLocaleString('es-AR');
+  await guardarEnSheets('Solicitudes', [fecha, nombre, user, pass, rol, 'PENDIENTE']);
+  msg.style.color = 'var(--accent)';
+  msg.textContent = '✅ Solicitud enviada. El administrador te dará acceso pronto.';
+  document.getElementById('sol-nombre').value = '';
+  document.getElementById('sol-user').value = '';
+  document.getElementById('sol-pass').value = '';
+}
+
 function doLogin() {
   const u=document.getElementById('loginUser').value.trim();
   const p=document.getElementById('loginPass').value.trim();
@@ -1325,6 +1396,55 @@ function showTipMq(e, el) {
 }
 function hideTip() { document.getElementById('tooltip').style.display = 'none'; }
 function showTip() {} // alias legacy
+
+// ========== SOLICITUDES ==========
+async function cargarSolicitudes() {
+  const grid = document.getElementById('solicitudesGrid');
+  grid.innerHTML = '<div style="color:var(--muted);font-size:13px">⏳ Cargando...</div>';
+  try {
+    const res = await fetch(SHEETS_URL);
+    const data = await res.json();
+    const rows = (data['Solicitudes'] || []).slice(1).filter(r => r[0] && r[5] === 'PENDIENTE');
+    if (!rows.length) {
+      grid.innerHTML = '<div style="color:var(--muted);font-size:13px">✅ Sin solicitudes pendientes.</div>';
+      return;
+    }
+    const rL = {editor:'✏️ Editor', visor:'👁️ Visor', admin:'📋 Admin'};
+    grid.innerHTML = rows.map((r,i) => `
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px;display:flex;align-items:center;justify-content:space-between;gap:16px">
+        <div>
+          <div style="font-weight:700;font-size:15px">${r[1]} <span style="font-size:12px;color:var(--muted);font-weight:400">@${r[2]}</span></div>
+          <div style="font-size:12px;color:var(--muted2);margin-top:3px">${rL[r[4]]||r[4]} — Solicitado: ${r[0]}</div>
+        </div>
+        <div style="display:flex;gap:8px;flex-shrink:0">
+          <button class="btn btn-primary" style="font-size:12px;padding:6px 14px" onclick="aprobarSolicitud('${r[1]}','${r[2]}','${r[3]}','${r[4]}')">✅ Aprobar</button>
+          <button class="btn btn-secondary" style="font-size:12px;padding:6px 14px;color:var(--red)" onclick="rechazarSolicitud('${r[2]}')">✕ Rechazar</button>
+        </div>
+      </div>`).join('');
+  } catch(e) {
+    grid.innerHTML = '<div style="color:var(--red);font-size:13px">Error al cargar solicitudes.</div>';
+  }
+}
+
+async function aprobarSolicitud(nombre, user, pass, rol) {
+  USUARIOS.push({user, pass, nombre, rol, acceso:['p']});
+  await guardarEnSheets('Usuarios', [nombre, user, pass, rol, new Date().toLocaleString('es-AR')]);
+  await marcarSolicitud(user, 'APROBADO');
+  renderPermisos();
+  cargarSolicitudes();
+  showToast('✅ Usuario ' + user + ' aprobado');
+}
+
+async function rechazarSolicitud(user) {
+  if (!confirm('¿Rechazar solicitud de ' + user + '?')) return;
+  await marcarSolicitud(user, 'RECHAZADO');
+  cargarSolicitudes();
+  showToast('🗑️ Solicitud rechazada');
+}
+
+async function marcarSolicitud(user, estado) {
+  await guardarEnSheets('_AccionSolicitud', [user, estado, new Date().toLocaleString('es-AR')]);
+}
 
 // ========== ORGANIGRAMA ==========
 function saveOrg(){
